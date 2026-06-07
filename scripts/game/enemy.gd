@@ -3,14 +3,44 @@ extends CharacterBody2D
 @export var move_speed := 100.0
 @export var touch_damage := 1
 @export var touch_range := 18.0
+@export var max_health := 30
+@export var experience_drop := 5
 
 var target: Node2D
+var game: Node = null
+var health := 30
+var is_dead := false
+
+func _ready() -> void:
+	health = max_health
+
+func set_game(game_ref: Node) -> void:
+	game = game_ref
 
 func set_target(target_node: Node2D) -> void:
 	target = target_node
 
+func take_damage(amount: int) -> void:
+	if is_dead:
+		return
+	health = max(health - amount, 0)
+	if health <= 0:
+		_die()
+
+func _die() -> void:
+	if is_dead:
+		return
+	is_dead = true
+	velocity = Vector2.ZERO
+	if game != null and game.has_method("on_enemy_died"):
+		game.on_enemy_died(self)
+	queue_free()
+
 func _physics_process(delta: float) -> void:
-	if target == null:
+	if is_dead:
+		velocity = Vector2.ZERO
+		return
+	if target == null or not is_instance_valid(target):
 		velocity = Vector2.ZERO
 		return
 	var direction := global_position.direction_to(target.global_position)
