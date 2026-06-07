@@ -14,6 +14,7 @@ var attack_cooldown := 0.0
 var active_target: Node2D = null
 var experience := 0
 var level := 1
+var is_leveling := false
 
 const BULLET_SCENE := preload("res://scenes/game/bullet.tscn")
 
@@ -27,8 +28,16 @@ func set_game(game_ref: Node) -> void:
 
 func collect_experience(value: int) -> void:
 	experience += value
+	_try_level_up()
 	if game != null and game.has_method("_update_hud"):
 		game._update_hud()
+
+func _try_level_up() -> void:
+	var required_experience := 25 * level
+	while experience >= required_experience:
+		experience -= required_experience
+		level += 1
+		required_experience = 25 * level
 
 func take_damage(amount: int) -> void:
 	if is_dead or invincible_time > 0.0:
@@ -73,7 +82,7 @@ func _process(delta: float) -> void:
 			modulate = Color(1.0, 1.0, 1.0, 1.0)
 	if attack_cooldown > 0.0:
 		attack_cooldown = maxf(attack_cooldown - delta, 0.0)
-	if attack_cooldown <= 0.0:
+	if attack_cooldown <= 0.0 and not is_leveling:
 		_try_auto_attack()
 
 func _physics_process(delta: float) -> void:

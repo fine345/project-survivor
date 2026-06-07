@@ -73,6 +73,8 @@ func _spawn_experience(position: Vector2, value: int) -> void:
 	var experience := EXPERIENCE_SCENE.instantiate()
 	experience.global_position = position
 	experience.pickup_value = value
+	if experience.has_method("set_attracted_target") and player != null:
+		experience.set_attracted_target(player)
 	add_child(experience)
 	spawned_experiences.append(experience)
 	experience.tree_exited.connect(_on_experience_tree_exited.bind(experience))
@@ -91,7 +93,7 @@ func _process(delta: float) -> void:
 
 func _update_hud() -> void:
 	if hud_info != null and player != null:
-		hud_info.text = "HP: %d / %d\nEnemies: %d\nExp Orbs: %d" % [player.health, player.max_health, spawned_enemies.size(), spawned_experiences.size()]
+		hud_info.text = "HP: %d / %d\nEnemies: %d\nExp Orbs: %d\nLV: %d  EXP: %d" % [player.health, player.max_health, spawned_enemies.size(), spawned_experiences.size(), player.level, player.experience]
 	if hud_game_over != null:
 		hud_game_over.visible = player != null and player.is_dead
 	if hud_restart_hint != null:
