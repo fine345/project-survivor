@@ -11,8 +11,17 @@ config_version=5
 [application]
 
 config/name="project-survivor"
+run/main_scene="res://scenes/game/main.tscn"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://icon.svg"
+
+[autoload]
+
+MCPRuntime="*uid://c8dfcidpqvwq8"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot_mcp/plugin.cfg")
 
 [physics]
 

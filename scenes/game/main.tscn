@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://dyvgsv0f01a1a"]
+
+[ext_resource type="Script" uid="uid://cgag7c0dle264" path="res://scripts/game/main.gd" id="1_llaio"]
+
+[node name="Main" type="Node2D" unique_id=1706105945]
+script = ExtResource("1_llaio")
+
+[node name="EnemyTimer" type="Timer" parent="." unique_id=208697807]
+wait_time = 2.0
+
+[node name="PlayerSpawnMarker" type="Marker2D" parent="." unique_id=360830251]
+position = Vector2(531, 333)
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=1309270491]
+
+[node name="Info" type="Label" parent="HUD" unique_id=1661219563]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 20.0
+offset_bottom = 20.0
+theme_type_variation = &"HeaderSmall"
+text = "HP: 0"
+
+[node name="RestartHint" type="Label" parent="HUD" unique_id=446098347]
+offset_left = 20.0
+offset_top = 60.0
+offset_right = 20.0
+offset_bottom = 60.0
+text = "Press R to restart"
+
+[node name="GameOver" type="Label" parent="HUD" unique_id=1217924387]
+visible = false
+offset_left = 260.0
+offset_top = 700.0
+offset_right = 260.0
+offset_bottom = 700.0
+text = "GAME OVER"
