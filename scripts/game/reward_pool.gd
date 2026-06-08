@@ -17,13 +17,13 @@ const REWARD_DEFS := [
 		"id": "attack_speed",
 		"title": "攻速 +50%",
 		"type": "attribute",
-		"max_count": 4
+		"max_count": 2
 	},
 	{
 		"id": "bullet_count",
 		"title": "子弹数量 +1",
 		"type": "attribute",
-		"max_count": 4
+		"max_count": 3
 	},
 	{
 		"id": "experience_bonus",

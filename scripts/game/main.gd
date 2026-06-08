@@ -7,7 +7,7 @@ const REWARD_POOL_SCRIPT := preload("res://scripts/game/reward_pool.gd")
 
 @export var enemy_one_spawn_interval := 1.5
 @export var enemy_two_spawn_interval := 3.0
-@export var enemy_spawn_distance := Vector2(1800.0, 1000.0)
+@export var enemy_spawn_distance := Vector2(800.0, 1600.0)
 @export var enemy_spawn_min_distance := 200.0
 @export var enemy_density_slowdown := 0.03
 @export var enemy_time_relief_start := 60.0

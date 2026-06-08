@@ -110,30 +110,42 @@ func take_damage(amount: int) -> void:
 func _try_auto_attack() -> void:
 	if game == null or not game.has_method("get_nearest_enemy"):
 		return
+	if game.get_nearest_enemy(global_position, attack_range) == null:
+		return
+	_fire_bullet_sequence()
+	attack_cooldown = attack_interval
+
+func _fire_bullet_sequence() -> void:
+	var shots: int = max(1, bullet_count)
+	var attack_gap := attack_interval / 5.0
+	for i in range(shots):
+		_fire_bullet_after_delay(float(i) * attack_gap)
+
+func _fire_bullet_after_delay(delay_seconds: float) -> void:
+	if delay_seconds <= 0.0:
+		_spawn_bullet_now()
+		return
+	var timer := get_tree().create_timer(delay_seconds)
+	await timer.timeout
+	_spawn_bullet_now()
+
+func _spawn_bullet_now() -> void:
+	if game == null or not game.has_method("get_nearest_enemy"):
+		return
 	var candidate: Node2D = game.get_nearest_enemy(global_position, attack_range)
 	if candidate == null:
 		return
-	active_target = candidate
-	_fire_bullet(active_target)
-	attack_cooldown = attack_interval
-
-func _fire_bullet(target: Node2D) -> void:
-	if target == null or not is_instance_valid(target):
-		return
-	var shots: int = max(1, bullet_count)
-	for i in range(shots):
-		var bullet := BULLET_SCENE.instantiate()
-		bullet.global_position = global_position
-		bullet.damage = int(10 * bullet_damage_multiplier)
-		bullet.set_target(target)
-		bullet.set_owner_player(self)
-		if bullet.has_method("set_status_modifiers"):
-			var bounce_value: int = max(0, bullet_count - 1)
-			bullet.set_status_modifiers(experience_bonus_multiplier, 0.0, 0.0, bounce_value, false)
-		if game != null:
-			game.add_child(bullet)
-		else:
-			add_child(bullet)
+	var bullet := BULLET_SCENE.instantiate()
+	bullet.global_position = global_position
+	bullet.damage = int(10 * bullet_damage_multiplier)
+	bullet.set_owner_player(self)
+	if bullet.has_method("set_status_modifiers"):
+		bullet.set_status_modifiers(experience_bonus_multiplier, 0.0, 0.0, 0, false)
+	if game != null:
+		game.add_child(bullet)
+	else:
+		add_child(bullet)
+	bullet.set_target(candidate)
 
 
 func _process(delta: float) -> void:

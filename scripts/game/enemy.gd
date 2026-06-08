@@ -47,7 +47,7 @@ func _apply_enemy_type() -> void:
 	match enemy_type:
 		2:
 			max_health = 50
-			move_speed = 75.0
+			move_speed = 100.0
 			experience_drop = 10
 		_:
 			max_health = 30
