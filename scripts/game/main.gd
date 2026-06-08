@@ -174,6 +174,9 @@ func _process(delta: float) -> void:
 	_update_spawn_timers()
 	if Input.is_key_pressed(KEY_R) and player != null and player.is_dead:
 		_restart_game()
+	if Input.is_key_pressed(KEY_Q):
+		_prepare_reward_offers()
+		_pause_for_level_up()
 	_update_hud()
 
 func _on_player_level_up() -> void:

@@ -17,12 +17,14 @@ var burn_chance := 0.0
 var bounce_count := 0
 var damage_multiplier := 1.0
 var knockback_enabled := false
+var knockback_force := 120.0
 var spawned_at := 0.0
 var spawn_delay := 0.0
 var use_target_homing := true
 var bounced_targets: Array[Node2D] = []
 var already_bounced := 0
 var pending_bounce_target: Node2D = null
+var has_knockback_effect := false
 
 const BULLET_SCENE := preload("res://scenes/game/bullet.tscn")
 
@@ -69,6 +71,7 @@ func set_status_modifiers(exp_bonus: float, freeze_prob: float = 0.0, burn_prob:
 	burn_chance = burn_prob
 	bounce_count = bounce
 	knockback_enabled = knockback
+	has_knockback_effect = knockback
 
 func set_damage_multiplier(multiplier: float) -> void:
 	damage_multiplier = multiplier
@@ -107,8 +110,9 @@ func _on_body_entered(body: Node) -> void:
 		return
 	if body is Node2D and bounced_targets.has(body):
 		return
+	var hit_force: float = knockback_force * (0.5 if already_bounced > 0 else 1.0)
 	if body.has_method("apply_knockback") and knockback_enabled:
-		body.apply_knockback(global_position, 180.0)
+		body.apply_knockback(global_position, hit_force)
 	if body.has_method("apply_freeze") and freeze_chance > 0.0 and randf() < freeze_chance:
 		body.apply_freeze(2.0)
 	if body.has_method("apply_burn") and burn_chance > 0.0 and randf() < burn_chance:
@@ -159,11 +163,14 @@ func _spawn_bounce_bullet() -> void:
 	if bounced_bullet.has_method("set_owner_player"):
 		bounced_bullet.set_owner_player(owner_player)
 	if bounced_bullet.has_method("set_status_modifiers"):
-		bounced_bullet.set_status_modifiers(experience_bonus_multiplier, freeze_chance, burn_chance, bounce_count - already_bounced, knockback_enabled)
+		var remaining_bounces: int = maxi(bounce_count - already_bounced, 0)
+		bounced_bullet.set_status_modifiers(experience_bonus_multiplier, freeze_chance, burn_chance, remaining_bounces, knockback_enabled)
 	if bounced_bullet.has_method("set_damage_multiplier"):
 		bounced_bullet.set_damage_multiplier(0.5)
 	if bounced_bullet.has_method("set_bounce_state"):
-		bounced_bullet.set_bounce_state(already_bounced, bounced_targets.duplicate())
+		bounced_bullet.set_bounce_state(0, bounced_targets.duplicate())
+	if bounced_bullet.has_method("set_knockback_state"):
+		bounced_bullet.set_knockback_state(has_knockback_effect, knockback_force * 0.5)
 	game.add_child(bounced_bullet)
 	if bounced_bullet.has_method("set_target"):
 		bounced_bullet.set_target(pending_bounce_target)
@@ -173,3 +180,7 @@ func _spawn_bounce_bullet() -> void:
 func set_bounce_state(bounce_index: int, previous_targets: Array) -> void:
 	already_bounced = bounce_index
 	bounced_targets = previous_targets.duplicate()
+
+func set_knockback_state(enabled: bool, force: float) -> void:
+	has_knockback_effect = enabled
+	knockback_force = force

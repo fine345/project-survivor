@@ -15,11 +15,18 @@ var freeze_timer := 0.0
 var burn_timer := 0.0
 var burn_tick_timer := 0.0
 var burn_damage_per_tick := 1
-var knockback_velocity := Vector2.ZERO
+var knockback_timer := 0.0
+var knockback_pause_timer := 0.0
+var knockback_return_timer := 0.0
+var knockback_direction := Vector2.ZERO
+var knockback_distance_left := 0.0
+var knockback_return_speed := 0.0
+var stored_move_speed := 100.0
 
 func _ready() -> void:
 	_apply_enemy_type()
 	health = max_health
+	stored_move_speed = move_speed
 	_apply_enemy_visual()
 
 func _apply_enemy_visual() -> void:
@@ -41,7 +48,16 @@ func apply_burn(duration: float, damage_per_tick: int = 1) -> void:
 	burn_damage_per_tick = damage_per_tick
 
 func apply_knockback(from_position: Vector2, force: float) -> void:
-	knockback_velocity = (global_position - from_position).normalized() * force
+	var direction: Vector2 = (global_position - from_position).normalized()
+	if direction == Vector2.ZERO:
+		direction = Vector2.RIGHT
+	knockback_direction = direction
+	knockback_distance_left = 5.0
+	knockback_timer = 0.05
+	knockback_return_timer = 0.1
+	knockback_return_speed = stored_move_speed
+	velocity = Vector2.ZERO
+	move_speed = 0.0
 
 func _apply_enemy_type() -> void:
 	match enemy_type:
@@ -82,8 +98,21 @@ func _physics_process(delta: float) -> void:
 		return
 	if freeze_timer > 0.0:
 		freeze_timer = maxf(freeze_timer - delta, 0.0)
-		velocity = knockback_velocity
-		knockback_velocity = knockback_velocity.lerp(Vector2.ZERO, clamp(delta * 3.0, 0.0, 1.0))
+		velocity = Vector2.ZERO
+		move_and_slide()
+		return
+	if knockback_timer > 0.0:
+		knockback_timer = maxf(knockback_timer - delta, 0.0)
+		var step_distance: float = minf(knockback_distance_left, 5.0 * delta / 0.1)
+		global_position += knockback_direction * step_distance
+		knockback_distance_left = maxf(knockback_distance_left - step_distance, 0.0)
+		velocity = Vector2.ZERO
+		move_and_slide()
+		return
+	if knockback_return_timer > 0.0:
+		knockback_return_timer = maxf(knockback_return_timer - delta, 0.0)
+		move_speed = knockback_return_speed
+		velocity = knockback_direction * move_speed
 		move_and_slide()
 		return
 	if burn_timer > 0.0:
@@ -92,11 +121,6 @@ func _physics_process(delta: float) -> void:
 		if burn_tick_timer >= 1.0:
 			burn_tick_timer -= 1.0
 			take_damage(burn_damage_per_tick)
-	if knockback_velocity.length() > 0.5:
-		velocity = knockback_velocity
-		knockback_velocity = knockback_velocity.lerp(Vector2.ZERO, clamp(delta * 5.0, 0.0, 1.0))
-		move_and_slide()
-		return
 	if target == null or not is_instance_valid(target):
 		velocity = Vector2.ZERO
 		return

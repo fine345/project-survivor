@@ -9,6 +9,7 @@ extends CharacterBody2D
 @export var bullet_count := 1
 @export var experience_bonus_multiplier := 1.0
 var bullet_bounce_count := 0
+var bullet_knockback_enabled := false
 var shield_count := 0
 
 var health := 5
@@ -72,6 +73,8 @@ func apply_reward_effect(reward_id: String) -> void:
 			bullet_bounce_count += 1
 		"experience_bonus":
 			experience_bonus_multiplier += 0.5
+		"knockback":
+			bullet_knockback_enabled = true
 		"shield":
 			shield_count += 1
 		"freeze_chance":
@@ -142,7 +145,7 @@ func _spawn_bullet_now(bullet_index: int) -> void:
 	bullet.damage = int(round(10 * bullet_damage_multiplier * (0.5 if bullet_index > 0 else 1.0)))
 	bullet.set_owner_player(self)
 	if bullet.has_method("set_status_modifiers"):
-		bullet.set_status_modifiers(experience_bonus_multiplier, 0.0, 0.0, bullet_bounce_count, false)
+		bullet.set_status_modifiers(experience_bonus_multiplier, 0.0, 0.0, bullet_bounce_count, bullet_knockback_enabled)
 	if game != null:
 		game.add_child(bullet)
 	else:
