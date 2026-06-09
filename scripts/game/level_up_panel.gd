@@ -10,6 +10,14 @@ var reward_titles: Array[String] = []
 @onready var option3: Button = $Panel/VBox/Option3
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	mouse_filter = Control.MOUSE_FILTER_STOP
+	option1.process_mode = Node.PROCESS_MODE_ALWAYS
+	option2.process_mode = Node.PROCESS_MODE_ALWAYS
+	option3.process_mode = Node.PROCESS_MODE_ALWAYS
+	option1.mouse_filter = Control.MOUSE_FILTER_STOP
+	option2.mouse_filter = Control.MOUSE_FILTER_STOP
+	option3.mouse_filter = Control.MOUSE_FILTER_STOP
 	option1.pressed.connect(func(): _emit_reward(0))
 	option2.pressed.connect(func(): _emit_reward(1))
 	option3.pressed.connect(func(): _emit_reward(2))
