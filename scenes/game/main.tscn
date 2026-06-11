@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://wu0bqi1u3elk" path="res://scripts/game/level_up_panel.gd" id="3_yd8kv"]
 [ext_resource type="PackedScene" uid="uid://bn8jggr1tiupa" path="res://scenes/ui/virtual_joystick.tscn" id="4_iba00"]
 [ext_resource type="Script" uid="uid://dubx6ob6i50j0" path="res://scripts/game/grid_background.gd" id="4_uaf1y"]
+[ext_resource type="PackedScene" path="res://scenes/game/summary_panel.tscn" id="6_j7lav"]
 
 [node name="Main" type="Node2D" unique_id=1706105945]
 script = ExtResource("1_llaio")
@@ -92,6 +93,10 @@ offset_top = 15.0
 offset_right = 710.0
 offset_bottom = 55.0
 text = "暂停"
+
+[node name="SummaryPanel" parent="Layer/Panel" unique_id=1553527617 instance=ExtResource("6_j7lav")]
+z_index = 250
+layout_mode = 1
 
 [connection signal="pressed" from="Layer/Panel/RetryButton" to="." method="restart_game"]
 [connection signal="pressed" from="Layer/Panel/PauseButton" to="." method="_on_pause_button_pressed"]

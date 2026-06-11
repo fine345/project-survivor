@@ -28,6 +28,8 @@ var knockback_distance_left := 0.0
 var knockback_return_speed := 0.0
 var stored_move_speed := 150.0
 
+const DAMAGE_NUMBER_SCENE := preload("res://scenes/game/damage_number.tscn")
+
 func _ready() -> void:
 	_apply_enemy_type()
 	health = max_health
@@ -109,12 +111,19 @@ func set_game(game_ref: Node) -> void:
 func set_target(target_node: Node2D) -> void:
 	target = target_node
 
-func take_damage(amount: int) -> void:
+func take_damage(amount: int, color: Color = Color.WHITE) -> void:
 	if is_dead:
 		return
 	health = max(health - amount, 0)
+	_spawn_damage_number(amount, color)
 	if health <= 0:
 		_die()
+
+func _spawn_damage_number(amount: int, color: Color) -> void:
+	var number: Label = DAMAGE_NUMBER_SCENE.instantiate() as Label
+	if number.has_method("setup"):
+		number.setup(amount, color, global_position)
+	get_parent().add_child(number)
 
 func _die() -> void:
 	if is_dead:
@@ -144,7 +153,7 @@ func _physics_process(delta: float) -> void:
 		while burn_tick_timer >= burn_tick_interval and burn_ticks_remaining > 0:
 			burn_tick_timer -= burn_tick_interval
 			burn_ticks_remaining -= 1
-			take_damage(burn_damage_per_tick)
+			take_damage(burn_damage_per_tick, Color(1, 0.3, 0.2))
 
 	if knockback_timer > 0.0:
 		knockback_timer = maxf(knockback_timer - delta, 0.0)

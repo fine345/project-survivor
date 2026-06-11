@@ -43,7 +43,7 @@ func _hit_enemies_during_tick() -> void:
 		if hit_enemies.has(body_id):
 			continue
 		hit_enemies.append(body_id)
-		body.take_damage(damage)
+		body.take_damage(damage, Color(0.2, 0.8, 1))
 
 func _on_body_entered(body: Node) -> void:
 	if body == null or not body.has_method("take_damage"):
@@ -54,7 +54,7 @@ func _on_body_entered(body: Node) -> void:
 	if hit_enemies.has(body_id):
 		return
 	hit_enemies.append(body_id)
-	body.take_damage(damage)
+	body.take_damage(damage, Color(0.2, 0.8, 1))
 
 func _update_collision_width() -> void:
 	var collision: CollisionShape2D = $CollisionShape2D

@@ -42,6 +42,7 @@ var active_target: Node2D = null
 var experience := 0
 var level := 1
 var is_leveling := false
+var total_damage_taken := 0
 
 const BULLET_SCENE := preload("res://scenes/game/bullet.tscn")
 
@@ -116,6 +117,7 @@ func apply_reward_effect(reward_id: String) -> void:
 		"ai_laser_weapon":
 			ai_laser_unlocked = true
 			laser_count = 1
+			_laser_cooldown = 2.0
 		"laser_width":
 			laser_width_multiplier *= 2.0
 		"laser_damage":
@@ -173,6 +175,7 @@ func take_damage(amount: int) -> void:
 			game._update_hud()
 		return
 	health = max(health - amount, 0)
+	total_damage_taken += amount
 	invincible_time = 1.0
 	modulate = Color(1.0, 0.6, 0.6, 1.0)
 	_apply_damage_knockback()

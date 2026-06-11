@@ -129,7 +129,7 @@ func _on_body_entered(body: Node) -> void:
 		body.apply_freeze(1.5 * effect_scale)
 	if body.has_method("apply_burn") and burn_chance > 0.0 and randf() < burn_chance:
 		body.apply_burn(1.0 * effect_scale, max(1, int(round(damage * 0.2))))
-	body.take_damage(damage)
+	body.take_damage(damage, Color(1, 1, 0.2))
 	if body is Node2D:
 		bounced_targets.append(body)
 	if already_bounced >= bounce_count:

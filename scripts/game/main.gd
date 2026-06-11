@@ -24,6 +24,9 @@ var reward_pool: Node = null
 var reward_counts: Dictionary = {}
 var pending_reward_options: Array[String] = []
 var game_over_paused := false
+var total_kills := 0
+var total_damage_dealt := 0
+var summary_shown := false
 
 @onready var enemy_one_timer: Timer = $EnemyTimer
 @onready var enemy_two_timer: Timer = Timer.new()
@@ -33,6 +36,7 @@ var game_over_paused := false
 @onready var level_up_panel: Control = $Layer/Panel/LevelUpPanel
 @onready var pause_button: Button = $Layer/Panel/PauseButton
 @onready var hud_virtual_joystick: Control = $HUD/VirtualJoystick
+@onready var summary_panel: Control = $Layer/Panel/SummaryPanel
 
 func _ready() -> void:
 	reward_pool = REWARD_POOL_SCRIPT.new()
@@ -48,6 +52,11 @@ func _ready() -> void:
 		hud_retry_button.visible = false
 	elapsed_time = 0.0
 	enemy_two_unlocked = false
+	summary_shown = false
+	if summary_panel != null:
+		summary_panel.visible = false
+		if summary_panel.has_signal("restart_requested") and not summary_panel.restart_requested.is_connected(_on_summary_restart):
+			summary_panel.restart_requested.connect(_on_summary_restart)
 	_update_hud()
 	_update_game_state_ui()
 
@@ -149,6 +158,7 @@ func _get_time_relief_factor() -> float:
 
 func on_enemy_died(enemy: Node) -> void:
 	spawned_enemies.erase(enemy)
+	total_kills += 1
 	if enemy != null:
 		var drop_value := 5
 		if enemy.has_method("get"):
@@ -231,20 +241,20 @@ func _update_game_state_ui() -> void:
 	var game_over_visible: bool = player != null and player.is_dead
 	if game_over_visible and not game_over_paused:
 		game_over_paused = true
-		get_tree().paused = true
 		if enemy_one_timer != null:
 			enemy_one_timer.paused = true
 		if enemy_two_timer != null:
 			enemy_two_timer.paused = true
+		if not summary_shown:
+			summary_shown = true
+			_show_summary(false)
 	elif not game_over_visible and game_over_paused:
 		game_over_paused = false
-	var show_joystick := not game_over_visible and not in_reward_select
+	var show_joystick := not game_over_visible and not in_reward_select and not summary_shown
 	if hud_game_over != null:
-		hud_game_over.visible = game_over_visible
+		hud_game_over.visible = false
 	if hud_retry_button != null:
-		hud_retry_button.visible = game_over_visible
-		hud_retry_button.process_mode = Node.PROCESS_MODE_ALWAYS
-		hud_retry_button.mouse_filter = Control.MOUSE_FILTER_STOP
+		hud_retry_button.visible = false
 	if hud_virtual_joystick != null:
 		hud_virtual_joystick.visible = show_joystick
 		hud_virtual_joystick.mouse_filter = Control.MOUSE_FILTER_IGNORE if not show_joystick else Control.MOUSE_FILTER_STOP
@@ -258,6 +268,9 @@ func _restart_game() -> void:
 		get_tree().paused = false
 		await get_tree().process_frame
 	game_over_paused = false
+	summary_shown = false
+	if summary_panel != null:
+		summary_panel.visible = false
 	if level_up_panel != null:
 		level_up_panel.visible = false
 		level_up_panel.process_mode = Node.PROCESS_MODE_INHERIT
@@ -283,6 +296,8 @@ func _restart_game() -> void:
 	experience_cleanup_enabled = true
 	elapsed_time = 0.0
 	enemy_two_unlocked = false
+	total_kills = 0
+	total_damage_dealt = 0
 	if enemy_one_timer != null:
 		enemy_one_timer.stop()
 		enemy_one_timer.start()
@@ -352,3 +367,41 @@ func _on_pause_button_pressed() -> void:
 		if enemy_two_timer != null:
 			enemy_two_timer.paused = true
 		pause_button.text = "继续"
+
+func _show_summary(is_victory: bool) -> void:
+	if summary_panel == null:
+		return
+	get_tree().paused = true
+	if enemy_one_timer != null:
+		enemy_one_timer.paused = true
+	if enemy_two_timer != null:
+		enemy_two_timer.paused = true
+	var damage_taken: int = 0
+	if player != null and player.has_method("get"):
+		damage_taken = int(player.get("total_damage_taken"))
+	var score: int = _calculate_score(damage_taken)
+	var rewards_display: Dictionary = {}
+	for key in reward_counts:
+		rewards_display[reward_pool.get_reward_title(key)] = reward_counts[key]
+	summary_panel.call("show_summary", {
+		"is_victory": is_victory,
+		"time": elapsed_time,
+		"kills": total_kills,
+		"level": player.level if player != null else 1,
+		"damage_dealt": total_damage_dealt,
+		"damage_taken": damage_taken,
+		"rewards": rewards_display,
+		"score": score
+	})
+
+func _calculate_score(damage_taken: int) -> int:
+	return int(
+		elapsed_time * 1
+		+ total_kills * 15
+		+ (player.level if player != null else 1) * 100
+		+ total_damage_dealt * 0.5
+		- damage_taken * 2
+	)
+
+func _on_summary_restart() -> void:
+	restart_game()
