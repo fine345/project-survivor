@@ -1,54 +1,58 @@
-[gd_scene format=3 uid="uid://cqq0n3h8ilbw5"]
+[gd_scene load_steps=2 format=3]
 
-[ext_resource type="Script" uid="uid://ce170d1pf6omq" path="res://scripts/ui/about.gd" id="1_xf6rd"]
+[ext_resource type="Script" path="res://scripts/ui/about.gd" id="1_ab"]
 
-[node name="About" type="Control" unique_id=1992875300]
+[node name="About" type="Control"]
 layout_mode = 3
-anchors_preset = 0
-script = ExtResource("1_xf6rd")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ab")
 
-[node name="Background" type="ColorRect" parent="." unique_id=634520735]
-layout_mode = 0
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.1, 0.1, 0.15, 1)
 
-[node name="Title" type="Label" parent="." unique_id=1408654427]
-layout_mode = 0
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -200.0
-offset_top = 200.0
-offset_right = 200.0
-offset_bottom = 280.0
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = 40.0
+offset_right = -40.0
+offset_bottom = -40.0
 grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="TitleLabel" type="Label" parent="Panel/VBox"]
+layout_mode = 2
 text = "关于"
 horizontal_alignment = 1
 
-[node name="VersionLabel" type="Label" parent="." unique_id=1904245450]
-layout_mode = 0
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -30.0
-offset_right = 200.0
-offset_bottom = 30.0
-grow_horizontal = 2
-text = "版本：v0.1.3"
+[node name="VersionLabel" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+text = "当前版本：v0.1.4"
 horizontal_alignment = 1
 
-[node name="BackButton" type="Button" parent="." unique_id=424272958]
-layout_mode = 0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -200.0
-offset_top = -80.0
-offset_right = -40.0
-offset_bottom = -30.0
-grow_horizontal = 2
+[node name="BackButton" type="Button" parent="Panel/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(200, 50)
+size_flags_horizontal = 4
 text = "返回"

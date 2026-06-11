@@ -11,7 +11,7 @@ func _ready() -> void:
 	records_button.pressed.connect(_on_records)
 	settings_button.pressed.connect(_on_settings)
 	achievements_button.pressed.connect(_on_achievements)
-	about_button.pressed.connect(func(): _show_placeholder("关于"))
+	about_button.pressed.connect(_on_about)
 	placeholder_label.visible = false
 
 func _on_start() -> void:
@@ -28,6 +28,9 @@ func _on_settings() -> void:
 
 func _on_achievements() -> void:
 	get_tree().change_scene_to_file("res://scenes/ui/achievements.tscn")
+
+func _on_about() -> void:
+	get_tree().change_scene_to_file("res://scenes/ui/about.tscn")
 
 func _show_placeholder(section_name: String) -> void:
 	placeholder_label.text = "%s — 敬请期待" % section_name
