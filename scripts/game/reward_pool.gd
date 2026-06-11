@@ -128,6 +128,42 @@ const WEAPON_RULER := [
 ]
 
 # ============================================================
+# 新武器类 - AI助手激光
+# ============================================================
+const WEAPON_AI_LASER := [
+	{
+		"id": "ai_laser_weapon",
+		"title": "解锁AI助手激光",
+		"type": "weapon",
+		"weapon": "ai_laser"
+	},
+	{
+		"id": "laser_width",
+		"title": "AI激光 宽度翻倍",
+		"type": "weapon_upgrade",
+		"weapon": "ai_laser",
+		"requires": "ai_laser",
+		"max_count": 2
+	},
+	{
+		"id": "laser_damage",
+		"title": "AI激光 伤害 +50%",
+		"type": "weapon_upgrade",
+		"weapon": "ai_laser",
+		"requires": "ai_laser",
+		"max_count": 3
+	},
+	{
+		"id": "laser_count",
+		"title": "AI激光 数量 +1",
+		"type": "weapon_upgrade",
+		"weapon": "ai_laser",
+		"requires": "ai_laser",
+		"max_count": 2
+	},
+]
+
+# ============================================================
 # 合并所有奖励
 # ============================================================
 var REWARD_DEFS: Array[Dictionary] = []
@@ -138,6 +174,7 @@ func _init() -> void:
 	REWARD_DEFS.append_array(ATTRIBUTES)
 	REWARD_DEFS.append_array(ABILITIES)
 	REWARD_DEFS.append_array(WEAPON_RULER)
+	REWARD_DEFS.append_array(WEAPON_AI_LASER)
 	for reward in REWARD_DEFS:
 		if reward.has("weapon") and reward["type"] == "weapon":
 			_weapon_unlock_ids.append(str(reward["id"]))

@@ -24,7 +24,14 @@ var ruler_collision_radius := 15.0
 var ruler_speed_multiplier := 1.0
 var _ruler_instances: Array[Node2D] = []
 
+var ai_laser_unlocked := false
+var laser_width_multiplier := 1.0
+var laser_damage_multiplier := 1.0
+var laser_count := 1
+var _laser_cooldown := 0.0
+
 const RULER_SCENE := preload("res://scenes/game/ruler.tscn")
+const AI_LASER_SCENE := preload("res://scenes/game/ai_laser.tscn")
 
 var health := 5
 var game: Node = null
@@ -106,6 +113,15 @@ func apply_reward_effect(reward_id: String) -> void:
 		"ruler_speed":
 			ruler_speed_multiplier += 0.5
 			_update_ruler_params()
+		"ai_laser_weapon":
+			ai_laser_unlocked = true
+			laser_count = 1
+		"laser_width":
+			laser_width_multiplier *= 2.0
+		"laser_damage":
+			laser_damage_multiplier += 0.5
+		"laser_count":
+			laser_count += 1
 		"attack_range":
 			attack_range *= 1.5
 		"bullet_speed":
@@ -251,6 +267,11 @@ func _process(delta: float) -> void:
 		attack_cooldown = maxf(attack_cooldown - delta, 0.0)
 	if attack_cooldown <= 0.0 and not is_leveling:
 		_try_auto_attack()
+	if ai_laser_unlocked and not is_leveling:
+		_laser_cooldown = maxf(_laser_cooldown - delta, 0.0)
+		if _laser_cooldown <= 0.0:
+			_fire_ai_laser()
+			_laser_cooldown = 3.0
 
 func _physics_process(delta: float) -> void:
 	if is_dead:
@@ -294,3 +315,30 @@ func cleanup_rulers() -> void:
 		if is_instance_valid(r):
 			r.queue_free()
 	_ruler_instances.clear()
+
+func _fire_ai_laser() -> void:
+	if game == null:
+		return
+	var base_direction := Vector2.RIGHT
+	if game.has_method("get_nearest_enemy"):
+		var nearest: Node2D = game.get_nearest_enemy(global_position, 9999.0)
+		if nearest != null:
+			base_direction = global_position.direction_to(nearest.global_position)
+	var laser_damage: int = int(round(5 * laser_damage_multiplier))
+	var laser_duration: float = 0.75
+	var laser_width: float = 12.0 * laser_width_multiplier
+	for i in range(laser_count):
+		var angle_offset: float = 0.0
+		if i > 0:
+			var side: int = (i + 1) / 2
+			angle_offset = deg_to_rad(7.0) * side * (-1 if i % 2 == 1 else 1)
+		var dir: Vector2 = base_direction.rotated(angle_offset)
+		var laser: Area2D = AI_LASER_SCENE.instantiate() as Area2D
+		laser.global_position = global_position
+		laser.setup(laser_damage, dir, laser_width, laser_duration, self)
+		if game != null:
+			game.add_child(laser)
+		else:
+			add_child(laser)
+		var timer := get_tree().create_timer(laser_duration)
+		timer.timeout.connect(func(): if is_instance_valid(laser): laser.queue_free())

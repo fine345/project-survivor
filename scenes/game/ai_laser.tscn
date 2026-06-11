@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://dc2x5wvxx6kva"]
+
+[ext_resource type="Script" uid="uid://bxcgntpkfgpoa" path="res://scripts/game/ai_laser.gd" id="1_0boml"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0boml"]
+size = Vector2(1440, 8)
+
+[node name="AILaser" type="Area2D" unique_id=800468077]
+script = ExtResource("1_0boml")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1566146657]
+shape = SubResource("RectangleShape2D_0boml")
+
+[node name="Visual" type="Label" parent="." unique_id=157831473]
+modulate = Color(0.2, 0.8, 1, 0.8)
+offset_left = -200.0
+offset_top = -10.0
+offset_right = 200.0
+offset_bottom = 10.0
+text = "01010101"
+horizontal_alignment = 1
+vertical_alignment = 1
