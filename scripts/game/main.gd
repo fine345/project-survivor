@@ -3,7 +3,7 @@ extends Node2D
 const PLAYER_SCENE := preload("res://scenes/game/player.tscn")
 const ENEMY_SCENE := preload("res://scenes/game/enemy.tscn")
 const EXPERIENCE_SCENE := preload("res://scenes/game/experience.tscn")
-const REWARD_POOL_SCRIPT := preload("res://scripts/game/reward_pool.gd")
+const REWARD_POOL_SCRIPT := preload("res://scripts/ui/reward_pool.gd")
 
 @export var enemy_one_spawn_interval := 1.5
 @export var enemy_two_spawn_interval := 3.0
@@ -27,6 +27,7 @@ var game_over_paused := false
 var total_kills := 0
 var total_damage_dealt := 0
 var summary_shown := false
+var _exiting := false
 
 @onready var enemy_one_timer: Timer = $EnemyTimer
 @onready var enemy_two_timer: Timer = Timer.new()
@@ -35,6 +36,7 @@ var summary_shown := false
 @onready var hud_retry_button: Button = $Layer/Panel/RetryButton
 @onready var level_up_panel: Control = $Layer/Panel/LevelUpPanel
 @onready var pause_button: Button = $Layer/Panel/PauseButton
+@onready var pause_menu: Control = $Layer/Panel/PauseMenu
 @onready var hud_virtual_joystick: Control = $HUD/VirtualJoystick
 @onready var summary_panel: Control = $Layer/Panel/SummaryPanel
 
@@ -57,6 +59,16 @@ func _ready() -> void:
 		summary_panel.visible = false
 		if summary_panel.has_signal("restart_requested") and not summary_panel.restart_requested.is_connected(_on_summary_restart):
 			summary_panel.restart_requested.connect(_on_summary_restart)
+		if summary_panel.has_signal("exit_to_menu_requested") and not summary_panel.exit_to_menu_requested.is_connected(_on_exit_to_menu):
+			summary_panel.exit_to_menu_requested.connect(_on_exit_to_menu)
+	if pause_menu != null:
+		pause_menu.visible = false
+		var resume_btn: Button = pause_menu.get_node_or_null("VBox/ResumeButton")
+		var exit_btn: Button = pause_menu.get_node_or_null("VBox/ExitButton")
+		if resume_btn != null:
+			resume_btn.pressed.connect(_on_pause_button_pressed)
+		if exit_btn != null:
+			exit_btn.pressed.connect(_on_exit_to_menu)
 	_update_hud()
 	_update_game_state_ui()
 
@@ -237,7 +249,10 @@ func _update_hud() -> void:
 	_update_game_state_ui()
 
 func _update_game_state_ui() -> void:
-	var in_reward_select := get_tree().paused and level_up_panel != null and level_up_panel.visible
+	var tree := get_tree()
+	if tree == null:
+		return
+	var in_reward_select := tree.paused and level_up_panel != null and level_up_panel.visible
 	var game_over_visible: bool = player != null and player.is_dead
 	if game_over_visible and not game_over_paused:
 		game_over_paused = true
@@ -360,6 +375,8 @@ func _on_pause_button_pressed() -> void:
 		if enemy_two_timer != null:
 			enemy_two_timer.paused = false
 		pause_button.text = "暂停"
+		if pause_menu != null:
+			pause_menu.visible = false
 	else:
 		get_tree().paused = true
 		if enemy_one_timer != null:
@@ -367,6 +384,8 @@ func _on_pause_button_pressed() -> void:
 		if enemy_two_timer != null:
 			enemy_two_timer.paused = true
 		pause_button.text = "继续"
+		if pause_menu != null:
+			pause_menu.visible = true
 
 func _show_summary(is_victory: bool) -> void:
 	if summary_panel == null:
@@ -393,6 +412,25 @@ func _show_summary(is_victory: bool) -> void:
 		"rewards": rewards_display,
 		"score": score
 	})
+	_save_record(is_victory, damage_taken, score, rewards_display)
+
+func _save_record(is_victory: bool, damage_taken: int, score: int, rewards_display: Dictionary) -> void:
+	var record_manager = get_node_or_null("/root/RecordManager")
+	if record_manager == null:
+		return
+	var rewards_list: Array[String] = []
+	for key in rewards_display:
+		rewards_list.append("%s×%d" % [str(key), rewards_display[key]])
+	record_manager.add_record({
+		"result": "victory" if is_victory else "defeat",
+		"time": elapsed_time,
+		"level": player.level if player != null else 1,
+		"kills": total_kills,
+		"damage_dealt": total_damage_dealt,
+		"damage_taken": damage_taken,
+		"score": score,
+		"rewards": rewards_list
+	})
 
 func _calculate_score(damage_taken: int) -> int:
 	return int(
@@ -405,3 +443,10 @@ func _calculate_score(damage_taken: int) -> int:
 
 func _on_summary_restart() -> void:
 	restart_game()
+
+func _on_exit_to_menu() -> void:
+	if _exiting:
+		return
+	_exiting = true
+	get_tree().paused = false
+	get_tree().change_scene_to_file.call_deferred("res://scenes/ui/main_menu.tscn")

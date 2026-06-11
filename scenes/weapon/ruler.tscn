@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://d3towke6ycepn"]
 
-[ext_resource type="Script" path="res://scripts/game/ruler.gd" id="1_m1ppu"]
+[ext_resource type="Script" path="res://scripts/weapon/ruler.gd" id="1_m1ppu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xbvac"]
 size = Vector2(20, 6)

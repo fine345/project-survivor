@@ -30,8 +30,8 @@ var laser_damage_multiplier := 1.0
 var laser_count := 1
 var _laser_cooldown := 0.0
 
-const RULER_SCENE := preload("res://scenes/game/ruler.tscn")
-const AI_LASER_SCENE := preload("res://scenes/game/ai_laser.tscn")
+const RULER_SCENE := preload("res://scenes/weapon/ruler.tscn")
+const AI_LASER_SCENE := preload("res://scenes/weapon/ai_laser.tscn")
 
 var health := 5
 var game: Node = null

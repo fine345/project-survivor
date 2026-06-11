@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bn8jggr1tiupa"]
 
-[ext_resource type="Script" uid="uid://rdmhps6vqmvt" path="res://scripts/game/virtual_joystick.gd" id="1_pakk4"]
+[ext_resource type="Script" path="res://scripts/ui/virtual_joystick.gd" id="1_pakk4"]
 
 [node name="VirtualJoystick" type="Control" unique_id=280974345]
 layout_mode = 3

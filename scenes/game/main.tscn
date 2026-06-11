@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://cgag7c0dle264" path="res://scripts/game/main.gd" id="1_llaio"]
 [ext_resource type="PackedScene" uid="uid://ctcvd8wy0rnhn" path="res://scenes/ui/level_up_panel.tscn" id="2_oekm8"]
-[ext_resource type="Script" uid="uid://wu0bqi1u3elk" path="res://scripts/game/level_up_panel.gd" id="3_yd8kv"]
+[ext_resource type="Script" uid="uid://c85wuuqkide8j" path="res://scripts/ui/level_up_panel.gd" id="3_yd8kv"]
 [ext_resource type="PackedScene" uid="uid://bn8jggr1tiupa" path="res://scenes/ui/virtual_joystick.tscn" id="4_iba00"]
 [ext_resource type="Script" uid="uid://dubx6ob6i50j0" path="res://scripts/game/grid_background.gd" id="4_uaf1y"]
-[ext_resource type="PackedScene" path="res://scenes/game/summary_panel.tscn" id="6_j7lav"]
+[ext_resource type="PackedScene" path="res://scenes/ui/summary_panel.tscn" id="6_j7lav"]
 
 [node name="Main" type="Node2D" unique_id=1706105945]
 script = ExtResource("1_llaio")
@@ -93,6 +93,30 @@ offset_top = 15.0
 offset_right = 710.0
 offset_bottom = 55.0
 text = "暂停"
+
+[node name="PauseMenu" type="PanelContainer" parent="Layer/Panel" unique_id=493510273]
+process_mode = 3
+visible = false
+z_index = 220
+layout_mode = 0
+offset_left = 210.0
+offset_top = 500.0
+offset_right = 510.0
+offset_bottom = 700.0
+
+[node name="VBox" type="VBoxContainer" parent="Layer/Panel/PauseMenu" unique_id=1524455562]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="ResumeButton" type="Button" parent="Layer/Panel/PauseMenu/VBox" unique_id=1420310396]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+text = "继续游戏"
+
+[node name="ExitButton" type="Button" parent="Layer/Panel/PauseMenu/VBox" unique_id=962121017]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+text = "退出到主菜单"
 
 [node name="SummaryPanel" parent="Layer/Panel" unique_id=1553527617 instance=ExtResource("6_j7lav")]
 z_index = 250

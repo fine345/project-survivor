@@ -47,5 +47,8 @@ func _process(delta: float) -> void:
 	if time_left <= 0.0:
 		queue_free()
 		return
-	if follow_target and target != null and is_instance_valid(target):
+	if target == null or not is_instance_valid(target):
+		queue_free()
+		return
+	if follow_target:
 		global_position = target.global_position

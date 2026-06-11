@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dc2x5wvxx6kva"]
 
-[ext_resource type="Script" uid="uid://bxcgntpkfgpoa" path="res://scripts/game/ai_laser.gd" id="1_0boml"]
+[ext_resource type="Script" path="res://scripts/weapon/ai_laser.gd" id="1_0boml"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0boml"]
 size = Vector2(1440, 8)

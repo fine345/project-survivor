@@ -28,7 +28,7 @@ var knockback_distance_left := 0.0
 var knockback_return_speed := 0.0
 var stored_move_speed := 150.0
 
-const DAMAGE_NUMBER_SCENE := preload("res://scenes/game/damage_number.tscn")
+const DAMAGE_NUMBER_SCENE := preload("res://scenes/ui/damage_number.tscn")
 
 func _ready() -> void:
 	_apply_enemy_type()

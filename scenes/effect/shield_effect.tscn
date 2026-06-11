@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cnxhgy25fadh0"]
 
-[ext_resource type="Script" uid="uid://bnsyqidy1qsr3" path="res://scripts/game/status_effect.gd" id="1_f3f37"]
+[ext_resource type="Script" path="res://scripts/effect/status_effect.gd" id="1_f3f37"]
 
 [node name="ShieldEffect" type="Node2D" unique_id=2003303844]
 script = ExtResource("1_f3f37")

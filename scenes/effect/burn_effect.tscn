@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dfosteiemvayb"]
 
-[ext_resource type="Script" uid="uid://bnsyqidy1qsr3" path="res://scripts/game/status_effect.gd" id="2_5m7ek"]
+[ext_resource type="Script" path="res://scripts/effect/status_effect.gd" id="2_5m7ek"]
 [ext_resource type="Texture2D" uid="uid://o5o6lrplba46" path="res://assets/generated/effect_box_white.png" id="2_6ib0g"]
 
 [node name="BurnEffect" type="Node2D" unique_id=1566307721]

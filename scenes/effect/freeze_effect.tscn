@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://befh1nvgh3qd6"]
 
 [ext_resource type="Texture2D" uid="uid://o5o6lrplba46" path="res://assets/generated/effect_box_white.png" id="2_3tpp1"]
-[ext_resource type="Script" uid="uid://bnsyqidy1qsr3" path="res://scripts/game/status_effect.gd" id="2_gcdcw"]
+[ext_resource type="Script" path="res://scripts/effect/status_effect.gd" id="2_gcdcw"]
 
 [node name="FreezeEffect" type="Node2D" unique_id=1224484554]
 script = ExtResource("2_gcdcw")

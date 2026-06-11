@@ -1,6 +1,7 @@
 extends Control
 
 signal restart_requested
+signal exit_to_menu_requested
 
 @onready var title_label: Label = $Panel/VBox/TitleLabel
 @onready var time_name: Label = $Panel/VBox/TimeRow/NameLabel
@@ -16,11 +17,13 @@ signal restart_requested
 @onready var rewards_label: Label = $Panel/VBox/RewardsLabel
 @onready var score_label: Label = $Panel/VBox/ScoreLabel
 @onready var retry_button: Button = $Panel/VBox/RetryButton
+@onready var exit_button: Button = $Panel/VBox/ExitButton
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	visible = false
 	retry_button.pressed.connect(func(): restart_requested.emit())
+	exit_button.pressed.connect(func(): exit_to_menu_requested.emit())
 
 func show_summary(stats: Dictionary) -> void:
 	visible = true

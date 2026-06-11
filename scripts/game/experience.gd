@@ -7,8 +7,8 @@ extends Area2D
 var attracted_target: Node2D = null
 
 func _ready() -> void:
-	monitoring = true
-	monitorable = true
+	set_deferred("monitoring", true)
+	set_deferred("monitorable", true)
 	body_entered.connect(_on_body_entered)
 
 func set_attracted_target(target: Node2D) -> void:
