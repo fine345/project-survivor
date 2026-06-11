@@ -16,6 +16,16 @@ var bullet_speed_multiplier := 1.0
 var shield_count := 0
 var shield_effect_instance: Node2D = null
 
+var ruler_weapon_unlocked := false
+var orbit_ruler_count := 2
+var ruler_damage_multiplier := 1.0
+var ruler_orbit_radius := 100.0
+var ruler_collision_radius := 15.0
+var ruler_speed_multiplier := 1.0
+var _ruler_instances: Array[Node2D] = []
+
+const RULER_SCENE := preload("res://scenes/game/ruler.tscn")
+
 var health := 5
 var game: Node = null
 var is_dead := false
@@ -79,6 +89,23 @@ func apply_reward_effect(reward_id: String) -> void:
 			experience_bonus_multiplier += 0.5
 		"knockback":
 			bullet_knockback_enabled = true
+		"ruler_weapon":
+			ruler_weapon_unlocked = true
+			orbit_ruler_count = 2
+			_rebuild_rulers()
+		"ruler_count":
+			orbit_ruler_count += 2
+			_rebuild_rulers()
+		"ruler_damage":
+			ruler_damage_multiplier += 0.5
+			_update_ruler_params()
+		"ruler_radius":
+			ruler_orbit_radius *= 1.25
+			ruler_collision_radius *= 1.25
+			_update_ruler_params()
+		"ruler_speed":
+			ruler_speed_multiplier += 0.5
+			_update_ruler_params()
 		"attack_range":
 			attack_range *= 1.5
 		"bullet_speed":
@@ -237,3 +264,33 @@ func _physics_process(delta: float) -> void:
 	var camera: Camera2D = $Camera2D
 	if camera != null and not camera.is_current():
 		camera.make_current()
+
+func _rebuild_rulers() -> void:
+	for r in _ruler_instances:
+		if is_instance_valid(r):
+			r.queue_free()
+	_ruler_instances.clear()
+	if not ruler_weapon_unlocked:
+		return
+	for i in range(orbit_ruler_count):
+		var ruler: Area2D = RULER_SCENE.instantiate() as Area2D
+		ruler.setup(self, i, orbit_ruler_count)
+		ruler.set_params(8 * ruler_damage_multiplier, ruler_orbit_radius, ruler_collision_radius, PI * ruler_speed_multiplier)
+		if game != null:
+			game.add_child(ruler)
+		else:
+			add_child(ruler)
+		_ruler_instances.append(ruler)
+
+func _update_ruler_params() -> void:
+	for i in range(_ruler_instances.size()):
+		var ruler: Area2D = _ruler_instances[i]
+		if is_instance_valid(ruler):
+			ruler.set_params(8 * ruler_damage_multiplier, ruler_orbit_radius, ruler_collision_radius, PI * ruler_speed_multiplier)
+			ruler.angle_offset = (TAU / max(orbit_ruler_count, 1)) * i
+
+func cleanup_rulers() -> void:
+	for r in _ruler_instances:
+		if is_instance_valid(r):
+			r.queue_free()
+	_ruler_instances.clear()

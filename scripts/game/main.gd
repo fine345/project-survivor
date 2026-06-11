@@ -272,9 +272,11 @@ func _restart_game() -> void:
 	spawned_experiences.clear()
 	for child in get_children():
 		if child is Node2D and child != player and child != enemy_one_timer and child != level_up_panel and child != hud_virtual_joystick:
-			if child.name.begins_with("Bullet"):
+			if child.name.begins_with("Bullet") or child.name.begins_with("Ruler"):
 				child.queue_free()
 	if is_instance_valid(player):
+		if player.has_method("cleanup_rulers"):
+			player.cleanup_rulers()
 		player.queue_free()
 	player = null
 	spawn_player()
@@ -299,7 +301,11 @@ func collect_experience(value: int) -> void:
 func _prepare_reward_offers() -> void:
 	if reward_pool == null:
 		return
-	var choices: Array[Dictionary] = reward_pool.get_offer_choices(reward_counts, 3, player.shield_count if player != null else 0)
+	var choices: Array[Dictionary] = reward_pool.get_offer_choices(
+		reward_counts, 3,
+		player.shield_count if player != null else 0,
+		{"ruler": player.ruler_weapon_unlocked if player != null else false}
+	)
 	pending_reward_options.clear()
 	var display_titles: Array[String] = []
 	for choice in choices:

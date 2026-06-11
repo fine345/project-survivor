@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://d3towke6ycepn"]
+
+[ext_resource type="Script" path="res://scripts/game/ruler.gd" id="1_m1ppu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xbvac"]
+size = Vector2(20, 6)
+
+[node name="Ruler" type="Area2D" unique_id=70022819]
+script = ExtResource("1_m1ppu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=263903193]
+shape = SubResource("RectangleShape2D_xbvac")
+
+[node name="Visual" type="ColorRect" parent="." unique_id=252680949]
+offset_left = -10.0
+offset_top = -3.0
+offset_right = 10.0
+offset_bottom = 3.0
+color = Color(0.3, 0.7, 0.3, 1)
