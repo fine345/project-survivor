@@ -48,8 +48,6 @@ var dash_cooldown := 0.0
 var dash_timer := 0.0
 var dash_direction := Vector2.ZERO
 var is_dashing := false
-var _cam_smoothing_was_enabled := false
-var _cam_smoothing_speed := 0.0
 const DASH_DISTANCE := 100.0
 const DASH_DURATION := 0.15
 const DASH_COOLDOWN := 1.0
@@ -90,19 +88,9 @@ func _on_joystick_released(direction: Vector2) -> void:
 	dash_timer = DASH_DURATION
 	dash_cooldown = DASH_COOLDOWN
 	is_dashing = true
-	var camera: Camera2D = $Camera2D
-	if camera != null:
-		_cam_smoothing_was_enabled = camera.position_smoothing_enabled
-		_cam_smoothing_speed = camera.position_smoothing_speed
-		camera.position_smoothing_speed = 12.0
 	var col: CollisionShape2D = $CollisionShape2D
 	if col != null:
 		col.disabled = true
-	for enemy in get_tree().get_nodes_in_group("enemy"):
-		if enemy is PhysicsBody2D:
-			var ecol: CollisionShape2D = enemy.get_node_or_null("CollisionShape2D")
-			if ecol != null:
-				ecol.disabled = true
 
 func set_game(game_ref: Node) -> void:
 	game = game_ref
@@ -335,22 +323,11 @@ func _physics_process(delta: float) -> void:
 		position += velocity * delta
 		if dash_timer <= 0.0:
 			is_dashing = false
-			var camera: Camera2D = $Camera2D
-			if camera != null:
-				camera.position_smoothing_enabled = _cam_smoothing_was_enabled
-				camera.position_smoothing_speed = _cam_smoothing_speed
 			collision_layer = 1
 			collision_mask = 2
 			var col: CollisionShape2D = $CollisionShape2D
 			if col != null:
 				col.disabled = false
-			for enemy in get_tree().get_nodes_in_group("enemy"):
-				if enemy is PhysicsBody2D:
-					enemy.collision_layer = 1
-					enemy.collision_mask = 1
-					var ecol: CollisionShape2D = enemy.get_node_or_null("CollisionShape2D")
-					if ecol != null:
-						ecol.disabled = false
 		return
 	var direction := Vector2.ZERO
 	direction.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
