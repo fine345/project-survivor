@@ -20,7 +20,7 @@ var ruler_weapon_unlocked := false
 var orbit_ruler_count := 2
 var ruler_damage_multiplier := 1.0
 var ruler_orbit_radius := 100.0
-var ruler_collision_radius := 15.0
+var ruler_collision_radius := 25.0
 var ruler_speed_multiplier := 1.0
 var _ruler_instances: Array[Node2D] = []
 
@@ -73,12 +73,12 @@ func collect_experience(value: int) -> void:
 
 func _try_level_up() -> bool:
 	var leveled_up := false
-	var required_experience := 25 * level
+	var required_experience := mini(25 * level, 500)
 	while experience >= required_experience:
 		experience -= required_experience
 		level += 1
 		leveled_up = true
-		required_experience = 25 * level
+		required_experience = mini(25 * level, 500)
 	return leveled_up
 
 func apply_reward_effect(reward_id: String) -> void:
@@ -117,6 +117,7 @@ func apply_reward_effect(reward_id: String) -> void:
 		"ai_laser_weapon":
 			ai_laser_unlocked = true
 			laser_count = 1
+			laser_width_multiplier = 1.5
 			_laser_cooldown = 2.0
 		"laser_width":
 			laser_width_multiplier *= 2.0

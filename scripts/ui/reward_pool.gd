@@ -8,43 +8,50 @@ const ATTRIBUTES := [
 		"id": "bullet_damage",
 		"title": "子弹伤害 +50%",
 		"type": "attribute",
-		"max_count": 5
+		"max_count": 5,
+		"weight": 1.0
 	},
 	{
 		"id": "pickup_range",
 		"title": "拾取范围 +75%",
 		"type": "attribute",
-		"max_count": 2
+		"max_count": 2,
+		"weight": 1.0
 	},
 	{
 		"id": "attack_speed",
 		"title": "攻速 +50%",
 		"type": "attribute",
-		"max_count": 2
+		"max_count": 2,
+		"weight": 1.0
 	},
 	{
 		"id": "bullet_count",
 		"title": "子弹数量 +1",
 		"type": "attribute",
-		"max_count": 3
+		"max_count": 3,
+		"weight": 1.0
 	},
 	{
 		"id": "experience_bonus",
 		"title": "经验球经验 +50%",
 		"type": "attribute",
-		"max_count": 2
+		"max_count": 2,
+		"weight": 1.0
 	},
 	{
 		"id": "attack_range",
 		"title": "攻击范围 +50%",
 		"type": "attribute",
-		"max_count": 2
+		"max_count": 2,
+		"weight": 1.0
 	},
 	{
 		"id": "bullet_speed",
 		"title": "子弹飞行速度 +50%",
 		"type": "attribute",
-		"max_count": 2
+		"max_count": 2,
+		"weight": 1.0
 	},
 ]
 
@@ -55,31 +62,36 @@ const ABILITIES := [
 	{
 		"id": "shield",
 		"title": "护盾（抵挡1次攻击）",
-		"type": "ability"
+		"type": "ability",
+		"weight": 1.0
 	},
 	{
 		"id": "freeze_chance",
 		"title": "子弹概率冰冻敌人",
 		"type": "ability",
-		"max_count": 1
+		"max_count": 1,
+		"weight": 1.0
 	},
 	{
 		"id": "burn_chance",
 		"title": "子弹概率点燃敌人",
 		"type": "ability",
-		"max_count": 1
+		"max_count": 1,
+		"weight": 1.0
 	},
 	{
 		"id": "bounce_count",
 		"title": "子弹弹射 +1",
 		"type": "ability",
-		"max_count": 2
+		"max_count": 2,
+		"weight": 1.0
 	},
 	{
 		"id": "knockback",
 		"title": "子弹获得击退效果",
 		"type": "ability",
-		"max_count": 1
+		"max_count": 1,
+		"weight": 1.0
 	},
 ]
 
@@ -91,7 +103,8 @@ const WEAPON_RULER := [
 		"id": "ruler_weapon",
 		"title": "解锁旋转尺子",
 		"type": "weapon",
-		"weapon": "ruler"
+		"weapon": "ruler",
+		"weight": 1.5
 	},
 	{
 		"id": "ruler_count",
@@ -99,7 +112,8 @@ const WEAPON_RULER := [
 		"type": "weapon_upgrade",
 		"weapon": "ruler",
 		"requires": "ruler",
-		"max_count": 2
+		"max_count": 2,
+		"weight": 1.2
 	},
 	{
 		"id": "ruler_damage",
@@ -107,7 +121,8 @@ const WEAPON_RULER := [
 		"type": "weapon_upgrade",
 		"weapon": "ruler",
 		"requires": "ruler",
-		"max_count": 3
+		"max_count": 3,
+		"weight": 1.2
 	},
 	{
 		"id": "ruler_radius",
@@ -115,7 +130,8 @@ const WEAPON_RULER := [
 		"type": "weapon_upgrade",
 		"weapon": "ruler",
 		"requires": "ruler",
-		"max_count": 2
+		"max_count": 2,
+		"weight": 1.2
 	},
 	{
 		"id": "ruler_speed",
@@ -123,7 +139,8 @@ const WEAPON_RULER := [
 		"type": "weapon_upgrade",
 		"weapon": "ruler",
 		"requires": "ruler",
-		"max_count": 2
+		"max_count": 2,
+		"weight": 1.2
 	},
 ]
 
@@ -135,7 +152,8 @@ const WEAPON_AI_LASER := [
 		"id": "ai_laser_weapon",
 		"title": "解锁AI助手激光",
 		"type": "weapon",
-		"weapon": "ai_laser"
+		"weapon": "ai_laser",
+		"weight": 1.5
 	},
 	{
 		"id": "laser_width",
@@ -143,7 +161,8 @@ const WEAPON_AI_LASER := [
 		"type": "weapon_upgrade",
 		"weapon": "ai_laser",
 		"requires": "ai_laser",
-		"max_count": 2
+		"max_count": 2,
+		"weight": 1.2
 	},
 	{
 		"id": "laser_damage",
@@ -151,7 +170,8 @@ const WEAPON_AI_LASER := [
 		"type": "weapon_upgrade",
 		"weapon": "ai_laser",
 		"requires": "ai_laser",
-		"max_count": 3
+		"max_count": 3,
+		"weight": 1.2
 	},
 	{
 		"id": "laser_count",
@@ -159,7 +179,8 @@ const WEAPON_AI_LASER := [
 		"type": "weapon_upgrade",
 		"weapon": "ai_laser",
 		"requires": "ai_laser",
-		"max_count": 2
+		"max_count": 2,
+		"weight": 1.2
 	},
 ]
 
@@ -208,9 +229,19 @@ func get_offer_choices(existing_counts: Dictionary, offer_count: int = 3, player
 	var choices: Array[Dictionary] = []
 	var pool: Array[Dictionary] = available.duplicate()
 	while choices.size() < offer_count and pool.size() > 0:
-		var index: int = randi() % pool.size()
-		choices.append(pool[index])
-		pool.remove_at(index)
+		var total_weight := 0.0
+		for reward in pool:
+			total_weight += _get_weight(reward)
+		var roll := randf() * total_weight
+		var cumulative := 0.0
+		var picked_index := 0
+		for i in range(pool.size()):
+			cumulative += _get_weight(pool[i])
+			if roll <= cumulative:
+				picked_index = i
+				break
+		choices.append(pool[picked_index])
+		pool.remove_at(picked_index)
 	return choices
 
 func get_reward_title(reward_id: String) -> String:
@@ -218,6 +249,16 @@ func get_reward_title(reward_id: String) -> String:
 		if reward.id == reward_id:
 			return str(reward.title)
 	return reward_id
+
+func _get_weight(reward: Dictionary) -> float:
+	if reward.has("weight"):
+		return float(reward["weight"])
+	var rtype: String = str(reward.get("type", ""))
+	if rtype == "weapon":
+		return 1.5
+	if rtype == "weapon_upgrade":
+		return 1.2
+	return 1.0
 
 func get_reward_type(reward_id: String) -> String:
 	for reward in REWARD_DEFS:

@@ -28,6 +28,8 @@ var total_kills := 0
 var total_damage_dealt := 0
 var summary_shown := false
 var _exiting := false
+var _unpause_ramp_time := 0.0
+var _is_ramping := false
 
 @onready var enemy_one_timer: Timer = $EnemyTimer
 @onready var enemy_two_timer: Timer = Timer.new()
@@ -75,7 +77,7 @@ func _ready() -> void:
 		if exit_btn != null:
 			exit_btn.pressed.connect(_on_exit_to_menu)
 	if exit_confirm_dialog != null:
-		exit_confirm_dialog.confirmed.connect(_do_exit_to_menu)
+		exit_confirm_dialog.confirmed.connect(func(): _show_summary(false))
 	if settings_overlay != null:
 		settings_overlay.visible = false
 		settings_overlay.is_overlay = true
@@ -212,6 +214,13 @@ func _on_enemy_tree_exited(enemy: Node) -> void:
 	_update_spawn_timers()
 
 func _process(delta: float) -> void:
+	if _is_ramping:
+		_unpause_ramp_time += delta
+		var t := clampf(_unpause_ramp_time / 0.5, 0.0, 1.0)
+		Engine.time_scale = lerpf(0.3, 1.0, t)
+		if t >= 1.0:
+			_is_ramping = false
+			Engine.time_scale = 1.0
 	elapsed_time += delta
 	enemy_two_unlocked = elapsed_time >= enemy_time_relief_start
 	_update_spawn_timers()
@@ -249,6 +258,9 @@ func _on_reward_selected(reward_id: String) -> void:
 		enemy_one_timer.paused = false
 	if enemy_two_timer != null:
 		enemy_two_timer.paused = false
+	_is_ramping = true
+	_unpause_ramp_time = 0.0
+	Engine.time_scale = 0.3
 	get_tree().paused = false
 	_update_hud()
 	_update_game_state_ui()
@@ -292,6 +304,8 @@ func _restart_game() -> void:
 	if get_tree().paused:
 		get_tree().paused = false
 		await get_tree().process_frame
+	_is_ramping = false
+	Engine.time_scale = 1.0
 	game_over_paused = false
 	summary_shown = false
 	if summary_panel != null:
@@ -379,6 +393,9 @@ func _on_pause_button_pressed() -> void:
 	if game_over_paused:
 		return
 	if get_tree().paused:
+		_is_ramping = true
+		_unpause_ramp_time = 0.0
+		Engine.time_scale = 0.3
 		get_tree().paused = false
 		if enemy_one_timer != null:
 			enemy_one_timer.paused = false
@@ -456,9 +473,10 @@ func _on_summary_restart() -> void:
 
 func _on_exit_to_menu() -> void:
 	if exit_confirm_dialog != null:
+		exit_confirm_dialog.dialog_text = "退出游戏将立即结算"
 		exit_confirm_dialog.popup_centered()
 	else:
-		_do_exit_to_menu()
+		_show_summary(false)
 
 func _do_exit_to_menu() -> void:
 	if _exiting:

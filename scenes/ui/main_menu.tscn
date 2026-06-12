@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://drj3bmhqckm6"]
 
-[ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="1_mm"]
+[ext_resource type="Script" uid="uid://di2maqvcp1h60" path="res://scripts/ui/main_menu.gd" id="1_mm"]
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" unique_id=1755850702]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,7 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_mm")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=2105874396]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,7 +20,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.1, 0.1, 0.15, 1)
 
-[node name="Title" type="Label" parent="."]
+[node name="Title" type="Label" parent="." unique_id=1522150969]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -33,7 +33,7 @@ grow_horizontal = 2
 text = "生存射击"
 horizontal_alignment = 1
 
-[node name="VBox" type="VBoxContainer" parent="."]
+[node name="VBox" type="VBoxContainer" parent="." unique_id=1177407621]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -48,35 +48,35 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 16
 
-[node name="StartButton" type="Button" parent="VBox"]
-layout_mode = 2
+[node name="StartButton" type="Button" parent="VBox" unique_id=190217647]
 custom_minimum_size = Vector2(240, 50)
+layout_mode = 2
 text = "开始游戏"
 
-[node name="RecordsButton" type="Button" parent="VBox"]
-layout_mode = 2
+[node name="RecordsButton" type="Button" parent="VBox" unique_id=700668274]
 custom_minimum_size = Vector2(240, 50)
+layout_mode = 2
 text = "游戏记录"
 
-[node name="SettingsButton" type="Button" parent="VBox"]
-layout_mode = 2
+[node name="SettingsButton" type="Button" parent="VBox" unique_id=1249931950]
 custom_minimum_size = Vector2(240, 50)
+layout_mode = 2
 text = "设置"
 
-[node name="AchievementsButton" type="Button" parent="VBox"]
-layout_mode = 2
+[node name="AchievementsButton" type="Button" parent="VBox" unique_id=563277853]
 custom_minimum_size = Vector2(240, 50)
+layout_mode = 2
 text = "成就"
 
-[node name="AboutButton" type="Button" parent="VBox"]
-layout_mode = 2
+[node name="AboutButton" type="Button" parent="VBox" unique_id=2105461480]
 custom_minimum_size = Vector2(240, 50)
+layout_mode = 2
 text = "关于"
 
-[node name="PlaceholderLabel" type="Label" parent="."]
+[node name="PlaceholderLabel" type="Label" parent="." unique_id=974314011]
 visible = false
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -86,5 +86,6 @@ offset_top = -80.0
 offset_right = 150.0
 offset_bottom = -40.0
 grow_horizontal = 2
+grow_vertical = 2
 text = "敬请期待"
 horizontal_alignment = 1
