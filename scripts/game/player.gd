@@ -116,12 +116,13 @@ func _try_level_up() -> bool:
 		required_experience = mini(25 * level, 500)
 	return leveled_up
 
-func level_up_reward() -> void:
-	var required := mini(25 * level, 500)
-	var xp_ratio := float(experience) / float(required) if required > 0 else 0.0
-	level += 1
-	var new_required := mini(25 * level, 500)
-	experience = int(xp_ratio * new_required)
+func level_up_reward(levels: int = 1) -> void:
+	for i in range(levels):
+		var required := mini(25 * level, 500)
+		var xp_ratio := float(experience) / float(required) if required > 0 else 0.0
+		level += 1
+		var new_required := mini(25 * level, 500)
+		experience = int(xp_ratio * new_required)
 	if game != null and game.has_method("_on_player_level_up"):
 		game._on_player_level_up()
 
