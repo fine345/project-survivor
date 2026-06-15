@@ -6,6 +6,7 @@ const ENEMY_TYPE2_SCENE := preload("res://scenes/game/enemy_type2.tscn")
 const EXPERIENCE_SCENE := preload("res://scenes/game/experience.tscn")
 const BOSS1_SCENE := preload("res://scenes/game/boss1.tscn")
 const BOSS_REWARD_SCENE := preload("res://scenes/game/boss_reward.tscn")
+const ENEMY_TYPE3_SCENE := preload("res://scenes/game/enemy_type3.tscn")
 const REWARD_POOL_SCRIPT := preload("res://scripts/ui/reward_pool.gd")
 
 @export var enemy_one_spawn_interval := 1.5
@@ -35,12 +36,15 @@ var _unpause_ramp_time := 0.0
 var _is_ramping := false
 var boss1_spawned := false
 var boss1_node: Node2D = null
+var enemy_three_unlocked := false
+var _key2_pressed := false
 var boss_boundary_active := false
 var boss_boundary_rect := Rect2(Vector2(-440, -600), Vector2(1600, 1600))
 var boss_health_bar: Control = null
 
 @onready var enemy_one_timer: Timer = $EnemyTimer
 @onready var enemy_two_timer: Timer = Timer.new()
+var enemy_three_timer: Timer = null
 @onready var hud_info: Label = $HUD/Info
 @onready var hud_game_over: Label = $Layer/Panel/GameOver
 @onready var hud_retry_button: Button = $Layer/Panel/RetryButton
@@ -112,6 +116,14 @@ func _setup_timers() -> void:
 	if not enemy_two_timer.is_stopped():
 		enemy_two_timer.stop()
 	enemy_two_timer.start()
+	if enemy_three_timer == null:
+		enemy_three_timer = Timer.new()
+		add_child(enemy_three_timer)
+	enemy_three_timer.one_shot = false
+	enemy_three_timer.wait_time = 3.0
+	if not enemy_three_timer.timeout.is_connected(_spawn_enemy_three):
+		enemy_three_timer.timeout.connect(_spawn_enemy_three)
+	enemy_three_timer.stop()
 
 func get_nearest_enemy(origin: Vector2, max_distance: float, exclude_enemy: Node = null) -> Node2D:
 	var nearest: Node2D = null
@@ -154,6 +166,22 @@ func _spawn_enemy_two() -> void:
 	if player == null or player.is_dead:
 		return
 	var enemy := ENEMY_TYPE2_SCENE.instantiate()
+	var offset := _get_spawn_offset()
+	enemy.position = player.position + offset
+	add_child(enemy)
+	spawned_enemies.append(enemy)
+	if enemy.has_method("set_game"):
+		enemy.set_game(self)
+	if enemy.has_signal("tree_exited"):
+		enemy.tree_exited.connect(_on_enemy_tree_exited.bind(enemy))
+	enemy.set_target(player)
+
+func _spawn_enemy_three() -> void:
+	if not enemy_three_unlocked:
+		return
+	if player == null or player.is_dead:
+		return
+	var enemy := ENEMY_TYPE3_SCENE.instantiate()
 	var offset := _get_spawn_offset()
 	enemy.position = player.position + offset
 	add_child(enemy)
@@ -208,6 +236,16 @@ func _on_boss1_tree_exited(enemy: Node) -> void:
 	queue_redraw()
 	if boss_health_bar != null:
 		boss_health_bar.hide_boss()
+	var enemy3_timer := Timer.new()
+	enemy3_timer.one_shot = true
+	enemy3_timer.wait_time = 30.0
+	enemy3_timer.timeout.connect(func():
+		enemy_three_unlocked = true
+		if enemy_three_timer != null:
+			enemy_three_timer.start()
+	)
+	add_child(enemy3_timer)
+	enemy3_timer.start()
 	_update_hud()
 	_update_game_state_ui()
 	_update_spawn_timers()
@@ -314,6 +352,12 @@ func _process(delta: float) -> void:
 		_pause_for_level_up()
 	if Input.is_key_pressed(KEY_1):
 		_spawn_boss1()
+	if Input.is_key_pressed(KEY_2) and not _key2_pressed:
+		_key2_pressed = true
+		enemy_three_unlocked = true
+		_spawn_enemy_three()
+	if not Input.is_key_pressed(KEY_2):
+		_key2_pressed = false
 	_update_hud()
 	_update_game_state_ui()
 
@@ -343,6 +387,8 @@ func _on_reward_selected(reward_id: String) -> void:
 		enemy_one_timer.paused = false
 	if enemy_two_timer != null:
 		enemy_two_timer.paused = false
+	if enemy_three_timer != null:
+		enemy_three_timer.paused = false
 	_is_ramping = true
 	_unpause_ramp_time = 0.0
 	Engine.time_scale = 0.3
@@ -367,6 +413,8 @@ func _update_game_state_ui() -> void:
 			enemy_one_timer.paused = true
 		if enemy_two_timer != null:
 			enemy_two_timer.paused = true
+		if enemy_three_timer != null:
+			enemy_three_timer.paused = true
 		if not summary_shown:
 			summary_shown = true
 			_show_summary(false)
@@ -415,6 +463,7 @@ func _restart_game() -> void:
 	boss1_spawned = false
 	boss1_node = null
 	boss_boundary_active = false
+	enemy_three_unlocked = false
 	queue_redraw()
 	if boss_health_bar != null:
 		boss_health_bar.hide_boss()
@@ -441,6 +490,9 @@ func _restart_game() -> void:
 		enemy_two_timer.paused = false
 		enemy_two_timer.stop()
 		enemy_two_timer.start()
+	if enemy_three_timer != null:
+		enemy_three_timer.paused = false
+		enemy_three_timer.stop()
 	_update_hud()
 	_update_game_state_ui()
 
@@ -486,6 +538,8 @@ func _pause_for_level_up() -> void:
 		enemy_one_timer.paused = true
 	if enemy_two_timer != null:
 		enemy_two_timer.paused = true
+	if enemy_three_timer != null:
+		enemy_three_timer.paused = true
 
 func _on_pause_button_pressed() -> void:
 	if game_over_paused:
@@ -499,6 +553,8 @@ func _on_pause_button_pressed() -> void:
 			enemy_one_timer.paused = false
 		if enemy_two_timer != null:
 			enemy_two_timer.paused = false
+		if enemy_three_timer != null:
+			enemy_three_timer.paused = false
 		pause_button.text = "暂停"
 		if pause_menu != null:
 			pause_menu.visible = false
@@ -508,6 +564,8 @@ func _on_pause_button_pressed() -> void:
 			enemy_one_timer.paused = true
 		if enemy_two_timer != null:
 			enemy_two_timer.paused = true
+		if enemy_three_timer != null:
+			enemy_three_timer.paused = true
 		pause_button.text = "继续"
 		if pause_menu != null:
 			pause_menu.visible = true
@@ -520,6 +578,8 @@ func _show_summary(is_victory: bool) -> void:
 		enemy_one_timer.paused = true
 	if enemy_two_timer != null:
 		enemy_two_timer.paused = true
+	if enemy_three_timer != null:
+		enemy_three_timer.paused = true
 	var score: int = _calculate_score()
 	var damage_taken: int = 0
 	if player != null and player.has_method("get"):

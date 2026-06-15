@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://c3typ3unique1"]
+
+[ext_resource type="Script" uid="uid://c4dybytxlcp8v" path="res://scripts/game/enemy_type3.gd" id="1_ibalm"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ibalm"]
+size = Vector2(21, 22.5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ibalm"]
+bg_color = Color(0.2, 0.5, 0.9, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="EnemyType3" type="CharacterBody2D" groups=["enemy"]]
+script = ExtResource("1_ibalm")
+
+[node name="Visual" type="Panel" parent="."]
+offset_left = -10.5
+offset_top = -11.25
+offset_right = 10.5
+offset_bottom = 11.25
+theme_override_styles/panel = SubResource("StyleBoxFlat_ibalm")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_ibalm")
