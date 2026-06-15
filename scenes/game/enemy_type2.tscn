@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://n67ouyxffnri"]
+
+[ext_resource type="Script" uid="uid://berywc27cages" path="res://scripts/game/enemy_type2.gd" id="1_o276a"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o276a"]
+size = Vector2(21, 22.5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o276a"]
+bg_color = Color(0.95, 0.55, 0.2, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="EnemyType2" type="CharacterBody2D" unique_id=103584818 groups=["enemy"]]
+script = ExtResource("1_o276a")
+
+[node name="Visual" type="Panel" parent="." unique_id=1573749179]
+offset_left = -10.5
+offset_top = -11.25
+offset_right = 10.5
+offset_bottom = 11.25
+theme_override_styles/panel = SubResource("StyleBoxFlat_o276a")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1088465831]
+shape = SubResource("RectangleShape2D_o276a")

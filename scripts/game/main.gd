@@ -1,7 +1,8 @@
 extends Node2D
 
 const PLAYER_SCENE := preload("res://scenes/game/player.tscn")
-const ENEMY_SCENE := preload("res://scenes/game/enemy.tscn")
+const ENEMY_TYPE1_SCENE := preload("res://scenes/game/enemy_type1.tscn")
+const ENEMY_TYPE2_SCENE := preload("res://scenes/game/enemy_type2.tscn")
 const EXPERIENCE_SCENE := preload("res://scenes/game/experience.tscn")
 const REWARD_POOL_SCRIPT := preload("res://scripts/ui/reward_pool.gd")
 
@@ -123,18 +124,25 @@ func spawn_player() -> void:
 	player.set_game(self)
 
 func _spawn_enemy_one() -> void:
-	_spawn_enemy(1)
+	if player == null or player.is_dead:
+		return
+	var enemy := ENEMY_TYPE1_SCENE.instantiate()
+	var offset := _get_spawn_offset()
+	enemy.position = player.position + offset
+	add_child(enemy)
+	spawned_enemies.append(enemy)
+	if enemy.has_method("set_game"):
+		enemy.set_game(self)
+	if enemy.has_signal("tree_exited"):
+		enemy.tree_exited.connect(_on_enemy_tree_exited.bind(enemy))
+	enemy.set_target(player)
 
 func _spawn_enemy_two() -> void:
 	if not enemy_two_unlocked:
 		return
-	_spawn_enemy(2)
-
-func _spawn_enemy(enemy_type: int) -> void:
 	if player == null or player.is_dead:
 		return
-	var enemy := ENEMY_SCENE.instantiate()
-	enemy.enemy_type = enemy_type
+	var enemy := ENEMY_TYPE2_SCENE.instantiate()
 	var offset := _get_spawn_offset()
 	enemy.position = player.position + offset
 	add_child(enemy)

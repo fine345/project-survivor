@@ -5,7 +5,6 @@ extends CharacterBody2D
 @export var touch_range := 18.0
 @export var max_health := 30
 @export var experience_drop := 5
-@export var enemy_type := 1
 
 var target: Node2D
 var game: Node = null
@@ -31,23 +30,12 @@ var stored_move_speed := 150.0
 const DAMAGE_NUMBER_SCENE := preload("res://scenes/ui/damage_number.tscn")
 
 func _ready() -> void:
-	_apply_enemy_type()
+	_apply_visual()
 	health = max_health
 	stored_move_speed = move_speed
-	_apply_enemy_visual()
 
-func _apply_enemy_visual() -> void:
-	var visual: Panel = $Visual
-	if visual == null:
-		return
-	var style: StyleBoxFlat = visual.get_theme_stylebox("panel") as StyleBoxFlat
-	if style == null:
-		return
-	match enemy_type:
-		2:
-			style.bg_color = Color(0.95, 0.55, 0.2, 1.0)
-		_:
-			style.bg_color = Color(0.9, 0.2, 0.3, 1.0)
+func _apply_visual() -> void:
+	pass
 
 func apply_freeze(duration: float) -> void:
 	freeze_timer = maxf(freeze_timer, duration)
@@ -96,17 +84,6 @@ func apply_knockback(from_position: Vector2, force: float) -> void:
 	knockback_return_speed = stored_move_speed
 	velocity = Vector2.ZERO
 	move_speed = 0.0
-
-func _apply_enemy_type() -> void:
-	match enemy_type:
-		2:
-			max_health = 50
-			move_speed = 150.0
-			experience_drop = 10
-		_:
-			max_health = 30
-			move_speed = 150.0
-			experience_drop = 5
 
 func set_game(game_ref: Node) -> void:
 	game = game_ref
