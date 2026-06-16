@@ -16,26 +16,26 @@ var visual_node: Panel
 var normal_shape: RectangleShape2D
 var saved_alpha := 1.0
 
-const CHASE_SPEED := 150.0
-const SKILL1_RANGE := 300.0
-const SKILL2_RANGE := 300.0
+const CHASE_SPEED := 200.0
+const SKILL1_RANGE := 400.0
+const SKILL2_RANGE := 400.0
 const COOLDOWN_DURATION := 3.0
 const PUSH_RADIUS := 50.0
 const PUSH_FORCE := 80.0
 
 func _ready() -> void:
 	max_health = 10000
-	move_speed = 150.0
+	move_speed = 200.0
 	experience_drop = 0
 	touch_damage = 1
-	touch_range = 20.0
+	touch_range = 26.67
 	super._ready()
 	_setup_collision()
 
 func _setup_collision() -> void:
 	collision_node = $CollisionShape2D
 	normal_shape = RectangleShape2D.new()
-	normal_shape.size = Vector2(38, 38)
+	normal_shape.size = Vector2(64, 64)
 	if collision_node != null:
 		collision_node.shape = normal_shape
 
@@ -124,14 +124,14 @@ func _process_skill1_warn(delta: float) -> void:
 	if state_timer <= 0.0:
 		if target != null and is_instance_valid(target):
 			lock_position = target.global_position
-		_show_circle_warning(lock_position, 50.0)
+		_show_circle_warning(lock_position, 66.67)
 		current_state = BossState.SKILL1_UP
 		state_timer = 0.6
 
 func _process_skill1_up(delta: float) -> void:
 	state_timer -= delta
 	velocity = Vector2.ZERO
-	global_position += Vector2(0, -75.0 / 0.6) * delta
+	global_position += Vector2(0, -100.0 / 0.6) * delta
 	if state_timer <= 0.0:
 		_set_collision_enabled(false)
 		_set_visual_alpha(0.5)
@@ -142,16 +142,16 @@ func _process_skill1_down(delta: float) -> void:
 	state_timer -= delta
 	velocity = Vector2.ZERO
 	if state_timer > 0.05:
-		global_position = lock_position + Vector2(0, -75)
+		global_position = lock_position + Vector2(0, -100)
 	else:
-		global_position = global_position.move_toward(lock_position, 600.0 * delta)
+		global_position = global_position.move_toward(lock_position, 800.0 * delta)
 	if state_timer <= 0.0:
 		global_position = lock_position
 		_set_collision_enabled(true)
 		_set_visual_alpha(1.0)
 		_hide_warning()
-		_damage_in_range(lock_position, 50.0)
-		_push_at_position(lock_position, 50.0)
+		_damage_in_range(lock_position, 66.67)
+		_push_at_position(lock_position, 66.67)
 		_enter_idle()
 
 func _damage_in_range(pos: Vector2, radius: float) -> void:
@@ -164,10 +164,10 @@ func _damage_in_range(pos: Vector2, radius: float) -> void:
 
 func _enter_skill2() -> void:
 	current_state = BossState.SKILL2_APPROACH
-	move_speed = 300.0
+	move_speed = 400.0
 
 func _process_skill2_approach(_delta: float) -> void:
-	move_speed = 300.0
+	move_speed = 400.0
 	if target == null or not is_instance_valid(target):
 		velocity = Vector2.ZERO
 		return
@@ -184,7 +184,7 @@ func _enter_skill2_warn1() -> void:
 	velocity = Vector2.ZERO
 	move_speed = 0.0
 	lock_position = global_position
-	_show_circle_warning(global_position, 150.0)
+	_show_circle_warning(global_position, 200.0)
 
 func _process_skill2_warn1(delta: float) -> void:
 	state_timer -= delta
@@ -205,7 +205,7 @@ func _process_skill2_laser1(delta: float) -> void:
 func _process_skill2_dash(delta: float) -> void:
 	state_timer -= delta
 	if target != null and is_instance_valid(target):
-		velocity = locked_direction * 500.0
+		velocity = locked_direction * 666.67
 	else:
 		velocity = Vector2.ZERO
 	if state_timer <= 0.0:
@@ -213,7 +213,7 @@ func _process_skill2_dash(delta: float) -> void:
 		lock_position = global_position
 		current_state = BossState.SKILL2_WARN2
 		state_timer = 0.5
-		_show_rect_warning(300.0, 75.0)
+		_show_rect_warning(400.0, 100.0)
 
 func _process_skill2_warn2(delta: float) -> void:
 	state_timer -= delta
@@ -302,15 +302,15 @@ func _spawn_rotating_laser() -> void:
 	var laser := laser_scene.instantiate()
 	laser.global_position = global_position
 	var shape := RectangleShape2D.new()
-	shape.size = Vector2(150, 12)
+	shape.size = Vector2(200, 16)
 	var collision := CollisionShape2D.new()
 	collision.shape = shape
-	collision.position = Vector2(75, 0)
+	collision.position = Vector2(100, 0)
 	laser.add_child(collision)
 	var vis := ColorRect.new()
 	vis.color = Color(1, 0.2, 0.2, 0.8)
-	vis.size = Vector2(150, 12)
-	vis.position = Vector2(0, -6)
+	vis.size = Vector2(200, 16)
+	vis.position = Vector2(0, -8)
 	laser.add_child(vis)
 	var angle := 0.0
 	if target != null and is_instance_valid(target):
@@ -326,15 +326,15 @@ func _spawn_rect_laser() -> void:
 	laser.global_position = _warning_position
 	laser.rotation = _warning_rotation
 	var shape := RectangleShape2D.new()
-	shape.size = Vector2(300, 75)
+	shape.size = Vector2(400, 100)
 	var collision := CollisionShape2D.new()
 	collision.shape = shape
-	collision.position = Vector2(150, 0)
+	collision.position = Vector2(200, 0)
 	laser.add_child(collision)
 	var vis := ColorRect.new()
 	vis.color = Color(1, 0.2, 0.2, 0.8)
-	vis.size = Vector2(300, 75)
-	vis.position = Vector2(0, -37.5)
+	vis.size = Vector2(400, 100)
+	vis.position = Vector2(0, -50)
 	laser.add_child(vis)
 	get_parent().add_child(laser)
 
@@ -356,13 +356,13 @@ func _push_at_position(pos: Vector2, radius: float) -> void:
 		var dist := pos.distance_to(enemy.global_position)
 		if dist < radius and dist > 0.01:
 			var push_dir := pos.direction_to(enemy.global_position)
-			enemy.global_position += push_dir * 60.0
+			enemy.global_position += push_dir * 80.0
 	if target != null and is_instance_valid(target):
 		var dist := pos.distance_to(target.global_position)
 		if dist < radius:
 			var push_angle := randf() * TAU
 			var push_dir := Vector2(cos(push_angle), sin(push_angle))
-			target.global_position += push_dir * 40.0
+			target.global_position += push_dir * 53.33
 
 func _push_nearby_enemies() -> void:
 	var game_node := get_tree().current_scene

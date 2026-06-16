@@ -1,7 +1,7 @@
 extends Area2D
 
-@export var attract_range := 140.0
-@export var attract_speed := 390.0
+@export var attract_range := 180.0
+@export var attract_speed := 520.0
 
 var attracted_target: Node2D = null
 var reward_levels := 1

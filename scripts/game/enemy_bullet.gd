@@ -1,6 +1,6 @@
 extends Area2D
 
-@export var move_speed := 200.0
+@export var move_speed := 300.0
 @export var damage := 1
 @export var max_distance := 1000.0
 

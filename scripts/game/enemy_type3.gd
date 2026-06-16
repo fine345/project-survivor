@@ -7,7 +7,7 @@ var shoot_timer := 0.0
 
 func _ready() -> void:
 	max_health = 50
-	move_speed = 150.0
+	move_speed = 200.0
 	experience_drop = 25
 	super._ready()
 

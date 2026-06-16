@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://be6mh6txla82q" path="res://scripts/game/bullet.gd" id="1_xhiv3"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_bullet"]
-radius = 2.25
-height = 13.5
+radius = 3.0
+height = 18.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bullet"]
 bg_color = Color(1, 1, 0, 1)
@@ -19,10 +19,10 @@ collision_mask = 1
 script = ExtResource("1_xhiv3")
 
 [node name="Visual" type="Panel" parent="." unique_id=1623374483]
-offset_left = -6.75
-offset_top = -2.25
-offset_right = 6.75
-offset_bottom = 2.25
+offset_left = -9.0
+offset_top = -3.0
+offset_right = 9.0
+offset_bottom = 3.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_bullet")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1147108424]

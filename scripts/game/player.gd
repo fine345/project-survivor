@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-@export var move_speed := 160.0
+@export var move_speed := 220.0
 @export var max_health := 5
 @export var attack_interval := 0.75
 @export var attack_range := 252.0
@@ -49,7 +49,7 @@ var dash_timer := 0.0
 var dash_direction := Vector2.ZERO
 var is_dashing := false
 var _dash_cooldown_bar: ColorRect = null
-const DASH_DISTANCE := 100.0
+const DASH_DISTANCE := 140.0
 const DASH_DURATION := 0.15
 const DASH_COOLDOWN := 1.0
 
@@ -453,7 +453,7 @@ func _physics_process(delta: float) -> void:
 		_dash_cooldown_bar.visible = dash_cooldown > 0.0
 		if dash_cooldown > 0.0:
 			var ratio := dash_cooldown / DASH_COOLDOWN
-			_dash_cooldown_bar.offset_right = lerpf(-9.0, 9.0, ratio)
+			_dash_cooldown_bar.offset_right = lerpf(-12.0, 12.0, ratio)
 	if dash_timer > 0.0:
 		dash_timer = maxf(dash_timer - delta, 0.0)
 		var dash_speed := DASH_DISTANCE / DASH_DURATION

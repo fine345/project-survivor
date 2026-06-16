@@ -1,8 +1,8 @@
 extends Area2D
 
 @export var pickup_value := 5
-@export var attract_range := 140.0
-@export var attract_speed := 390.0
+@export var attract_range := 180.0
+@export var attract_speed := 520.0
 
 var attracted_target: Node2D = null
 

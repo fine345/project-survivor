@@ -12,7 +12,7 @@ var collision_node: CollisionShape2D
 var visual_node: Panel
 var lasers: Array[Node2D] = []
 
-const CHASE_SPEED := 250.0
+const CHASE_SPEED := 333.33
 const CHARGE_RANGE := 250.0
 const CHARGE_DURATION := 0.5
 const LASER_DURATION := 15.0
@@ -27,10 +27,10 @@ const LASER_FAST_SPEED := TAU / 5.0
 
 func _ready() -> void:
 	max_health = 5000
-	move_speed = 150.0
+	move_speed = 200.0
 	experience_drop = 0
 	touch_damage = 1
-	touch_range = 20.0
+	touch_range = 26.67
 	super._ready()
 	_setup_collision_shapes()
 	_setup_charge_indicator()
@@ -38,14 +38,14 @@ func _ready() -> void:
 func _setup_collision_shapes() -> void:
 	collision_node = $CollisionShape2D
 	normal_shape = RectangleShape2D.new()
-	normal_shape.size = Vector2(32, 32)
+	normal_shape.size = Vector2(64, 64)
 	if collision_node != null:
 		collision_node.shape = normal_shape
 
 func _setup_charge_indicator() -> void:
 	charge_indicator = ColorRect.new()
 	charge_indicator.color = Color(1, 0, 0, 0.3)
-	charge_indicator.size = Vector2(60, 200)
+	charge_indicator.size = Vector2(80, 266.67)
 	charge_indicator.visible = false
 	add_child(charge_indicator)
 
@@ -149,7 +149,7 @@ func _enter_cooldown_state() -> void:
 
 func _process_cooldown(delta: float) -> void:
 	state_timer -= delta
-	move_speed = 150.0
+	move_speed = 200.0
 	if target == null or not is_instance_valid(target):
 		velocity = Vector2.ZERO
 		return

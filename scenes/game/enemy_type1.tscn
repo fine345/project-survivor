@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://toq0o7gjibfs" path="res://scripts/game/enemy_type1.gd" id="1_ibalm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ibalm"]
-size = Vector2(21, 22.5)
+size = Vector2(28, 30)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ibalm"]
 bg_color = Color(0.9, 0.2, 0.3, 1)
@@ -16,10 +16,10 @@ corner_radius_bottom_left = 6
 script = ExtResource("1_ibalm")
 
 [node name="Visual" type="Panel" parent="." unique_id=226183596]
-offset_left = -10.5
-offset_top = -11.25
-offset_right = 10.5
-offset_bottom = 11.25
+offset_left = -14.0
+offset_top = -15.0
+offset_right = 14.0
+offset_bottom = 15.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_ibalm")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=180382155]

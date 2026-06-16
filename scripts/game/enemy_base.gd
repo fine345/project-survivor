@@ -1,8 +1,8 @@
 extends CharacterBody2D
 
-@export var move_speed := 150.0
+@export var move_speed := 200.0
 @export var touch_damage := 1
-@export var touch_range := 18.0
+@export var touch_range := 24.0
 @export var max_health := 30
 @export var experience_drop := 5
 
@@ -25,7 +25,7 @@ var knockback_return_timer := 0.0
 var knockback_direction := Vector2.ZERO
 var knockback_distance_left := 0.0
 var knockback_return_speed := 0.0
-var stored_move_speed := 150.0
+var stored_move_speed := 200.0
 
 const DAMAGE_NUMBER_SCENE := preload("res://scenes/ui/damage_number.tscn")
 

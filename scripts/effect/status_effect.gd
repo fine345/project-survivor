@@ -1,7 +1,7 @@
 extends Node2D
 
 @export var effect_color: Color = Color(1, 1, 1, 0.4)
-@export var effect_size: Vector2 = Vector2(30, 30)
+@export var effect_size: Vector2 = Vector2(40, 40)
 @export var lifetime := 1.5
 @export var follow_target := true
 

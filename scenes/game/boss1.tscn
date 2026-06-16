@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bphq8j3k78cbc" path="res://scripts/game/boss1.gd" id="1_nr2pe"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nr2pe"]
-size = Vector2(32, 32)
+size = Vector2(64, 64)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nr2pe"]
 bg_color = Color(0.6, 0.2, 0.8, 1)
@@ -17,10 +17,10 @@ collision_layer = 1
 script = ExtResource("1_nr2pe")
 
 [node name="Visual" type="Panel" parent="." unique_id=931369769]
-offset_left = -16.0
-offset_top = -16.0
-offset_right = 16.0
-offset_bottom = 16.0
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_nr2pe")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1729362172]

@@ -1,6 +1,6 @@
 extends Area2D
 
-@export var move_speed := 300.0
+@export var move_speed := 400.0
 @export var damage := 10
 @export var lifetime := 5.0
 @export var turn_speed := 10.0
@@ -19,7 +19,7 @@ var damage_multiplier := 1.0
 var status_effect_multiplier := 1.0
 var shot_effect_multiplier := 1.0
 var knockback_enabled := false
-var knockback_force := 120.0
+var knockback_force := 160.0
 var life_time := 0.0
 var spawn_delay := 0.0
 var use_target_homing := true

@@ -3,7 +3,7 @@ extends Area2D
 @export var rotation_speed := 1.0
 @export var laser_damage := 1
 @export var laser_length := 1200.0
-@export var laser_width := 12.0
+@export var laser_width := 16.0
 
 func _ready() -> void:
 	add_to_group("boss_laser")

@@ -11,13 +11,13 @@ var normal_shape: RectangleShape2D
 var dash_shape: RectangleShape2D
 var collision_node: CollisionShape2D
 var visual_node: Panel
-var dash_visual_offset := Rect2(-16, -24, 32, 48)
-var normal_visual_offset := Rect2(-16, -16, 32, 32)
+var dash_visual_offset := Rect2(-32, -48, 64, 96)
+var normal_visual_offset := Rect2(-32, -32, 64, 64)
 
-const CHASE_SPEED := 300.0
-const CHARGE_RANGE := 150.0
+const CHASE_SPEED := 400.0
+const CHARGE_RANGE := 200.0
 const CHARGE_DURATION := 0.75
-const DASH_SPEED := 600.0
+const DASH_SPEED := 800.0
 const DASH_DURATION := 0.5
 const IDLE_DURATION := 0.2
 const COOLDOWN_DURATION := 2.0
@@ -26,10 +26,10 @@ const PUSH_FORCE := 80.0
 
 func _ready() -> void:
 	max_health = 2000
-	move_speed = 150.0
+	move_speed = 200.0
 	experience_drop = 0
 	touch_damage = 1
-	touch_range = 20.0
+	touch_range = 26.67
 	super._ready()
 	_setup_collision_shapes()
 	_setup_charge_indicator()
@@ -37,16 +37,16 @@ func _ready() -> void:
 func _setup_collision_shapes() -> void:
 	collision_node = $CollisionShape2D
 	normal_shape = RectangleShape2D.new()
-	normal_shape.size = Vector2(32, 32)
+	normal_shape.size = Vector2(64, 64)
 	dash_shape = RectangleShape2D.new()
-	dash_shape.size = Vector2(32, 48)
+	dash_shape.size = Vector2(64, 96)
 	if collision_node != null:
 		collision_node.shape = normal_shape
 
 func _setup_charge_indicator() -> void:
 	charge_indicator = ColorRect.new()
 	charge_indicator.color = Color(1, 0, 0, 0.3)
-	charge_indicator.size = Vector2(60, 200)
+	charge_indicator.size = Vector2(80, 266.67)
 	charge_indicator.visible = false
 	add_child(charge_indicator)
 
@@ -154,7 +154,7 @@ func _enter_cooldown_state() -> void:
 
 func _process_cooldown(delta: float) -> void:
 	state_timer -= delta
-	move_speed = 150.0
+	move_speed = 200.0
 	if target == null or not is_instance_valid(target):
 		velocity = Vector2.ZERO
 		return

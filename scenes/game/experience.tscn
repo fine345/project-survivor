@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/game/experience.gd" id="1_exp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exp"]
-size = Vector2(13.5, 13.5)
+size = Vector2(18, 18)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_exp"]
 bg_color = Color(0.2, 1, 0.4, 1)
@@ -16,10 +16,10 @@ corner_radius_bottom_left = 2
 script = ExtResource("1_exp")
 
 [node name="Visual" type="Panel" parent="."]
-offset_left = -6.75
-offset_top = -6.75
-offset_right = 6.75
-offset_bottom = 6.75
+offset_left = -9.0
+offset_top = -9.0
+offset_right = 9.0
+offset_bottom = 9.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_exp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

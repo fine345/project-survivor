@@ -7,20 +7,20 @@
 script = ExtResource("2_5m7ek")
 
 [node name="Visual" type="ColorRect" parent="." unique_id=543391104]
-offset_left = -14.0
-offset_top = -14.0
-offset_right = 14.0
-offset_bottom = 14.0
+offset_left = -18.67
+offset_top = -18.67
+offset_right = 18.67
+offset_bottom = 18.67
 mouse_filter = 2
 color = Color(1, 0, 0, 0.45)
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1961303592]
 z_index = 10
-scale = Vector2(0.875, 0.875)
+scale = Vector2(1.167, 1.167)
 
 [node name="Visual2" type="Sprite2D" parent="." unique_id=2021293249]
 modulate = Color(1, 0, 0, 0.45)
 z_index = 100
-scale = Vector2(0.9375, 0.9375)
+scale = Vector2(1.25, 1.25)
 texture = ExtResource("2_6ib0g")
 script = ExtResource("2_5m7ek")

@@ -8,4 +8,4 @@ script = ExtResource("1_f3f37")
 [node name="Visual" type="Sprite2D" parent="." unique_id=859452877]
 modulate = Color(0.2, 0.45, 1, 0.45)
 z_index = 100
-scale = Vector2(1.125, 1.125)
+scale = Vector2(1.5, 1.5)

@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/game/enemy_bullet.gd" id="1_eb"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_eb"]
-size = Vector2(20.25, 6.75)
+size = Vector2(27, 9)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eb"]
 bg_color = Color(0.9, 0.15, 0.15, 1)
@@ -16,10 +16,10 @@ corner_radius_bottom_left = 2
 script = ExtResource("1_eb")
 
 [node name="Visual" type="Panel" parent="."]
-offset_left = -10.125
-offset_top = -3.375
-offset_right = 10.125
-offset_bottom = 3.375
+offset_left = -13.5
+offset_top = -4.5
+offset_right = 13.5
+offset_bottom = 4.5
 theme_override_styles/panel = SubResource("StyleBoxFlat_eb")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

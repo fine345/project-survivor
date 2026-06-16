@@ -9,6 +9,6 @@ script = ExtResource("2_gcdcw")
 [node name="Visual" type="Sprite2D" parent="." unique_id=453834280]
 modulate = Color(0, 0, 0, 0.55)
 z_index = 100
-scale = Vector2(0.9375, 0.9375)
+scale = Vector2(1.25, 1.25)
 texture = ExtResource("2_3tpp1")
 script = ExtResource("2_gcdcw")
