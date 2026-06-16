@@ -55,6 +55,12 @@ const DASH_COOLDOWN := 1.0
 
 const BULLET_SCENE := preload("res://scenes/game/bullet.tscn")
 
+var _animated_sprite: AnimatedSprite2D
+var _facing_right := true
+var _pre_dash_visual := "idle"
+var _hurt_timer := 0.0
+const HURT_DISPLAY_TIME := 0.2
+
 func _ready() -> void:
 	health = max_health
 	is_dashing = false
@@ -64,17 +70,119 @@ func _ready() -> void:
 	if col != null:
 		col.disabled = false
 	_dash_cooldown_bar = get_node_or_null("DashCooldownBar")
+	_animated_sprite = $AnimatedSprite2D
+	_setup_animations()
 	set_physics_process(true)
 	set_process(true)
 	call_deferred("_activate_camera")
 	call_deferred("_connect_joystick")
 
+func _setup_animations() -> void:
+	var sf := SpriteFrames.new()
+	sf.add_animation("idle")
+	sf.set_animation_loop("idle", true)
+	sf.set_animation_speed("idle", 1.0)
+	var idle_tex = load("res://assets/sprites/player/player_idle-Sheet.png")
+	sf.add_frame("idle", idle_tex)
+	sf.add_animation("walk")
+	sf.set_animation_loop("walk", true)
+	sf.set_animation_speed("walk", 10.0)
+	var walk_tex = load("res://assets/sprites/player/player_walk-Sheet.png")
+	var walk_atlas = AtlasTexture.new()
+	walk_atlas.atlas = walk_tex
+	for i in range(8):
+		walk_atlas.region = Rect2(i * 14, 0, 14, 24)
+		sf.add_frame("walk", walk_atlas.duplicate())
+	sf.add_animation("hurt")
+	sf.set_animation_loop("hurt", false)
+	sf.set_animation_speed("hurt", 1.0)
+	var hurt_tex = load("res://assets/sprites/player/player_hurt-Sheet.png")
+	sf.add_frame("hurt", hurt_tex)
+	sf.add_animation("dash_front")
+	sf.set_animation_loop("dash_front", false)
+	sf.set_animation_speed("dash_front", 1.0)
+	sf.add_frame("dash_front", load("res://assets/sprites/player/player_dash_front-Sheet.png"))
+	sf.add_animation("dash_up30")
+	sf.set_animation_loop("dash_up30", false)
+	sf.set_animation_speed("dash_up30", 1.0)
+	sf.add_frame("dash_up30", load("res://assets/sprites/player/player_dash_up30-Sheet.png"))
+	sf.add_animation("dash_down30")
+	sf.set_animation_loop("dash_down30", false)
+	sf.set_animation_speed("dash_down30", 1.0)
+	sf.add_frame("dash_down30", load("res://assets/sprites/player/player_dash_down30-Sheet.png"))
+	sf.add_animation("dash_up60")
+	sf.set_animation_loop("dash_up60", false)
+	sf.set_animation_speed("dash_up60", 1.0)
+	sf.add_frame("dash_up60", load("res://assets/sprites/player/player_dash_up60-Sheet.png"))
+	sf.add_animation("dash_down60")
+	sf.set_animation_loop("dash_down60", false)
+	sf.set_animation_speed("dash_down60", 1.0)
+	sf.add_frame("dash_down60", load("res://assets/sprites/player/player_dash_down60-Sheet.png"))
+	_animated_sprite.sprite_frames = sf
+	_animated_sprite.play("idle")
+
 func _activate_camera() -> void:
 	var camera: Camera2D = $Camera2D
 	if camera != null:
 		camera.enabled = true
-		camera.position = Vector2(0, 80)
+		camera.position = Vector2(0, 0)
 		camera.make_current()
+
+func _update_visuals() -> void:
+	if _animated_sprite == null:
+		return
+	if is_dashing:
+		_update_dash_visual()
+		return
+	if _hurt_timer > 0.0:
+		return
+	if velocity != Vector2.ZERO:
+		if _animated_sprite.animation != "walk":
+			_animated_sprite.play("walk")
+		_facing_right = velocity.x >= 0.0
+		_animated_sprite.flip_h = not _facing_right
+	else:
+		if _animated_sprite.animation != "idle":
+			_animated_sprite.play("idle")
+
+func _update_dash_visual() -> void:
+	var angle_rad: float = dash_direction.angle()
+	var deg: float = fmod(rad_to_deg(angle_rad) + 360.0, 360.0)
+	var anim_name: String
+	var mirror: bool
+	if deg < 15.0 or deg >= 345.0:
+		anim_name = "dash_front"
+		mirror = false
+	elif deg < 45.0:
+		anim_name = "dash_down30"
+		mirror = false
+	elif deg < 90.0:
+		anim_name = "dash_down60"
+		mirror = false
+	elif deg < 135.0:
+		anim_name = "dash_down60"
+		mirror = true
+	elif deg < 165.0:
+		anim_name = "dash_down30"
+		mirror = true
+	elif deg < 195.0:
+		anim_name = "dash_front"
+		mirror = true
+	elif deg < 225.0:
+		anim_name = "dash_up30"
+		mirror = true
+	elif deg < 270.0:
+		anim_name = "dash_up60"
+		mirror = true
+	elif deg < 315.0:
+		anim_name = "dash_up60"
+		mirror = false
+	else:
+		anim_name = "dash_up30"
+		mirror = false
+	if _animated_sprite.animation != anim_name:
+		_animated_sprite.play(anim_name)
+	_animated_sprite.flip_h = mirror
 
 func _connect_joystick() -> void:
 	var joy := get_tree().get_first_node_in_group("virtual_joystick")
@@ -229,11 +337,16 @@ func take_damage(amount: int) -> void:
 	health = max(health - amount, 0)
 	total_damage_taken += amount
 	invincible_time = 1.0
-	modulate = Color(1.0, 0.6, 0.6, 1.0)
+	modulate = Color(1.0, 1.0, 1.0, 1.0)
+	if _animated_sprite != null:
+		_animated_sprite.play("hurt")
+	_hurt_timer = HURT_DISPLAY_TIME
 	_apply_damage_knockback()
 	if health <= 0:
 		is_dead = true
-		modulate = Color(0.5, 0.5, 0.5, 1.0)
+		if _animated_sprite != null:
+			_animated_sprite.stop()
+			_animated_sprite.modulate = Color(0.5, 0.5, 0.5, 1.0)
 	if game != null and game.has_method("_update_hud"):
 		game._update_hud()
 
@@ -316,6 +429,8 @@ func _process(delta: float) -> void:
 		invincible_time = maxf(invincible_time - delta, 0.0)
 		if invincible_time <= 0.0:
 			modulate = Color(1.0, 1.0, 1.0, 1.0)
+	if _hurt_timer > 0.0:
+		_hurt_timer = maxf(_hurt_timer - delta, 0.0)
 	if get_tree() != null and get_tree().paused:
 		return
 	if attack_cooldown > 0.0:
@@ -351,12 +466,14 @@ func _physics_process(delta: float) -> void:
 			var col: CollisionShape2D = $CollisionShape2D
 			if col != null:
 				col.disabled = false
+		_update_visuals()
 		return
 	var direction := Vector2.ZERO
 	direction.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
 	direction.y = Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
 	velocity = direction.normalized() * move_speed if direction != Vector2.ZERO else Vector2.ZERO
 	move_and_slide()
+	_update_visuals()
 	var camera: Camera2D = $Camera2D
 	if camera != null and not camera.is_current():
 		camera.make_current()
