@@ -17,14 +17,14 @@ var normal_shape: RectangleShape2D
 var saved_alpha := 1.0
 
 const CHASE_SPEED := 150.0
-const SKILL1_RANGE := 350.0
-const SKILL2_RANGE := 350.0
+const SKILL1_RANGE := 300.0
+const SKILL2_RANGE := 300.0
 const COOLDOWN_DURATION := 3.0
 const PUSH_RADIUS := 50.0
 const PUSH_FORCE := 80.0
 
 func _ready() -> void:
-	max_health = 3000
+	max_health = 10000
 	move_speed = 150.0
 	experience_drop = 0
 	touch_damage = 1

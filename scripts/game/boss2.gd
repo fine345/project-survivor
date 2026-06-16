@@ -26,7 +26,7 @@ const LASER_MID_SPEED := TAU / 10.0
 const LASER_FAST_SPEED := TAU / 5.0
 
 func _ready() -> void:
-	max_health = 2000
+	max_health = 5000
 	move_speed = 150.0
 	experience_drop = 0
 	touch_damage = 1

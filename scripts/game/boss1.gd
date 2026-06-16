@@ -14,7 +14,7 @@ var visual_node: Panel
 var dash_visual_offset := Rect2(-16, -24, 32, 48)
 var normal_visual_offset := Rect2(-16, -16, 32, 32)
 
-const CHASE_SPEED := 250.0
+const CHASE_SPEED := 300.0
 const CHARGE_RANGE := 150.0
 const CHARGE_DURATION := 0.75
 const DASH_SPEED := 600.0
@@ -25,7 +25,7 @@ const PUSH_RADIUS := 50.0
 const PUSH_FORCE := 80.0
 
 func _ready() -> void:
-	max_health = 1000
+	max_health = 2000
 	move_speed = 150.0
 	experience_drop = 0
 	touch_damage = 1

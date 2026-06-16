@@ -130,6 +130,9 @@ func _on_body_entered(body: Node) -> void:
 	if body.has_method("apply_burn") and burn_chance > 0.0 and randf() < burn_chance:
 		body.apply_burn(1.0 * effect_scale, max(1, int(round(damage * 0.2))))
 	body.take_damage(damage, Color(1, 1, 0.2))
+	var game_node := get_tree().current_scene
+	if game_node != null and game_node.has_method("get") and "total_damage_dealt" in game_node:
+		game_node.total_damage_dealt += damage
 	if body is Node2D:
 		bounced_targets.append(body)
 	if already_bounced >= bounce_count:

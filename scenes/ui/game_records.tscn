@@ -49,10 +49,13 @@ horizontal_alignment = 1
 [node name="ScrollContainer" type="ScrollContainer" parent="Panel/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
+size_flags_stretch_ratio = 1.0
+follow_focus = true
 
 [node name="RecordsList" type="VBoxContainer" parent="Panel/VBox/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 theme_override_constants/separation = 8
 
 [node name="EmptyLabel" type="Label" parent="Panel/VBox"]

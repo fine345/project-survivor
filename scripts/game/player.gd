@@ -108,17 +108,23 @@ func collect_experience(value: int) -> void:
 
 func _try_level_up() -> bool:
 	var leveled_up := false
-	var required_experience := mini(25 * level, 500)
+	var required_experience := _get_required_exp()
 	while experience >= required_experience:
 		experience -= required_experience
 		level += 1
 		leveled_up = true
-		required_experience = mini(25 * level, 500)
+		required_experience = _get_required_exp()
 	return leveled_up
+
+func _get_required_exp() -> int:
+	if level <= 20:
+		return 25 * level
+	else:
+		return 15 * level + 200
 
 func level_up_reward(levels: int = 1) -> void:
 	for i in range(levels):
-		var required := mini(25 * level, 500)
+		var required := _get_required_exp()
 		var xp_ratio := float(experience) / float(required) if required > 0 else 0.0
 		level += 1
 		var new_required := mini(25 * level, 500)

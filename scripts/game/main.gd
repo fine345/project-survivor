@@ -53,6 +53,7 @@ var boss_health_bar: Control = null
 @onready var enemy_one_timer: Timer = $EnemyTimer
 @onready var enemy_two_timer: Timer = Timer.new()
 var enemy_three_timer: Timer = null
+var enemy_four_timer: Timer = null
 @onready var hud_info: Label = $HUD/Info
 @onready var hud_game_over: Label = $Layer/Panel/GameOver
 @onready var hud_retry_button: Button = $Layer/Panel/RetryButton
@@ -248,9 +249,16 @@ func _clear_enemies_in_range(center: Vector2, radius: float) -> void:
 
 func _enable_boss_boundary() -> void:
 	boss_boundary_active = true
-	if boss1_node != null:
-		var center := boss1_node.global_position
-		boss_boundary_rect = Rect2(Vector2(center.x - 800, center.y - 800), Vector2(1600, 1600))
+	var center := Vector2.ZERO
+	if boss1_node != null and is_instance_valid(boss1_node):
+		center = boss1_node.global_position
+	elif boss2_node != null and is_instance_valid(boss2_node):
+		center = boss2_node.global_position
+	elif boss3_node != null and is_instance_valid(boss3_node):
+		center = boss3_node.global_position
+	else:
+		center = player.global_position if player != null else Vector2(360, 720)
+	boss_boundary_rect = Rect2(Vector2(center.x - 800, center.y - 800), Vector2(1600, 1600))
 	queue_redraw()
 
 func _on_boss1_tree_exited(enemy: Node) -> void:
@@ -307,12 +315,15 @@ func _on_boss2_tree_exited(enemy: Node) -> void:
 	queue_redraw()
 	if boss_health_bar != null:
 		boss_health_bar.hide_boss()
-	var enemy4_timer := Timer.new()
-	enemy4_timer.one_shot = true
-	enemy4_timer.wait_time = 30.0
-	enemy4_timer.timeout.connect(func(): enemy_four_unlocked = true)
-	add_child(enemy4_timer)
-	enemy4_timer.start()
+	var enemy4_unlock_timer := Timer.new()
+	enemy4_unlock_timer.one_shot = true
+	enemy4_unlock_timer.wait_time = 30.0
+	enemy4_unlock_timer.timeout.connect(func():
+		enemy_four_unlocked = true
+		_start_enemy4_spawner()
+	)
+	add_child(enemy4_unlock_timer)
+	enemy4_unlock_timer.start()
 	var boss3_timer := Timer.new()
 	boss3_timer.one_shot = true
 	boss3_timer.wait_time = 180.0
@@ -322,6 +333,18 @@ func _on_boss2_tree_exited(enemy: Node) -> void:
 	_update_hud()
 	_update_game_state_ui()
 	_update_spawn_timers()
+
+func _start_enemy4_spawner() -> void:
+	if enemy_four_timer != null and is_instance_valid(enemy_four_timer):
+		enemy_four_timer.stop()
+	else:
+		enemy_four_timer = Timer.new()
+		enemy_four_timer.one_shot = false
+		add_child(enemy_four_timer)
+	enemy_four_timer.wait_time = 5.0
+	if not enemy_four_timer.timeout.is_connected(_spawn_enemy_four):
+		enemy_four_timer.timeout.connect(_spawn_enemy_four)
+	enemy_four_timer.start()
 
 func _spawn_boss3() -> void:
 	if boss3_spawned or player == null or player.is_dead:
@@ -407,8 +430,6 @@ func on_enemy_died(enemy: Node) -> void:
 				_show_summary(true)
 			else:
 				var levels := 1
-				if enemy.is_in_group("boss2"):
-					levels = 2
 				_spawn_boss_reward(enemy.global_position, levels)
 		else:
 			var drop_value := 5
@@ -481,7 +502,9 @@ func _process(delta: float) -> void:
 	_update_game_state_ui()
 
 func restart_game() -> void:
-	_restart_game()
+	get_tree().paused = false
+	Engine.time_scale = 1.0
+	get_tree().reload_current_scene()
 
 
 func _on_player_level_up() -> void:
@@ -570,6 +593,10 @@ func _restart_game() -> void:
 	if level_up_panel != null:
 		level_up_panel.visible = false
 		level_up_panel.process_mode = Node.PROCESS_MODE_INHERIT
+	if pause_menu != null:
+		pause_menu.visible = false
+	if pause_button != null:
+		pause_button.text = "暂停"
 	experience_cleanup_enabled = false
 	for enemy in spawned_enemies:
 		if is_instance_valid(enemy):
