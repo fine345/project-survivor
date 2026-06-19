@@ -3,10 +3,10 @@
 [ext_resource type="Script" uid="uid://bphq8j3k78cbc" path="res://scripts/game/boss1.gd" id="1_nr2pe"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_boss1"]
-radius = 16.0
+radius = 32.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_boss1_outer"]
-radius = 18.0
+radius = 36.0
 
 [node name="Boss1" type="CharacterBody2D" unique_id=1850569289 groups=["enemy", "boss"]]
 collision_layer = 1

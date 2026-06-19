@@ -7,9 +7,8 @@ var state_timer := 0.0
 var locked_direction := Vector2.ZERO
 var laser_lock_position := Vector2.ZERO
 var charge_indicator: ColorRect = null
-var normal_shape: RectangleShape2D
+var normal_shape: Shape2D
 var collision_node: CollisionShape2D
-var visual_node: Panel
 var lasers: Array[Node2D] = []
 
 const CHASE_SPEED := 333.33
@@ -31,21 +30,50 @@ func _ready() -> void:
 	experience_drop = 0
 	touch_damage = 1
 	touch_range = 26.67
-	super._ready()
+	_setup_boss_animations()
 	_setup_collision_shapes()
 	_setup_charge_indicator()
+	super._ready()
+
+func _setup_boss_animations() -> void:
+	_animated_sprite = AnimatedSprite2D.new()
+	_animated_sprite.z_index = 5
+	_animated_sprite.texture_filter = 0
+	_animated_sprite.scale = Vector2(2.0, 2.0)
+	var sf := SpriteFrames.new()
+	sf.add_animation("idle_walk")
+	sf.set_animation_loop("idle_walk", true)
+	sf.set_animation_speed("idle_walk", 10.0)
+	var iw_tex := load("res://assets/sprites/bosses/alarm_idle_walk-Sheet.png")
+	var atlas := AtlasTexture.new()
+	atlas.atlas = iw_tex
+	for i in range(15):
+		atlas.region = Rect2(i * 32, 0, 32, 32)
+		sf.add_frame("idle_walk", atlas.duplicate())
+	sf.add_animation("skill")
+	sf.set_animation_loop("skill", true)
+	sf.set_animation_speed("skill", 10.0)
+	var sk_tex := load("res://assets/sprites/bosses/alarm_skill-Sheet.png")
+	var sk_atlas := AtlasTexture.new()
+	sk_atlas.atlas = sk_tex
+	for i in range(4):
+		sk_atlas.region = Rect2(i * 32, 0, 32, 32)
+		sf.add_frame("skill", sk_atlas.duplicate())
+	_animated_sprite.sprite_frames = sf
+	_animated_sprite.play("idle_walk")
+	add_child(_animated_sprite)
 
 func _setup_collision_shapes() -> void:
 	collision_node = $CollisionShape2D
-	normal_shape = RectangleShape2D.new()
-	normal_shape.size = Vector2(64, 64)
+	normal_shape = CircleShape2D.new()
+	normal_shape.radius = 32.0
 	if collision_node != null:
 		collision_node.shape = normal_shape
 
 func _setup_charge_indicator() -> void:
 	charge_indicator = ColorRect.new()
 	charge_indicator.color = Color(1, 0, 0, 0.3)
-	charge_indicator.size = Vector2(80, 266.67)
+	charge_indicator.size = Vector2(64, 250)
 	charge_indicator.visible = false
 	add_child(charge_indicator)
 
@@ -59,23 +87,17 @@ func apply_knockback(_from_position: Vector2, _force: float) -> void:
 	pass
 
 func _apply_visual() -> void:
-	visual_node = $Visual
-	if visual_node == null:
-		return
-	var style: StyleBoxFlat = visual_node.get_theme_stylebox("panel") as StyleBoxFlat
-	if style == null:
-		return
-	style.bg_color = Color(0.2, 0.6, 0.7, 1.0)
-	style.corner_radius_top_left = 12
-	style.corner_radius_top_right = 12
-	style.corner_radius_bottom_right = 12
-	style.corner_radius_bottom_left = 12
+	pass
 
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		velocity = Vector2.ZERO
 		_cleanup_effects()
 		return
+
+	_update_status_effects(delta)
+	if _hurt_timer > 0.0:
+		_hurt_timer = maxf(_hurt_timer - delta, 0.0)
 
 	match current_state:
 		BossState.CHASE:
@@ -93,8 +115,17 @@ func _physics_process(delta: float) -> void:
 	_push_nearby_enemies()
 	_check_touch_damage()
 
+func _play_idle_walk() -> void:
+	if _animated_sprite != null and _animated_sprite.animation != "idle_walk":
+		_animated_sprite.play("idle_walk")
+
+func _play_skill() -> void:
+	if _animated_sprite != null and _animated_sprite.animation != "skill":
+		_animated_sprite.play("skill")
+
 func _process_chase(delta: float) -> void:
 	move_speed = CHASE_SPEED
+	_play_idle_walk()
 	if target == null or not is_instance_valid(target):
 		velocity = Vector2.ZERO
 		return
@@ -110,6 +141,7 @@ func _enter_charge_state() -> void:
 	move_speed = 0.0
 	if target != null and is_instance_valid(target):
 		locked_direction = global_position.direction_to(target.global_position)
+	_play_skill()
 
 func _process_charge(delta: float) -> void:
 	state_timer -= delta
@@ -122,6 +154,7 @@ func _enter_laser_state() -> void:
 	velocity = Vector2.ZERO
 	move_speed = 0.0
 	laser_lock_position = global_position
+	_play_skill()
 	_spawn_lasers()
 
 func _process_laser(delta: float) -> void:
@@ -136,6 +169,7 @@ func _enter_idle_state() -> void:
 	state_timer = IDLE_DURATION
 	velocity = Vector2.ZERO
 	move_speed = 0.0
+	_play_idle_walk()
 	_destroy_lasers()
 
 func _process_idle(delta: float) -> void:
@@ -150,6 +184,7 @@ func _enter_cooldown_state() -> void:
 func _process_cooldown(delta: float) -> void:
 	state_timer -= delta
 	move_speed = 200.0
+	_play_idle_walk()
 	if target == null or not is_instance_valid(target):
 		velocity = Vector2.ZERO
 		return
@@ -209,7 +244,7 @@ func _update_charge_indicator() -> void:
 	if charge_indicator == null:
 		return
 	var indicator_length := 250.0
-	var indicator_width := 40.0
+	var indicator_width := 64.0
 	charge_indicator.size = Vector2(indicator_width, indicator_length)
 	charge_indicator.pivot_offset = Vector2(indicator_width / 2, indicator_length)
 	charge_indicator.rotation = locked_direction.angle() + PI / 2

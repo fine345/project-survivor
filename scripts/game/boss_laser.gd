@@ -16,6 +16,7 @@ func _setup_visual() -> void:
 	visual.color = Color(1, 0.2, 0.2, 0.8)
 	visual.position = Vector2(0, -laser_width / 2)
 	visual.size = Vector2(laser_length, laser_width)
+	visual.z_index = 10
 	add_child(visual)
 
 func _setup_collision() -> void:

@@ -83,10 +83,10 @@ func _setup_boss_animations() -> void:
 func _setup_collision_shapes() -> void:
 	collision_node = $CollisionShape2D
 	normal_shape = CircleShape2D.new()
-	normal_shape.radius = 16.0
+	normal_shape.radius = 32.0
 	dash_shape = CapsuleShape2D.new()
-	dash_shape.radius = 16.0
-	dash_shape.height = 48.0
+	dash_shape.radius = 32.0
+	dash_shape.height = 96.0
 	if collision_node != null:
 		collision_node.shape = normal_shape
 
