@@ -177,6 +177,8 @@ func _physics_process(delta: float) -> void:
 	if _hurt_timer > 0.0:
 		_hurt_timer = maxf(_hurt_timer - delta, 0.0)
 	elif _animated_sprite != null:
+		_animated_sprite.flip_h = false
+		_animated_sprite.rotation = 0.0
 		if velocity != Vector2.ZERO:
 			if _animated_sprite.animation != "walk":
 				_animated_sprite.play("walk")
