@@ -1,27 +1,15 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://btws7fv65r2r2"]
 
-[ext_resource type="Script" path="res://scripts/game/boss3.gd" id="1_b3"]
+[ext_resource type="Script" uid="uid://b54sq1du8xtnr" path="res://scripts/game/boss3.gd" id="1_b3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_b3"]
 size = Vector2(64, 64)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b3"]
-bg_color = Color(0.9, 0.4, 0.1, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-
-[node name="Boss3" type="CharacterBody2D" groups=["enemy", "boss", "boss3"]]
-collision_layer = 1
+[node name="Boss3" type="CharacterBody2D" unique_id=604100208 groups=["boss", "boss3", "enemy"]]
 script = ExtResource("1_b3")
 
-[node name="Visual" type="Panel" parent="."]
-offset_left = -32.0
-offset_top = -32.0
-offset_right = 32.0
-offset_bottom = 32.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_b3")
+[node name="Cap" type="AnimatedSprite2D" parent="." unique_id=1959830482]
+z_index = 4
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1037126384]
 shape = SubResource("RectangleShape2D_b3")
