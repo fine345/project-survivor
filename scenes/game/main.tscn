@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://dtl8wwdkyob30" path="res://scenes/ui/summary_panel.tscn" id="6_j7lav"]
 [ext_resource type="PackedScene" path="res://scenes/ui/settings.tscn" id="7_settings"]
 [ext_resource type="PackedScene" uid="uid://dukqqin6bftnl" path="res://scenes/ui/boss_health_bar.tscn" id="8_5v64u"]
+[ext_resource type="Theme" path="res://dialog_theme.tres" id="9_dlgtheme"]
 
 [node name="Main" type="Node2D" unique_id=1706105945]
 script = ExtResource("1_llaio")
@@ -124,7 +125,7 @@ text = "设置"
 [node name="ExitButton" type="Button" parent="Layer/Panel/PauseMenu/VBox" unique_id=962121017]
 custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
-text = "放弃"
+text = "不玩了"
 
 [node name="SummaryPanel" parent="Layer/Panel" unique_id=1553527617 instance=ExtResource("6_j7lav")]
 z_index = 250
@@ -132,8 +133,12 @@ layout_mode = 1
 
 [node name="ExitConfirmDialog" type="ConfirmationDialog" parent="Layer/Panel" unique_id=2080680080]
 process_mode = 3
+title = ""
+position = Vector2i(160, 645)
+size = Vector2i(400, 190)
+theme = ExtResource("9_dlgtheme")
 ok_button_text = "确定"
-dialog_text = "中途退出不会保存游戏！确定退出？"
+dialog_text = "退出游戏将立即结算"
 cancel_button_text = "取消"
 
 [node name="SettingsOverlay" parent="Layer/Panel" unique_id=1721139600 instance=ExtResource("7_settings")]

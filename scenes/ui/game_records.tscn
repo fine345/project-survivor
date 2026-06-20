@@ -103,49 +103,69 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -250.0
-offset_top = -200.0
+offset_top = -300.0
 offset_right = 250.0
-offset_bottom = 200.0
+offset_bottom = 300.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="VBox" type="VBoxContainer" parent="DetailPanel/DetailBox" unique_id=2021476201]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 12
 
 [node name="TitleLabel" type="Label" parent="DetailPanel/DetailBox/VBox" unique_id=847940365]
 layout_mode = 2
 text = "记录详情"
 horizontal_alignment = 1
 
-[node name="IDLabel" type="Label" parent="DetailPanel/DetailBox/VBox" unique_id=1574896555]
+[node name="Separator1" type="HSeparator" parent="DetailPanel/DetailBox/VBox"]
 layout_mode = 2
 
-[node name="ResultLabel" type="Label" parent="DetailPanel/DetailBox/VBox" unique_id=2018495943]
+[node name="InfoRow1" type="HBoxContainer" parent="DetailPanel/DetailBox/VBox"]
 layout_mode = 2
 
-[node name="DateLabel" type="Label" parent="DetailPanel/DetailBox/VBox" unique_id=437397251]
+[node name="IDLabel" type="Label" parent="DetailPanel/DetailBox/VBox/InfoRow1" unique_id=1574896555]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ResultLabel" type="Label" parent="DetailPanel/DetailBox/VBox/InfoRow1" unique_id=2018495943]
 layout_mode = 2
 
-[node name="Sep1" type="HSeparator" parent="DetailPanel/DetailBox/VBox" unique_id=1971452602]
+[node name="InfoRow1Spacer" type="Control" parent="DetailPanel/DetailBox/VBox/InfoRow1"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DateLabel" type="Label" parent="DetailPanel/DetailBox/VBox/InfoRow1" unique_id=437397251]
 layout_mode = 2
 
-[node name="LevelLabel" type="Label" parent="DetailPanel/DetailBox/VBox" unique_id=1688062251]
+[node name="Separator2" type="HSeparator" parent="DetailPanel/DetailBox/VBox"]
 layout_mode = 2
 
-[node name="KillsLabel" type="Label" parent="DetailPanel/DetailBox/VBox" unique_id=852856648]
+[node name="StatsRow1" type="HBoxContainer" parent="DetailPanel/DetailBox/VBox"]
 layout_mode = 2
 
-[node name="TimeLabel" type="Label" parent="DetailPanel/DetailBox/VBox" unique_id=860411918]
+[node name="LevelLabel" type="Label" parent="DetailPanel/DetailBox/VBox/StatsRow1" unique_id=1688062251]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="KillsLabel" type="Label" parent="DetailPanel/DetailBox/VBox/StatsRow1" unique_id=852856648]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TimeLabel" type="Label" parent="DetailPanel/DetailBox/VBox/StatsRow1" unique_id=860411918]
 layout_mode = 2
 
-[node name="DamageLabel" type="Label" parent="DetailPanel/DetailBox/VBox" unique_id=285950977]
+[node name="StatsRow2" type="HBoxContainer" parent="DetailPanel/DetailBox/VBox"]
 layout_mode = 2
 
-[node name="ScoreLabel" type="Label" parent="DetailPanel/DetailBox/VBox" unique_id=1602846001]
+[node name="DamageLabel" type="Label" parent="DetailPanel/DetailBox/VBox/StatsRow2" unique_id=285950977]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ScoreLabel" type="Label" parent="DetailPanel/DetailBox/VBox/StatsRow2" unique_id=1602846001]
 layout_mode = 2
 
-[node name="Sep2" type="HSeparator" parent="DetailPanel/DetailBox/VBox" unique_id=1952183035]
+[node name="Separator3" type="HSeparator" parent="DetailPanel/DetailBox/VBox"]
 layout_mode = 2
 
 [node name="RewardsLabel" type="Label" parent="DetailPanel/DetailBox/VBox" unique_id=411689899]
@@ -157,6 +177,9 @@ layout_mode = 2
 columns = 2
 theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 4
+
+[node name="Separator4" type="HSeparator" parent="DetailPanel/DetailBox/VBox"]
+layout_mode = 2
 
 [node name="CloseButton" type="Button" parent="DetailPanel/DetailBox/VBox" unique_id=1046562778]
 custom_minimum_size = Vector2(200, 40)

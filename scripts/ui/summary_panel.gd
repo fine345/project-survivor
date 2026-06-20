@@ -14,7 +14,8 @@ signal exit_to_menu_requested
 @onready var dealt_value: Label = $Panel/VBox/DealtRow/ValueLabel
 @onready var rewards_label: Label = $Panel/VBox/RewardsLabel
 @onready var rewards_grid: GridContainer = $Panel/VBox/RewardsGrid
-@onready var score_label: Label = $Panel/VBox/ScoreLabel
+@onready var score_label: Label = $Panel/VBox/ScoreRow/ScoreLabel
+@onready var score_value: Label = $Panel/VBox/ScoreRow/ScoreValue
 @onready var retry_button: Button = $Panel/VBox/RetryButton
 @onready var exit_button: Button = $Panel/VBox/ExitButton
 
@@ -23,6 +24,21 @@ func _ready() -> void:
 	visible = false
 	retry_button.pressed.connect(func(): restart_requested.emit())
 	exit_button.pressed.connect(func(): exit_to_menu_requested.emit())
+	title_label.add_theme_font_size_override("font_size", 44)
+	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	time_name.add_theme_font_size_override("font_size", 33)
+	kills_name.add_theme_font_size_override("font_size", 33)
+	level_name.add_theme_font_size_override("font_size", 33)
+	dealt_name.add_theme_font_size_override("font_size", 33)
+	time_value.add_theme_font_size_override("font_size", 55)
+	kills_value.add_theme_font_size_override("font_size", 55)
+	level_value.add_theme_font_size_override("font_size", 55)
+	dealt_value.add_theme_font_size_override("font_size", 55)
+	rewards_label.add_theme_font_size_override("font_size", 33)
+	score_label.add_theme_font_size_override("font_size", 33)
+	score_value.add_theme_font_size_override("font_size", 55)
+	retry_button.add_theme_font_size_override("font_size", 33)
+	exit_button.add_theme_font_size_override("font_size", 33)
 
 func show_summary(stats: Dictionary) -> void:
 	visible = true
@@ -38,23 +54,13 @@ func show_summary(stats: Dictionary) -> void:
 	var rewards: Dictionary = stats.get("rewards", {})
 	var keys: Array = rewards.keys()
 	rewards_label.text = "获得奖励："
-	rewards_label.add_theme_font_size_override("font_size", 24)
-	for child in rewards_grid.get_children():
-		child.queue_free()
-	if keys.size() > 0:
-		rewards_grid.columns = 2 if keys.size() > 1 else 1
-		for key in keys:
-			var lbl := Label.new()
-			lbl.text = "%s ×%d" % [str(key), rewards[key]]
-			lbl.add_theme_font_size_override("font_size", 22)
-			rewards_grid.add_child(lbl)
-		rewards_grid.visible = true
-	else:
-		rewards_grid.visible = false
-	var score: int = stats.get("score", 0)
-	score_label.text = "总分：%d" % score
-	score_label.add_theme_font_size_override("font_size", 38)
-	score_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	for key in keys:
+		var count: int = rewards[key] if rewards[key] is int else 1
+		var lbl := Label.new()
+		lbl.text = "%s ×%d" % [key, count] if count > 1 else str(key)
+		lbl.add_theme_font_size_override("font_size", 22)
+		rewards_grid.add_child(lbl)
+	score_value.text = str(stats.get("score", 0))
 	get_tree().paused = true
 
 func _set_row(name_label: Label, value_label: Label, name_text: String, value_text: String) -> void:

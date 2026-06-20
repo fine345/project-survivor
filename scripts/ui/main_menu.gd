@@ -13,6 +13,13 @@ func _ready() -> void:
 	achievements_button.pressed.connect(_on_achievements)
 	about_button.pressed.connect(_on_about)
 	placeholder_label.visible = false
+	_set_font_size(self, 44)
+
+func _set_font_size(node: Node, size: int) -> void:
+	if node is Label or node is Button:
+		(node as Control).add_theme_font_size_override("font_size", size)
+	for child in node.get_children():
+		_set_font_size(child, size)
 
 func _on_start() -> void:
 	get_tree().change_scene_to_file("res://scenes/game/main.tscn")

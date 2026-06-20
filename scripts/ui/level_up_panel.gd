@@ -30,6 +30,10 @@ func _ready() -> void:
 	option1.pressed.connect(func(): _emit_reward(0))
 	option2.pressed.connect(func(): _emit_reward(1))
 	option3.pressed.connect(func(): _emit_reward(2))
+	$Panel/VBox/Title.add_theme_font_size_override("font_size", 44)
+	option1.add_theme_font_size_override("font_size", 44)
+	option2.add_theme_font_size_override("font_size", 44)
+	option3.add_theme_font_size_override("font_size", 44)
 
 func set_rewards(new_reward_ids: Array[String], new_reward_titles: Array[String]) -> void:
 	reward_ids = new_reward_ids.duplicate()

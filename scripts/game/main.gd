@@ -92,6 +92,7 @@ func _ready() -> void:
 		var resume_btn: Button = pause_menu.get_node_or_null("VBox/ResumeButton")
 		var settings_btn: Button = pause_menu.get_node_or_null("VBox/SettingsButton")
 		var exit_btn: Button = pause_menu.get_node_or_null("VBox/ExitButton")
+		_set_font_size(pause_menu, 44)
 		if resume_btn != null:
 			resume_btn.pressed.connect(_on_pause_button_pressed)
 		if settings_btn != null:
@@ -100,14 +101,22 @@ func _ready() -> void:
 			exit_btn.pressed.connect(_on_exit_to_menu)
 	if exit_confirm_dialog != null:
 		exit_confirm_dialog.confirmed.connect(func(): _show_summary(false))
+		_set_font_size(exit_confirm_dialog, 44)
 	if settings_overlay != null:
 		settings_overlay.visible = false
 		settings_overlay.is_overlay = true
+		_set_font_size(settings_overlay, 44)
 	boss_health_bar = boss_health_bar_node
 	if boss_health_bar != null:
 		boss_health_bar.visible = false
 	_update_hud()
 	_update_game_state_ui()
+
+func _set_font_size(node: Node, size: int) -> void:
+	if node is Label or node is Button:
+		(node as Control).add_theme_font_size_override("font_size", size)
+	for child in node.get_children():
+		_set_font_size(child, size)
 
 func _setup_timers() -> void:
 	enemy_one_timer.wait_time = enemy_one_spawn_interval
@@ -758,7 +767,7 @@ func _save_record(is_victory: bool, damage_taken: int, score: int, rewards_displ
 		return
 	var rewards_list: Array[String] = []
 	for key in rewards_display:
-		rewards_list.append("%s×%d" % [str(key), rewards_display[key]])
+		rewards_list.append("%s ×%d" % [str(key), rewards_display[key]])
 	record_manager.add_record({
 		"result": "victory" if is_victory else "defeat",
 		"time": elapsed_time,

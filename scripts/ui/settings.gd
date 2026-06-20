@@ -11,6 +11,13 @@ func _ready() -> void:
 	anywhere_button.pressed.connect(func(): _set_mode("anywhere"))
 	fixed_button.pressed.connect(func(): _set_mode("fixed"))
 	_update_display()
+	_set_font_size(self, 33)
+
+func _set_font_size(node: Node, size: int) -> void:
+	if node is Label or node is Button:
+		(node as Control).add_theme_font_size_override("font_size", size)
+	for child in node.get_children():
+		_set_font_size(child, size)
 
 func _on_back() -> void:
 	if is_overlay:

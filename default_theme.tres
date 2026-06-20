@@ -1,0 +1,7 @@
+[gd_resource type="Theme"]
+
+[ext_resource type="FontFile" uid="uid://71hjaswh6tcf" path="res://font/Uranus_Pixel_11Px.ttf" id="1_font"]
+
+[resource]
+default_font = ExtResource("1_font")
+default_font_size = 11

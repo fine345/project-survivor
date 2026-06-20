@@ -5,6 +5,7 @@ var current_page := 0
 var page_size := 15
 
 @onready var grid: GridContainer = $Panel/VBox/GridContainer
+@onready var title_label: Label = $Panel/VBox/TitleLabel
 @onready var page_label: Label = $Panel/VBox/PageInfo/PageLabel
 @onready var prev_button: Button = $Panel/VBox/PageInfo/PrevButton
 @onready var next_button: Button = $Panel/VBox/PageInfo/NextButton
@@ -20,6 +21,11 @@ func _ready() -> void:
 	prev_button.pressed.connect(_prev_page)
 	next_button.pressed.connect(_next_page)
 	_load_achievements()
+	page_label.add_theme_font_size_override("font_size", 33)
+	title_label.add_theme_font_size_override("font_size", 33)
+	prev_button.add_theme_font_size_override("font_size", 33)
+	next_button.add_theme_font_size_override("font_size", 33)
+	back_button.add_theme_font_size_override("font_size", 33)
 
 func _load_achievements() -> void:
 	all_achievements = [
@@ -76,13 +82,13 @@ func _create_card(def: Dictionary, stats: Dictionary) -> void:
 
 	var title := Label.new()
 	title.text = def["name"]
-	title.add_theme_font_size_override("font_size", 20)
+	title.add_theme_font_size_override("font_size", 33)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(title)
 
 	var value_label := Label.new()
 	value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	value_label.add_theme_font_size_override("font_size", 18)
+	value_label.add_theme_font_size_override("font_size", 22)
 	if is_bool:
 		value_label.text = "已达成" if bool(current_value) else "未达成"
 	else:

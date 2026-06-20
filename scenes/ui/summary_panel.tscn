@@ -43,6 +43,9 @@ layout_mode = 2
 text = "本局复盘"
 horizontal_alignment = 1
 
+[node name="Separator1" type="HSeparator" parent="Panel/VBox"]
+layout_mode = 2
+
 [node name="TimeRow" type="HBoxContainer" parent="Panel/VBox" unique_id=673387115]
 layout_mode = 2
 
@@ -95,6 +98,9 @@ layout_mode = 2
 size_flags_horizontal = 10
 text = "0"
 
+[node name="Separator2" type="HSeparator" parent="Panel/VBox"]
+layout_mode = 2
+
 [node name="RewardsLabel" type="Label" parent="Panel/VBox" unique_id=535284526]
 layout_mode = 2
 text = "获得奖励："
@@ -106,10 +112,23 @@ columns = 2
 theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 4
 
-[node name="ScoreLabel" type="Label" parent="Panel/VBox" unique_id=1576555027]
+[node name="Separator3" type="HSeparator" parent="Panel/VBox"]
 layout_mode = 2
-text = "总分：0"
-horizontal_alignment = 1
+
+[node name="ScoreRow" type="HBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="ScoreLabel" type="Label" parent="Panel/VBox/ScoreRow" unique_id=1576555027]
+layout_mode = 2
+text = "总分："
+
+[node name="ScoreValue" type="Label" parent="Panel/VBox/ScoreRow"]
+layout_mode = 2
+text = "0"
+
+[node name="Separator4" type="HSeparator" parent="Panel/VBox"]
+layout_mode = 2
 
 [node name="RetryButton" type="Button" parent="Panel/VBox" unique_id=1694624484]
 custom_minimum_size = Vector2(200, 50)

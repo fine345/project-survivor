@@ -34,7 +34,11 @@ enabled=PackedStringArray("res://addons/godot_mcp/plugin.cfg")
 
 [gui]
 
+theme/default_font_antialiasing=0.0
+theme/default_font_hinting=0.0
 theme/default_theme_scale=2.0
+theme/custom="res://default_theme.tres"
+theme/default_font="res://font/Uranus_Pixel_11Px.ttf"
 
 [input]
 
