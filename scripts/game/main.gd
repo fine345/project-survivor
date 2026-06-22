@@ -65,10 +65,10 @@ var enemy_four_timer: Timer = null
 @onready var hud_retry_button: Button = $Layer/Panel/RetryButton
 @onready var level_up_panel: Control = $Layer/Panel/LevelUpPanel
 @onready var pause_button: TextureButton = $Layer/Panel/PauseButton
-@onready var pause_menu: Control = $Layer/Panel/PauseMenu
+@onready var pause_menu: Node2D = $Layer/Panel/PauseMenu
 @onready var hud_virtual_joystick: Control = $HUD/VirtualJoystick
 @onready var summary_panel: Control = $Layer/Panel/SummaryPanel
-@onready var exit_confirm_dialog: ConfirmationDialog = $Layer/Panel/ExitConfirmDialog
+@onready var exit_confirm_dialog: Control = $Layer/Panel/ExitConfirmDialog
 @onready var settings_overlay: Control = $Layer/Panel/SettingsOverlay
 @onready var boss_health_bar_node: Control = $Layer/Panel/BossHealthBar
 
@@ -96,10 +96,12 @@ func _ready() -> void:
 			summary_panel.exit_to_menu_requested.connect(_do_exit_to_menu)
 	if pause_menu != null:
 		pause_menu.visible = false
-		var resume_btn: Button = pause_menu.get_node_or_null("VBox/ResumeButton")
-		var settings_btn: Button = pause_menu.get_node_or_null("VBox/SettingsButton")
-		var exit_btn: Button = pause_menu.get_node_or_null("VBox/ExitButton")
-		_set_font_size(pause_menu, 44)
+		var resume_btn: Button = pause_menu.get_node_or_null("ResumeButton")
+		var settings_btn: Button = pause_menu.get_node_or_null("SettingsButton")
+		var exit_btn: Button = pause_menu.get_node_or_null("ExitButton")
+		_style_pause_button(resume_btn, "继续游戏")
+		_style_pause_button(settings_btn, "设置")
+		_style_pause_button(exit_btn, "不玩了")
 		if resume_btn != null:
 			resume_btn.pressed.connect(_on_pause_button_pressed)
 		if settings_btn != null:
@@ -107,8 +109,16 @@ func _ready() -> void:
 		if exit_btn != null:
 			exit_btn.pressed.connect(_on_exit_to_menu)
 	if exit_confirm_dialog != null:
-		exit_confirm_dialog.confirmed.connect(func(): _show_summary(false))
-		_set_font_size(exit_confirm_dialog, 44)
+		var confirm_btn: Button = exit_confirm_dialog.get_node_or_null("ConfirmBtn")
+		var cancel_btn: Button = exit_confirm_dialog.get_node_or_null("CancelBtn")
+		if confirm_btn != null:
+			confirm_btn.pressed.connect(func(): exit_confirm_dialog.visible = false; _show_summary(false))
+			_style_pause_button(confirm_btn, "确定", 22)
+		if cancel_btn != null:
+			cancel_btn.pressed.connect(func(): exit_confirm_dialog.visible = false)
+			_style_pause_button(cancel_btn, "取消", 22)
+		exit_confirm_dialog.get_node_or_null("TextLabel").add_theme_font_size_override("font_size", 33)
+		exit_confirm_dialog.get_node_or_null("TextLabel").add_theme_color_override("font_color", Color(0, 0, 0))
 	if settings_overlay != null:
 		settings_overlay.visible = false
 		settings_overlay.is_overlay = true
@@ -124,6 +134,28 @@ func _set_font_size(node: Node, size: int) -> void:
 		(node as Control).add_theme_font_size_override("font_size", size)
 	for child in node.get_children():
 		_set_font_size(child, size)
+
+func _style_pause_button(btn: Button, label_text: String, font_size: int = 33) -> void:
+	if btn == null:
+		return
+	btn.process_mode = Node.PROCESS_MODE_ALWAYS
+	btn.text = ""
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0, 0, 0, 0)
+	style.set_content_margin_all(0)
+	btn.add_theme_stylebox_override("normal", style)
+	btn.add_theme_stylebox_override("hover", style)
+	var pressed_style := StyleBoxFlat.new()
+	pressed_style.bg_color = Color(0, 0, 0, 0.15)
+	pressed_style.set_content_margin_all(0)
+	btn.add_theme_stylebox_override("pressed", pressed_style)
+	var lbl := Label.new()
+	lbl.text = label_text
+	lbl.add_theme_font_size_override("font_size", font_size)
+	lbl.add_theme_color_override("font_color", Color(0, 0, 0))
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl.set_anchors_preset(Control.PRESET_FULL_RECT)
+	btn.add_child(lbl)
 
 func _setup_timers() -> void:
 	enemy_one_timer.wait_time = enemy_one_spawn_interval
@@ -712,12 +744,16 @@ func _prepare_reward_offers() -> void:
 	)
 	pending_reward_options.clear()
 	var display_names: Array[String] = []
+	var display_details: Array[String] = []
+	var display_details2: Array[String] = []
 	for choice in choices:
 		var reward_id := str(choice["id"])
 		pending_reward_options.append(reward_id)
 		display_names.append(reward_pool.get_reward_title(reward_id, int(reward_counts.get(reward_id, 0))))
+		display_details.append(reward_pool.get_reward_detail(reward_id))
+		display_details2.append(reward_pool.get_reward_detail2(reward_id))
 	if level_up_panel != null:
-		level_up_panel.call("set_rewards", pending_reward_options, display_names)
+		level_up_panel.call("set_rewards", pending_reward_options, display_names, display_details, display_details2)
 
 func _apply_reward(reward_id: String) -> void:
 	if player == null:
@@ -828,8 +864,7 @@ func _on_summary_restart() -> void:
 
 func _on_exit_to_menu() -> void:
 	if exit_confirm_dialog != null:
-		exit_confirm_dialog.dialog_text = "退出游戏将立即结算"
-		exit_confirm_dialog.popup_centered()
+		exit_confirm_dialog.visible = true
 	else:
 		_show_summary(false)
 

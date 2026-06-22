@@ -3,52 +3,75 @@ extends Control
 signal reward_selected(reward_id: String)
 
 var reward_ids: Array[String] = []
-var reward_titles: Array[String] = []
+var reward_names: Array[String] = []
+var reward_details: Array[String] = []
+var reward_details2: Array[String] = []
 
 @onready var dim: Control = $Dim
-@onready var panel: Control = $Panel
-@onready var option1: Button = $Panel/VBox/Option1
-@onready var option2: Button = $Panel/VBox/Option2
-@onready var option3: Button = $Panel/VBox/Option3
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	if dim != null:
 		dim.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	if panel != null:
-		panel.mouse_filter = Control.MOUSE_FILTER_STOP
-	option1.process_mode = Node.PROCESS_MODE_ALWAYS
-	option2.process_mode = Node.PROCESS_MODE_ALWAYS
-	option3.process_mode = Node.PROCESS_MODE_ALWAYS
-	option1.mouse_filter = Control.MOUSE_FILTER_STOP
-	option2.mouse_filter = Control.MOUSE_FILTER_STOP
-	option3.mouse_filter = Control.MOUSE_FILTER_STOP
-	option1.focus_mode = Control.FOCUS_ALL
-	option2.focus_mode = Control.FOCUS_ALL
-	option3.focus_mode = Control.FOCUS_ALL
-	option1.pressed.connect(func(): _emit_reward(0))
-	option2.pressed.connect(func(): _emit_reward(1))
-	option3.pressed.connect(func(): _emit_reward(2))
-	$Panel/VBox/Title.add_theme_font_size_override("font_size", 44)
-	option1.add_theme_font_size_override("font_size", 44)
-	option2.add_theme_font_size_override("font_size", 44)
-	option3.add_theme_font_size_override("font_size", 44)
+	_setup_option($Option1, 0)
+	_setup_option($Option2, 1)
+	_setup_option($Option3, 2)
+	$Title.add_theme_font_size_override("font_size", 33)
+	$Title.add_theme_color_override("font_color", Color(0, 0, 0))
 
-func set_rewards(new_reward_ids: Array[String], new_reward_titles: Array[String]) -> void:
+func _setup_option(btn: Button, index: int) -> void:
+	btn.process_mode = Node.PROCESS_MODE_ALWAYS
+	btn.mouse_filter = Control.MOUSE_FILTER_STOP
+	btn.focus_mode = Control.FOCUS_ALL
+	btn.text = ""
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0, 0, 0, 0)
+	style.set_content_margin_all(0)
+	btn.add_theme_stylebox_override("normal", style)
+	btn.add_theme_stylebox_override("hover", style)
+	var pressed_style := StyleBoxFlat.new()
+	pressed_style.bg_color = Color(0, 0, 0, 0.1)
+	pressed_style.set_content_margin_all(0)
+	btn.add_theme_stylebox_override("pressed", pressed_style)
+	btn.pressed.connect(func(): _emit_reward(index))
+
+func set_rewards(new_reward_ids: Array[String], new_reward_names: Array[String], new_reward_details: Array[String] = [], new_reward_details2: Array[String] = []) -> void:
 	reward_ids = new_reward_ids.duplicate()
-	reward_titles = new_reward_titles.duplicate()
-	var options := [option1, option2, option3]
+	reward_names = new_reward_names.duplicate()
+	reward_details = new_reward_details.duplicate()
+	reward_details2 = new_reward_details2.duplicate()
+	var options := [$Option1, $Option2, $Option3]
 	for i in range(options.size()):
 		var button: Button = options[i]
-		if i < reward_ids.size() and i < reward_titles.size():
-			button.text = reward_titles[i]
-			button.disabled = false
+		_clear_labels(button)
+		if i < reward_ids.size() and i < reward_names.size():
 			button.visible = true
+			button.disabled = false
+			_add_label(button, reward_names[i], 33, 0)
+			var y := 40.0
+			if i < reward_details.size() and reward_details[i] != "":
+				_add_label(button, reward_details[i], 22, y)
+				y += 30.0
+			if i < reward_details2.size() and reward_details2[i] != "":
+				_add_label(button, reward_details2[i], 22, y)
 		else:
-			button.text = ""
-			button.disabled = true
 			button.visible = false
+			button.disabled = true
+
+func _clear_labels(btn: Button) -> void:
+	for child in btn.get_children():
+		if child is Label:
+			child.queue_free()
+
+func _add_label(btn: Button, text: String, font_size: int, y: float) -> void:
+	var lbl := Label.new()
+	lbl.text = text
+	lbl.add_theme_font_size_override("font_size", font_size)
+	lbl.add_theme_color_override("font_color", Color(0, 0, 0))
+	lbl.position = Vector2(0, y)
+	lbl.size = Vector2(btn.size.x, font_size + 8)
+	btn.add_child(lbl)
 
 func _emit_reward(index: int) -> void:
 	if index < 0 or index >= reward_ids.size():

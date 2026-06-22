@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://ryje3xy5dul8" path="res://scripts/ui/game_records.gd" id="1_gr"]
 
 [node name="GameRecords" type="Control" unique_id=416642955]
+texture_filter = 1
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -122,11 +123,11 @@ horizontal_alignment = 1
 layout_mode = 2
 autowrap_mode = 2
 
-[node name="RewardsGrid" type="GridContainer" parent="DetailPanel/DetailBox/VBox"]
+[node name="RewardsGrid" type="GridContainer" parent="DetailPanel/DetailBox/VBox" unique_id=1879180885]
 layout_mode = 2
-columns = 2
 theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 4
+columns = 2
 
 [node name="CloseButton" type="Button" parent="DetailPanel/DetailBox/VBox" unique_id=1046562778]
 custom_minimum_size = Vector2(200, 40)

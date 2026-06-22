@@ -1,0 +1,15 @@
+[gd_resource type="Theme"]
+
+[ext_resource type="FontFile" uid="uid://71hjaswh6tcf" path="res://font/Uranus_Pixel_11Px.ttf" id="1_font"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/exit_comfirm_panel-Sheet.png" id="2_exit_tex"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_exit"]
+texture = ExtResource("2_exit_tex")
+texture_margin_left = 0.0
+texture_margin_top = 0.0
+texture_margin_right = 0.0
+texture_margin_bottom = 0.0
+
+[resource]
+default_font = ExtResource("1_font")
+default_font_size = 33
