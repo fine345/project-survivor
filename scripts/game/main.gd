@@ -711,13 +711,13 @@ func _prepare_reward_offers() -> void:
 		}
 	)
 	pending_reward_options.clear()
-	var display_titles: Array[String] = []
+	var display_names: Array[String] = []
 	for choice in choices:
 		var reward_id := str(choice["id"])
 		pending_reward_options.append(reward_id)
-		display_titles.append(reward_pool.get_reward_title(reward_id))
+		display_names.append(reward_pool.get_reward_title(reward_id, int(reward_counts.get(reward_id, 0))))
 	if level_up_panel != null:
-		level_up_panel.call("set_rewards", pending_reward_options, display_titles)
+		level_up_panel.call("set_rewards", pending_reward_options, display_names)
 
 func _apply_reward(reward_id: String) -> void:
 	if player == null:

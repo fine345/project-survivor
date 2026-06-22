@@ -29,6 +29,7 @@ var laser_width_multiplier := 1.0
 var laser_damage_multiplier := 1.0
 var laser_count := 1
 var _laser_cooldown := 0.0
+var _laser_frequency_count := 0
 var _calculator: Node2D = null
 var _calculator_reward_count := 0
 
@@ -248,7 +249,7 @@ func level_up_reward(levels: int = 1) -> void:
 func apply_reward_effect(reward_id: String) -> void:
 	match reward_id:
 		"bullet_damage":
-			bullet_damage_multiplier += 0.5
+			bullet_damage_multiplier += 0.3
 		"pickup_range":
 			pickup_range *= 1.75
 		"attack_speed":
@@ -291,6 +292,10 @@ func apply_reward_effect(reward_id: String) -> void:
 			laser_width_multiplier = 15.0 + (_calculator_reward_count - 1) * 3.0
 		"laser_count":
 			laser_count = mini(laser_count + 1, 5)
+			_calculator_reward_count += 1
+			laser_width_multiplier = 15.0 + (_calculator_reward_count - 1) * 3.0
+		"laser_frequency":
+			_laser_frequency_count += 1
 			_calculator_reward_count += 1
 			laser_width_multiplier = 15.0 + (_calculator_reward_count - 1) * 3.0
 		"attack_range":
@@ -458,7 +463,7 @@ func _process(delta: float) -> void:
 		_laser_cooldown = maxf(_laser_cooldown - delta, 0.0)
 		if _laser_cooldown <= 0.0:
 			_fire_calculator_beam()
-			_laser_cooldown = 3.0
+			_laser_cooldown = 3.0 * pow(0.5, _laser_frequency_count)
 
 func _physics_process(delta: float) -> void:
 	if is_dead:
