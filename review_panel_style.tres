@@ -1,0 +1,14 @@
+[gd_resource type="StyleBoxTexture" format=3 uid="uid://btv05rpcidk7w"]
+
+[ext_resource type="Texture2D" uid="uid://b4nc8qlgtqe4d" path="res://assets/sprites/ui/review_panel_x2-Sheet.png" id="1_review_tex"]
+
+[resource]
+content_margin_left = 68.0
+content_margin_top = 98.0
+content_margin_right = 62.0
+content_margin_bottom = 60.0
+texture = ExtResource("1_review_tex")
+texture_margin_left = 200.0
+texture_margin_top = 510.0
+texture_margin_right = 200.0
+texture_margin_bottom = 300.0

@@ -41,27 +41,24 @@ horizontal_alignment = 1
 
 [node name="Option1" type="Button" parent="." unique_id=708834393]
 process_mode = 3
-layout_mode = 0
 offset_left = 72.0
 offset_top = 174.0
 offset_right = 428.0
-offset_bottom = 330.0
+offset_bottom = 274.0
 text = "Reward A"
 
 [node name="Option2" type="Button" parent="." unique_id=467037946]
 process_mode = 3
-layout_mode = 0
 offset_left = 72.0
 offset_top = 338.0
 offset_right = 428.0
-offset_bottom = 494.0
+offset_bottom = 438.0
 text = "Reward B"
 
 [node name="Option3" type="Button" parent="." unique_id=312687288]
 process_mode = 3
-layout_mode = 0
 offset_left = 72.0
 offset_top = 502.0
 offset_right = 428.0
-offset_bottom = 658.0
+offset_bottom = 602.0
 text = "Reward C"

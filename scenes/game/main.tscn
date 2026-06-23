@@ -179,33 +179,33 @@ stretch_mode = 5
 process_mode = 3
 visible = false
 z_index = 220
+position = Vector2(360, 720)
 
 [node name="BG" type="Sprite2D" parent="Layer/Panel/PauseMenu"]
 process_mode = 3
-position = Vector2(360, 720)
 texture = ExtResource("19_pause_panel")
 scale = Vector2(2, 2)
 
 [node name="ResumeButton" type="Button" parent="Layer/Panel/PauseMenu" unique_id=1420310396]
 process_mode = 3
-offset_left = 140.0
-offset_top = 620.0
-offset_right = 580.0
-offset_bottom = 716.0
+offset_left = -100.0
+offset_top = -106.0
+offset_right = 100.0
+offset_bottom = -66.0
 
 [node name="SettingsButton" type="Button" parent="Layer/Panel/PauseMenu" unique_id=1984925037]
 process_mode = 3
-offset_left = 140.0
-offset_top = 718.0
-offset_right = 580.0
-offset_bottom = 814.0
+offset_left = -100.0
+offset_top = -3.0
+offset_right = 100.0
+offset_bottom = 37.0
 
 [node name="ExitButton" type="Button" parent="Layer/Panel/PauseMenu" unique_id=962121017]
 process_mode = 3
-offset_left = 140.0
-offset_top = 816.0
-offset_right = 580.0
-offset_bottom = 912.0
+offset_left = -100.0
+offset_top = 100.0
+offset_right = 100.0
+offset_bottom = 140.0
 
 [node name="SummaryPanel" parent="Layer/Panel" unique_id=1553527617 instance=ExtResource("6_j7lav")]
 z_index = 250

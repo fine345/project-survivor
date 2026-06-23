@@ -25,20 +25,56 @@ func _ready() -> void:
 	retry_button.pressed.connect(func(): restart_requested.emit())
 	exit_button.pressed.connect(func(): exit_to_menu_requested.emit())
 	title_label.add_theme_font_size_override("font_size", 44)
+	title_label.add_theme_color_override("font_color", Color(0, 0, 0))
 	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	time_name.add_theme_font_size_override("font_size", 33)
+	time_name.add_theme_color_override("font_color", Color(0, 0, 0))
 	kills_name.add_theme_font_size_override("font_size", 33)
+	kills_name.add_theme_color_override("font_color", Color(0, 0, 0))
 	level_name.add_theme_font_size_override("font_size", 33)
+	level_name.add_theme_color_override("font_color", Color(0, 0, 0))
 	dealt_name.add_theme_font_size_override("font_size", 33)
+	dealt_name.add_theme_color_override("font_color", Color(0, 0, 0))
 	time_value.add_theme_font_size_override("font_size", 55)
+	time_value.add_theme_color_override("font_color", Color(0, 0, 0))
 	kills_value.add_theme_font_size_override("font_size", 55)
+	kills_value.add_theme_color_override("font_color", Color(0, 0, 0))
 	level_value.add_theme_font_size_override("font_size", 55)
+	level_value.add_theme_color_override("font_color", Color(0, 0, 0))
 	dealt_value.add_theme_font_size_override("font_size", 55)
+	dealt_value.add_theme_color_override("font_color", Color(0, 0, 0))
 	rewards_label.add_theme_font_size_override("font_size", 33)
+	rewards_label.add_theme_color_override("font_color", Color(0, 0, 0))
 	score_label.add_theme_font_size_override("font_size", 33)
+	score_label.add_theme_color_override("font_color", Color(0, 0, 0))
 	score_value.add_theme_font_size_override("font_size", 55)
+	score_value.add_theme_color_override("font_color", Color(0, 0, 0))
 	retry_button.add_theme_font_size_override("font_size", 33)
 	exit_button.add_theme_font_size_override("font_size", 33)
+	_style_summary_button(retry_button, "再试一次")
+	_style_summary_button(exit_button, "退出到主菜单")
+
+func _style_summary_button(btn: Button, label_text: String) -> void:
+	if btn == null:
+		return
+	btn.process_mode = Node.PROCESS_MODE_ALWAYS
+	btn.text = ""
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0, 0, 0, 0)
+	style.set_content_margin_all(0)
+	btn.add_theme_stylebox_override("normal", style)
+	btn.add_theme_stylebox_override("hover", style)
+	var pressed_style := StyleBoxFlat.new()
+	pressed_style.bg_color = Color(0, 0, 0, 0.15)
+	pressed_style.set_content_margin_all(0)
+	btn.add_theme_stylebox_override("pressed", pressed_style)
+	var lbl := Label.new()
+	lbl.text = label_text
+	lbl.add_theme_font_size_override("font_size", 33)
+	lbl.add_theme_color_override("font_color", Color(0, 0, 0))
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl.set_anchors_preset(Control.PRESET_FULL_RECT)
+	btn.add_child(lbl)
 
 func show_summary(stats: Dictionary) -> void:
 	visible = true
@@ -53,12 +89,14 @@ func show_summary(stats: Dictionary) -> void:
 	_set_row(dealt_name, dealt_value, "造成伤害", str(stats.get("damage_dealt", 0)))
 	var rewards: Dictionary = stats.get("rewards", {})
 	var keys: Array = rewards.keys()
-	rewards_label.text = "获得奖励："
+	rewards_label.text = "获得奖励"
 	for key in keys:
 		var count: int = rewards[key] if rewards[key] is int else 1
 		var lbl := Label.new()
 		lbl.text = "%s ×%d" % [key, count] if count > 1 else str(key)
 		lbl.add_theme_font_size_override("font_size", 22)
+		lbl.add_theme_color_override("font_color", Color(0, 0, 0))
+		lbl.custom_minimum_size.x = 200
 		rewards_grid.add_child(lbl)
 	score_value.text = str(stats.get("score", 0))
 	get_tree().paused = true
