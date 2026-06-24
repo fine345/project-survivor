@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 MCPRuntime="*uid://c8dfcidpqvwq8"
 RecordManager="*res://scripts/game/record_manager.gd"
 SettingsManager="*res://scripts/ui/settings_manager.gd"
+DifficultyManager="*res://scripts/ui/difficulty_manager.gd"
 
 [display]
 

@@ -25,7 +25,9 @@ const READY_DURATION := 0.6
 const DONE_DURATION := 0.6
 
 func _ready() -> void:
-	max_health = 2000
+	var dm = get_node_or_null("/root/DifficultyManager")
+	var mult: float = dm.get_boss_health_multiplier() if dm != null else 1.0
+	max_health = int(2000 * mult)
 	move_speed = 200.0
 	experience_drop = 0
 	touch_damage = 1

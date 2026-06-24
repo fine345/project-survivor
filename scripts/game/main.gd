@@ -74,6 +74,10 @@ var enemy_four_timer: Timer = null
 
 func _ready() -> void:
 	reward_pool = REWARD_POOL_SCRIPT.new()
+	var dm = get_node_or_null("/root/DifficultyManager")
+	if dm != null:
+		enemy_one_spawn_interval *= dm.get_spawn_interval_multiplier()
+		enemy_two_spawn_interval *= dm.get_spawn_interval_multiplier()
 	spawn_player()
 	_setup_timers()
 	if level_up_panel != null and level_up_panel.has_signal("reward_selected") and not level_up_panel.reward_selected.is_connected(_on_reward_selected):
@@ -824,6 +828,7 @@ func _show_summary(is_victory: bool) -> void:
 		rewards_display[reward_pool.get_reward_title(key)] = reward_counts[key]
 	summary_panel.call("show_summary", {
 		"is_victory": is_victory,
+		"difficulty": _get_current_difficulty(),
 		"time": elapsed_time,
 		"kills": total_kills,
 		"level": player.level if player != null else 1,
@@ -859,7 +864,22 @@ func _calculate_score() -> int:
 		+ total_damage_dealt * 0.5
 	)
 
+func _get_current_difficulty() -> int:
+	var dm = get_node_or_null("/root/DifficultyManager")
+	return dm.current_difficulty if dm != null else 0
+
 func _on_summary_restart() -> void:
+	var btn_text: String = ""
+	if summary_panel != null:
+		btn_text = summary_panel.retry_button.get_child(0).text if summary_panel.retry_button.get_child_count() > 0 else ""
+	if btn_text == "困难模式":
+		var dm = get_node_or_null("/root/DifficultyManager")
+		if dm != null:
+			dm.set_difficulty(1)
+	elif btn_text == "挑战模式":
+		var dm = get_node_or_null("/root/DifficultyManager")
+		if dm != null:
+			dm.set_difficulty(2)
 	restart_game()
 
 func _on_exit_to_menu() -> void:

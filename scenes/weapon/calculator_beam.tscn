@@ -6,6 +6,7 @@
 size = Vector2(1440, 8)
 
 [node name="CalculatorBeam" type="Area2D" unique_id=509426503]
+collision_mask = 5
 texture_filter = 1
 script = ExtResource("1_beam")
 

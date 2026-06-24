@@ -3,7 +3,8 @@ extends Control
 signal restart_requested
 signal exit_to_menu_requested
 
-@onready var title_label: Label = $Panel/VBox/TitleLabel
+@onready var title_label: Label = $Panel/VBox/TitleRow/TitleLabel
+@onready var difficulty_label: Label = $Panel/VBox/TitleRow/DifficultyLabel
 @onready var time_name: Label = $Panel/VBox/TimeRow/NameLabel
 @onready var time_value: Label = $Panel/VBox/TimeRow/ValueLabel
 @onready var kills_name: Label = $Panel/VBox/KillsRow/NameLabel
@@ -19,6 +20,8 @@ signal exit_to_menu_requested
 @onready var retry_button: Button = $Panel/VBox/RetryButton
 @onready var exit_button: Button = $Panel/VBox/ExitButton
 
+var _current_difficulty: int = 0
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	visible = false
@@ -27,6 +30,8 @@ func _ready() -> void:
 	title_label.add_theme_font_size_override("font_size", 44)
 	title_label.add_theme_color_override("font_color", Color(0, 0, 0))
 	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	difficulty_label.add_theme_font_size_override("font_size", 22)
+	difficulty_label.add_theme_color_override("font_color", Color(0, 0, 0))
 	time_name.add_theme_font_size_override("font_size", 33)
 	time_name.add_theme_color_override("font_color", Color(0, 0, 0))
 	kills_name.add_theme_font_size_override("font_size", 33)
@@ -68,6 +73,9 @@ func _style_summary_button(btn: Button, label_text: String) -> void:
 	pressed_style.bg_color = Color(0, 0, 0, 0.15)
 	pressed_style.set_content_margin_all(0)
 	btn.add_theme_stylebox_override("pressed", pressed_style)
+	for child in btn.get_children():
+		if child is Label:
+			child.queue_free()
 	var lbl := Label.new()
 	lbl.text = label_text
 	lbl.add_theme_font_size_override("font_size", 33)
@@ -78,8 +86,18 @@ func _style_summary_button(btn: Button, label_text: String) -> void:
 
 func show_summary(stats: Dictionary) -> void:
 	visible = true
+	_current_difficulty = stats.get("difficulty", 0)
 	var is_victory: bool = stats.get("is_victory", false)
 	title_label.text = "通关！" if is_victory else "本局复盘"
+	var diff_names := ["正常", "困难", "挑战"]
+	difficulty_label.text = diff_names[_current_difficulty]
+	if is_victory:
+		match _current_difficulty:
+			0: _style_summary_button(retry_button, "困难模式")
+			1: _style_summary_button(retry_button, "挑战模式")
+			2: _style_summary_button(retry_button, "再来一把")
+	else:
+		_style_summary_button(retry_button, "再试一次")
 	var time: float = stats.get("time", 0.0)
 	var minutes: int = int(time) / 60
 	var seconds: int = int(time) % 60

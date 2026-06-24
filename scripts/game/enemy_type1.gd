@@ -1,7 +1,9 @@
 extends "res://scripts/game/enemy_base.gd"
 
 func _ready() -> void:
-	max_health = 30
+	var dm = get_node_or_null("/root/DifficultyManager")
+	var mult: float = dm.get_enemy_health_multiplier() if dm != null else 1.0
+	max_health = int(30 * mult)
 	move_speed = 200.0
 	experience_drop = 5
 	super._ready()

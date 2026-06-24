@@ -19,6 +19,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 color = Color(0, 0, 0, 0.65)
 
 [node name="Panel" type="PanelContainer" parent="." unique_id=201380505]
@@ -40,10 +41,17 @@ grow_vertical = 2
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="TitleLabel" type="Label" parent="Panel/VBox" unique_id=19760862]
+[node name="TitleRow" type="HBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="Panel/VBox/TitleRow" unique_id=19760862]
 layout_mode = 2
 text = "本局复盘"
-horizontal_alignment = 1
+
+[node name="DifficultyLabel" type="Label" parent="Panel/VBox/TitleRow"]
+layout_mode = 2
+text = ""
 
 [node name="Spacer1" type="Control" parent="Panel/VBox"]
 custom_minimum_size = Vector2(0, 9)

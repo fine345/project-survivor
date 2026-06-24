@@ -9,7 +9,9 @@ var _attack_timer := 0.0
 var _pending_shot := false
 
 func _ready() -> void:
-	max_health = 50
+	var dm = get_node_or_null("/root/DifficultyManager")
+	var mult: float = dm.get_enemy_health_multiplier() if dm != null else 1.0
+	max_health = int(50 * mult)
 	move_speed = 200.0
 	experience_drop = 25
 	super._ready()

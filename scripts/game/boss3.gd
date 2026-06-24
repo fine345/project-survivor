@@ -26,7 +26,9 @@ const PUSH_RADIUS := 50.0
 const PUSH_FORCE := 80.0
 
 func _ready() -> void:
-	max_health = 10000
+	var dm = get_node_or_null("/root/DifficultyManager")
+	var mult: float = dm.get_boss_health_multiplier() if dm != null else 1.0
+	max_health = int(10000 * mult)
 	move_speed = 200.0
 	experience_drop = 0
 	touch_damage = 1

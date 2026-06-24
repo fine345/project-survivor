@@ -7,6 +7,7 @@
 radius = 9.0
 
 [node name="Experience" type="Area2D" unique_id=1261785776]
+collision_mask = 2
 texture_filter = 1
 script = ExtResource("1_exp")
 
