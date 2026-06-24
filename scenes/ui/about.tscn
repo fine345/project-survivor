@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://dps6b1xt37ewy"]
 
 [ext_resource type="Script" uid="uid://ce170d1pf6omq" path="res://scripts/ui/about.gd" id="1_ab"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/menu-Sheet.png" id="2_menu_bg"]
+[ext_resource type="StyleBox" path="res://transparent_style.tres" id="3_transparent"]
 
 [node name="About" type="Control" unique_id=711546489]
 layout_mode = 3
@@ -11,45 +13,48 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ab")
 
-[node name="Background" type="ColorRect" parent="." unique_id=2131216139]
+[node name="MenuBG" type="TextureRect" parent="." unique_id=2131216139]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.1, 0.1, 0.15, 1)
+texture = ExtResource("2_menu_bg")
+stretch_mode = 6
 
 [node name="Panel" type="PanelContainer" parent="." unique_id=760885656]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 40.0
-offset_top = 40.0
-offset_right = -40.0
-offset_bottom = -40.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -400.0
+offset_right = 300.0
+offset_bottom = 400.0
+theme_override_styles/panel = ExtResource("3_transparent")
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="VBox" type="VBoxContainer" parent="Panel" unique_id=1656087417]
 layout_mode = 2
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 theme_override_constants/separation = 16
 
 [node name="TitleLabel" type="Label" parent="Panel/VBox" unique_id=1137442130]
 layout_mode = 2
 text = "关于"
 horizontal_alignment = 1
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 44
 
 [node name="VersionLabel" type="Label" parent="Panel/VBox" unique_id=1093110569]
 layout_mode = 2
 text = "当前版本：v0.1.4"
 horizontal_alignment = 1
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 44
 
 [node name="Spacer" type="Control" parent="Panel/VBox" unique_id=266937551]
 layout_mode = 2
@@ -60,3 +65,5 @@ custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 text = "返回"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 44

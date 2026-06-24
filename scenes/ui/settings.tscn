@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/settings.gd" id="1_set"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/menu-Sheet.png" id="2_menu_bg"]
+[ext_resource type="StyleBox" path="res://transparent_style.tres" id="3_transparent"]
 
 [node name="Settings" type="Control"]
 layout_mode = 3
@@ -11,14 +13,15 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_set")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="MenuBG" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.1, 0.1, 0.15, 1)
+texture = ExtResource("2_menu_bg")
+stretch_mode = 6
 
 [node name="Panel" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -27,22 +30,24 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -250.0
-offset_top = -120.0
-offset_right = 250.0
-offset_bottom = 120.0
+offset_left = -300.0
+offset_top = -400.0
+offset_right = 300.0
+offset_bottom = 400.0
+theme_override_styles/panel = ExtResource("3_transparent")
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="VBox" type="VBoxContainer" parent="Panel"]
 layout_mode = 2
-size_flags_vertical = 4
 theme_override_constants/separation = 16
 
 [node name="TitleLabel" type="Label" parent="Panel/VBox"]
 layout_mode = 2
 text = "设置"
 horizontal_alignment = 1
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 44
 
 [node name="JoystickRow" type="HBoxContainer" parent="Panel/VBox"]
 layout_mode = 2
@@ -51,19 +56,31 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 text = "摇杆模式"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 44
 
 [node name="AnywhereButton" type="Button" parent="Panel/VBox/JoystickRow"]
 layout_mode = 2
 custom_minimum_size = Vector2(120, 40)
 text = "任意位置"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 44
 
 [node name="FixedButton" type="Button" parent="Panel/VBox/JoystickRow"]
 layout_mode = 2
 custom_minimum_size = Vector2(120, 40)
 text = "固定位置"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 44
+
+[node name="Spacer" type="Control" parent="Panel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
 
 [node name="BackButton" type="Button" parent="Panel/VBox"]
 layout_mode = 2
 custom_minimum_size = Vector2(200, 50)
 size_flags_horizontal = 4
 text = "返回"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 44

@@ -1,0 +1,14 @@
+[gd_resource type="StyleBoxTexture" format=3 uid="uid://buibv7xaapi6k"]
+
+[ext_resource type="Texture2D" uid="uid://u43ytfulap1p" path="res://assets/sprites/ui/detail_x2-Sheet.png" id="1_detail_tex"]
+
+[resource]
+content_margin_left = 68.0
+content_margin_top = 98.0
+content_margin_right = 62.0
+content_margin_bottom = 60.0
+texture = ExtResource("1_detail_tex")
+texture_margin_left = 200.0
+texture_margin_top = 510.0
+texture_margin_right = 200.0
+texture_margin_bottom = 231.0

@@ -6,6 +6,7 @@
 radius = 15.0
 
 [node name="EnemyType3" type="CharacterBody2D" unique_id=1616859487 groups=["enemy"]]
+collision_mask = 3
 texture_filter = 1
 script = ExtResource("1_ibalm")
 

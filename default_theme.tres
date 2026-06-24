@@ -1,7 +1,19 @@
-[gd_resource type="Theme"]
+[gd_resource type="Theme" format=3 uid="uid://bnkujid0mch8v"]
 
 [ext_resource type="FontFile" uid="uid://71hjaswh6tcf" path="res://font/Uranus_Pixel_11Px.ttf" id="1_font"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_normal"]
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pressed"]
+bg_color = Color(0, 0, 0, 0.15)
 
 [resource]
 default_font = ExtResource("1_font")
 default_font_size = 11
+Button/colors/font_color = Color(0, 0, 0, 1)
+Button/colors/font_hover_color = Color(0, 0, 0, 1)
+Button/colors/font_pressed_color = Color(0.3, 0.3, 0.3, 1)
+Button/styles/hover = SubResource("StyleBoxFlat_normal")
+Button/styles/normal = SubResource("StyleBoxFlat_normal")
+Button/styles/pressed = SubResource("StyleBoxFlat_pressed")

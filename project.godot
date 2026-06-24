@@ -22,6 +22,13 @@ RecordManager="*res://scripts/game/record_manager.gd"
 SettingsManager="*res://scripts/ui/settings_manager.gd"
 DifficultyManager="*res://scripts/ui/difficulty_manager.gd"
 
+[boot]
+
+boot/splash/image="res://assets/sprites/splash_backgroung.png"
+boot/splash/show_image=true
+boot/splash/fullsize=true
+boot/splash/minimum_display_time=1.5
+
 [display]
 
 window/size/viewport_width=720

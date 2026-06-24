@@ -6,6 +6,7 @@
 radius = 15.0
 
 [node name="EnemyType2" type="CharacterBody2D" unique_id=1892549706 groups=["enemy"]]
+collision_mask = 3
 texture_filter = 1
 script = ExtResource("1_e2")
 

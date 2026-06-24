@@ -1,30 +1,21 @@
 extends Control
 
 var all_achievements := []
-var current_page := 0
-var page_size := 15
 
 @onready var grid: GridContainer = $Panel/VBox/GridContainer
 @onready var title_label: Label = $Panel/VBox/TitleLabel
-@onready var page_label: Label = $Panel/VBox/PageInfo/PageLabel
-@onready var prev_button: Button = $Panel/VBox/PageInfo/PrevButton
-@onready var next_button: Button = $Panel/VBox/PageInfo/NextButton
 @onready var back_button: Button = $Panel/VBox/BackButton
 
-const COLOR_NONE := Color(0.18, 0.18, 0.22)
+const COLOR_NONE := Color(0.5, 0.5, 0.55)
 const COLOR_BRONZE := Color(0.45, 0.3, 0.15)
 const COLOR_SILVER := Color(0.35, 0.35, 0.4)
 const COLOR_GOLD := Color(0.5, 0.42, 0.1)
 
 func _ready() -> void:
 	back_button.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn"))
-	prev_button.pressed.connect(_prev_page)
-	next_button.pressed.connect(_next_page)
 	_load_achievements()
-	page_label.add_theme_font_size_override("font_size", 33)
 	title_label.add_theme_font_size_override("font_size", 33)
-	prev_button.add_theme_font_size_override("font_size", 33)
-	next_button.add_theme_font_size_override("font_size", 33)
+	title_label.add_theme_color_override("font_color", Color(0, 0, 0))
 	back_button.add_theme_font_size_override("font_size", 33)
 
 func _load_achievements() -> void:
@@ -34,31 +25,20 @@ func _load_achievements() -> void:
 		{"key": "total_games", "name": "游戏场数", "tiers": [10, 50, 200]},
 		{"key": "no_damage_victory", "name": "无伤通关", "tiers": [1], "is_bool": true},
 	]
-	for i in range(20):
+	for i in range(8):
 		all_achievements.append({"key": "none_%d" % i, "name": "暂无", "tiers": [1], "is_bool": true, "hidden": true})
-	_show_page()
+	_show_all()
 
-func _show_page() -> void:
+func _show_all() -> void:
 	for child in grid.get_children():
 		child.queue_free()
-	var total_pages := maxi(1, ceili(float(all_achievements.size()) / float(page_size)))
-	current_page = clampi(current_page, 0, total_pages - 1)
-	var start := current_page * page_size
-	var end_idx := mini(start + page_size, all_achievements.size())
 	var record_manager = get_node_or_null("/root/RecordManager")
 	var stats: Dictionary = record_manager.get_achievements() if record_manager != null else {}
-	for i in range(start, end_idx):
-		var def: Dictionary = all_achievements[i]
+	for def in all_achievements:
 		if def.get("hidden", false):
 			_create_placeholder_card()
 		else:
 			_create_card(def, stats)
-	var remaining := page_size - (end_idx - start)
-	for i in range(remaining):
-		_create_placeholder_card()
-	page_label.text = "第%d/%d页" % [current_page + 1, total_pages]
-	prev_button.disabled = current_page <= 0
-	next_button.disabled = current_page >= total_pages - 1
 
 func _create_card(def: Dictionary, stats: Dictionary) -> void:
 	var card := PanelContainer.new()
@@ -83,12 +63,14 @@ func _create_card(def: Dictionary, stats: Dictionary) -> void:
 	var title := Label.new()
 	title.text = def["name"]
 	title.add_theme_font_size_override("font_size", 33)
+	title.add_theme_color_override("font_color", Color(0, 0, 0))
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(title)
 
 	var value_label := Label.new()
 	value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	value_label.add_theme_font_size_override("font_size", 22)
+	value_label.add_theme_color_override("font_color", Color(0, 0, 0))
 	if is_bool:
 		value_label.text = "已达成" if bool(current_value) else "未达成"
 	else:
@@ -131,11 +113,3 @@ func _get_color(tier_index: int, is_bool: bool) -> Color:
 		1: return COLOR_BRONZE
 		2: return COLOR_SILVER
 		_: return COLOR_GOLD
-
-func _prev_page() -> void:
-	current_page -= 1
-	_show_page()
-
-func _next_page() -> void:
-	current_page += 1
-	_show_page()

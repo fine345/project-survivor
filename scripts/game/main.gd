@@ -858,10 +858,10 @@ func _save_record(is_victory: bool, damage_taken: int, score: int, rewards_displ
 
 func _calculate_score() -> int:
 	return int(
-		elapsed_time * 1
+		elapsed_time * 2
 		+ total_kills * 15
 		+ (player.level if player != null else 1) * 100
-		+ total_damage_dealt * 0.5
+		+ total_damage_dealt * 1
 	)
 
 func _get_current_difficulty() -> int:

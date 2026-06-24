@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://drj3bmhqckm6"]
 
 [ext_resource type="Script" uid="uid://di2maqvcp1h60" path="res://scripts/ui/main_menu.gd" id="1_mm"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/menu-Sheet.png" id="2_menu_bg"]
 
 [node name="MainMenu" type="Control" unique_id=1755850702]
 texture_filter = 1
@@ -12,14 +13,15 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_mm")
 
-[node name="Background" type="ColorRect" parent="." unique_id=2105874396]
+[node name="MenuBG" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.1, 0.1, 0.15, 1)
+texture = ExtResource("2_menu_bg")
+stretch_mode = 6
 
 [node name="Title" type="Label" parent="." unique_id=1522150969]
 layout_mode = 1
@@ -33,6 +35,7 @@ offset_bottom = 280.0
 grow_horizontal = 2
 text = "生存射击"
 horizontal_alignment = 1
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 
 [node name="VBox" type="VBoxContainer" parent="." unique_id=1177407621]
 layout_mode = 1
@@ -90,6 +93,7 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "敬请期待"
 horizontal_alignment = 1
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 
 [node name="DifficultyPanel" type="VBoxContainer" parent="."]
 visible = false
@@ -111,6 +115,7 @@ theme_override_constants/separation = 16
 layout_mode = 2
 text = "选择难度"
 horizontal_alignment = 1
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 
 [node name="NormalBtn" type="Button" parent="DifficultyPanel"]
 custom_minimum_size = Vector2(240, 50)

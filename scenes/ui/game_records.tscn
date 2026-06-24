@@ -1,6 +1,9 @@
 [gd_scene format=3 uid="uid://bla6o8sl5qksm"]
 
 [ext_resource type="Script" uid="uid://ryje3xy5dul8" path="res://scripts/ui/game_records.gd" id="1_gr"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/menu-Sheet.png" id="2_menu_bg"]
+[ext_resource type="StyleBox" path="res://transparent_style.tres" id="3_transparent"]
+[ext_resource type="StyleBox" path="res://detail_panel_style.tres" id="4_detail_style"]
 
 [node name="GameRecords" type="Control" unique_id=416642955]
 texture_filter = 1
@@ -12,125 +15,230 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_gr")
 
-[node name="Background" type="ColorRect" parent="." unique_id=471768101]
+[node name="MenuBG" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.1, 0.1, 0.15, 1)
+texture = ExtResource("2_menu_bg")
+stretch_mode = 6
 
-[node name="Panel" type="PanelContainer" parent="." unique_id=1454554402]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 40.0
-offset_top = 40.0
-offset_right = -40.0
-offset_bottom = -40.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBox" type="VBoxContainer" parent="Panel" unique_id=509626036]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="TitleLabel" type="Label" parent="Panel/VBox" unique_id=1319733819]
-layout_mode = 2
-text = "游戏记录"
-horizontal_alignment = 1
-
-[node name="RecordsList" type="VBoxContainer" parent="Panel/VBox" unique_id=146927902]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 8
-
-[node name="PageInfo" type="HBoxContainer" parent="Panel/VBox" unique_id=967907625]
-layout_mode = 2
-theme_override_constants/separation = 20
-alignment = 1
-
-[node name="PrevButton" type="Button" parent="Panel/VBox/PageInfo" unique_id=325783220]
-custom_minimum_size = Vector2(120, 40)
-layout_mode = 2
-text = "上一页"
-
-[node name="PageLabel" type="Label" parent="Panel/VBox/PageInfo" unique_id=690426600]
-layout_mode = 2
-text = "第1/1页"
-
-[node name="NextButton" type="Button" parent="Panel/VBox/PageInfo" unique_id=267023346]
-custom_minimum_size = Vector2(120, 40)
-layout_mode = 2
-text = "下一页"
-
-[node name="EmptyLabel" type="Label" parent="Panel/VBox" unique_id=605551678]
-visible = false
-layout_mode = 2
-text = "暂无记录"
-horizontal_alignment = 1
-
-[node name="BackButton" type="Button" parent="Panel/VBox" unique_id=919623598]
-custom_minimum_size = Vector2(200, 50)
-layout_mode = 2
-size_flags_horizontal = 4
-text = "返回"
-
-[node name="DetailPanel" type="Control" parent="." unique_id=1293289939]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Dim" type="ColorRect" parent="DetailPanel" unique_id=1427969435]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 0.8)
-
-[node name="DetailBox" type="PanelContainer" parent="DetailPanel" unique_id=2014871404]
+[node name="Panel" type="PanelContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -250.0
-offset_top = -300.0
-offset_right = 250.0
-offset_bottom = 300.0
+offset_left = -300.0
+offset_top = -630.0
+offset_right = 300.0
+offset_bottom = 650.0
+theme_override_styles/panel = ExtResource("3_transparent")
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBox" type="VBoxContainer" parent="DetailPanel/DetailBox" unique_id=2021476201]
+[node name="VBox" type="VBoxContainer" parent="Panel"]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="TitleLabel" type="Label" parent="DetailPanel/DetailBox/VBox" unique_id=847940365]
+[node name="TitleLabel" type="Label" parent="Panel/VBox"]
 layout_mode = 2
-text = "记录详情"
+text = "游戏记录"
 horizontal_alignment = 1
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 44
 
-[node name="RewardsLabel" type="Label" parent="DetailPanel/DetailBox/VBox" unique_id=411689899]
+[node name="RecordsList" type="VBoxContainer" parent="Panel/VBox"]
 layout_mode = 2
-autowrap_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
 
-[node name="RewardsGrid" type="GridContainer" parent="DetailPanel/DetailBox/VBox" unique_id=1879180885]
+[node name="PageInfo" type="HBoxContainer" parent="Panel/VBox"]
 layout_mode = 2
-theme_override_constants/h_separation = 20
-theme_override_constants/v_separation = 4
-columns = 2
+alignment = 1
+theme_override_constants/separation = 20
 
-[node name="CloseButton" type="Button" parent="DetailPanel/DetailBox/VBox" unique_id=1046562778]
-custom_minimum_size = Vector2(200, 40)
+[node name="PrevButton" type="Button" parent="Panel/VBox/PageInfo"]
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+text = "上一页"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+
+[node name="PageLabel" type="Label" parent="Panel/VBox/PageInfo"]
+layout_mode = 2
+text = "第1/1页"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+
+[node name="NextButton" type="Button" parent="Panel/VBox/PageInfo"]
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+text = "下一页"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+
+[node name="EmptyLabel" type="Label" parent="Panel/VBox"]
+visible = false
+layout_mode = 2
+text = "暂无记录"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+
+[node name="BackButton" type="Button" parent="Panel/VBox"]
+custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
 size_flags_horizontal = 4
+text = "返回"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 44
+
+[node name="DetailPanel" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DetailBox" type="PanelContainer" parent="DetailPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -268.0
+offset_top = -370.0
+offset_right = 268.0
+offset_bottom = 370.0
+theme_override_styles/panel = ExtResource("4_detail_style")
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="DetailPanel/DetailBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleRow" type="HBoxContainer" parent="DetailPanel/DetailBox/VBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="DetailPanel/DetailBox/VBox/TitleRow"]
+layout_mode = 2
+text = ""
+
+[node name="Spacer1" type="Control" parent="DetailPanel/DetailBox/VBox"]
+custom_minimum_size = Vector2(0, 9)
+
+[node name="LevelRow" type="HBoxContainer" parent="DetailPanel/DetailBox/VBox"]
+layout_mode = 2
+
+[node name="LevelName" type="Label" parent="DetailPanel/DetailBox/VBox/LevelRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "最终等级"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 33
+
+[node name="LevelValue" type="Label" parent="DetailPanel/DetailBox/VBox/LevelRow"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "Lv.1"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+
+[node name="KillsRow" type="HBoxContainer" parent="DetailPanel/DetailBox/VBox"]
+layout_mode = 2
+
+[node name="KillsName" type="Label" parent="DetailPanel/DetailBox/VBox/KillsRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "击杀数量"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 33
+
+[node name="KillsValue" type="Label" parent="DetailPanel/DetailBox/VBox/KillsRow"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "0"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+
+[node name="TimeRow" type="HBoxContainer" parent="DetailPanel/DetailBox/VBox"]
+layout_mode = 2
+
+[node name="TimeName" type="Label" parent="DetailPanel/DetailBox/VBox/TimeRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "存活时间"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 33
+
+[node name="TimeValue" type="Label" parent="DetailPanel/DetailBox/VBox/TimeRow"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "0:00"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+
+[node name="DealtRow" type="HBoxContainer" parent="DetailPanel/DetailBox/VBox"]
+layout_mode = 2
+
+[node name="DealtName" type="Label" parent="DetailPanel/DetailBox/VBox/DealtRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "造成伤害"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 33
+
+[node name="DealtValue" type="Label" parent="DetailPanel/DetailBox/VBox/DealtRow"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "0"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+
+[node name="Spacer2" type="Control" parent="DetailPanel/DetailBox/VBox"]
+custom_minimum_size = Vector2(0, 6)
+
+[node name="RewardsLabel" type="Label" parent="DetailPanel/DetailBox/VBox"]
+layout_mode = 2
+text = "获得奖励"
+autowrap_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 33
+
+[node name="Spacer5" type="Control" parent="DetailPanel/DetailBox/VBox"]
+custom_minimum_size = Vector2(0, 3)
+
+[node name="RewardsGrid" type="GridContainer" parent="DetailPanel/DetailBox/VBox"]
+layout_mode = 2
+columns = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 4
+
+[node name="Spacer4" type="Control" parent="DetailPanel/DetailBox/VBox"]
+custom_minimum_size = Vector2(0, 10)
+
+[node name="ScoreRow" type="HBoxContainer" parent="DetailPanel/DetailBox/VBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="ScoreLabel" type="Label" parent="DetailPanel/DetailBox/VBox/ScoreRow"]
+layout_mode = 2
+text = "总分："
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 33
+
+[node name="ScoreValue" type="Label" parent="DetailPanel/DetailBox/VBox/ScoreRow"]
+layout_mode = 2
+text = "0"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+
+[node name="Spacer3" type="Control" parent="DetailPanel/DetailBox/VBox"]
+custom_minimum_size = Vector2(0, 30)
+
+[node name="CloseButton" type="Button" parent="DetailPanel/DetailBox/VBox"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
 text = "关闭"
+theme_override_colors/font_color = Color(0, 0, 0, 1)

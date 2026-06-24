@@ -2,7 +2,7 @@ extends Control
 
 var all_records: Array = []
 var current_page := 0
-var page_size := 6
+var page_size := 5
 
 @onready var records_list: VBoxContainer = $Panel/VBox/RecordsList
 @onready var title_label: Label = $Panel/VBox/TitleLabel
@@ -14,14 +14,12 @@ var page_size := 6
 @onready var detail_panel: Control = $DetailPanel
 @onready var rewards_label: Label = $DetailPanel/DetailBox/VBox/RewardsLabel
 @onready var close_button: Button = $DetailPanel/DetailBox/VBox/CloseButton
-@onready var dim: ColorRect = $DetailPanel/Dim
 
 func _ready() -> void:
 	back_button.pressed.connect(_on_back)
 	prev_button.pressed.connect(_prev_page)
 	next_button.pressed.connect(_next_page)
 	close_button.pressed.connect(_close_detail)
-	dim.gui_input.connect(_on_dim_input)
 	detail_panel.visible = false
 	_load_records()
 	page_label.add_theme_font_size_override("font_size", 33)
@@ -73,7 +71,7 @@ func _create_record_card(record: Dictionary) -> void:
 	card.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	card.size_flags_stretch_ratio = 1.0
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.15, 0.15, 0.2, 1)
+	style.bg_color = Color(0.45, 0.45, 0.5, 1)
 	style.set_corner_radius_all(8)
 	style.set_content_margin_all(10)
 	card.add_theme_stylebox_override("panel", style)
@@ -103,7 +101,7 @@ func _create_record_card(record: Dictionary) -> void:
 	var id_label := Label.new()
 	id_label.text = "#%d" % record.get("id", 0)
 	id_label.add_theme_font_size_override("font_size", font_main)
-	id_label.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6))
+	id_label.add_theme_color_override("font_color", Color(0, 0, 0))
 	row1.add_child(id_label)
 
 	var result_lbl := Label.new()
@@ -119,7 +117,7 @@ func _create_record_card(record: Dictionary) -> void:
 	var date_lbl := Label.new()
 	date_lbl.text = record.get("date", "")
 	date_lbl.add_theme_font_size_override("font_size", font_small)
-	date_lbl.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7))
+	date_lbl.add_theme_color_override("font_color", Color(0, 0, 0))
 	row1.add_child(date_lbl)
 
 	var sep := HSeparator.new()
@@ -152,11 +150,13 @@ func _add_grid_pair(parent: GridContainer, label_text: String, value_text: Strin
 	var lbl := Label.new()
 	lbl.text = label_text
 	lbl.add_theme_font_size_override("font_size", label_size)
+	lbl.add_theme_color_override("font_color", Color(0, 0, 0))
 	lbl.custom_minimum_size.x = 70
 	parent.add_child(lbl)
 	var val := Label.new()
 	val.text = value_text
 	val.add_theme_font_size_override("font_size", value_size)
+	val.add_theme_color_override("font_color", Color(0, 0, 0))
 	val.custom_minimum_size.x = 80
 	parent.add_child(val)
 
@@ -164,16 +164,19 @@ func _add_stat_pair(parent: HBoxContainer, label_text: String, value_text: Strin
 	var lbl := Label.new()
 	lbl.text = label_text
 	lbl.add_theme_font_size_override("font_size", label_size)
+	lbl.add_theme_color_override("font_color", Color(0, 0, 0))
 	parent.add_child(lbl)
 	var val := Label.new()
 	val.text = value_text
 	val.add_theme_font_size_override("font_size", value_size)
+	val.add_theme_color_override("font_color", Color(0, 0, 0))
 	parent.add_child(val)
 
 func _add_stat(parent: HBoxContainer, text: String, font_size: int = 22) -> void:
 	var label := Label.new()
 	label.text = text
 	label.add_theme_font_size_override("font_size", font_size)
+	label.add_theme_color_override("font_color", Color(0, 0, 0))
 	parent.add_child(label)
 
 var _detail_stats_grid: GridContainer = null
@@ -181,107 +184,45 @@ var _detail_stats_grid2: GridContainer = null
 
 func _show_detail(record: Dictionary) -> void:
 	_clear_detail_dynamic()
-	var vbox: VBoxContainer = $DetailPanel/DetailBox/VBox
-	$DetailPanel/DetailBox/VBox/TitleLabel.add_theme_font_size_override("font_size", 33)
-
 	var is_victory: bool = record.get("result", "") == "victory"
-
-	# 第一块：编号 + 结果 + 日期
-	var sep1 := HSeparator.new()
-	vbox.add_child(sep1)
-	vbox.move_child(sep1, 1)
-
-	var row1 := HBoxContainer.new()
-	row1.name = "DetailInfoRow"
-	row1.add_theme_constant_override("separation", 12)
-	vbox.add_child(row1)
-	vbox.move_child(row1, 2)
-
-	var id_lbl := Label.new()
-	id_lbl.text = "#%d" % record.get("id", 0)
-	id_lbl.add_theme_font_size_override("font_size", 22)
-	id_lbl.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6))
-	row1.add_child(id_lbl)
-
-	var result_lbl := Label.new()
-	result_lbl.text = "胜利" if is_victory else "失败"
-	result_lbl.add_theme_font_size_override("font_size", 44)
-	result_lbl.add_theme_color_override("font_color", Color(0.3, 0.9, 0.3) if is_victory else Color(0.9, 0.3, 0.3))
-	row1.add_child(result_lbl)
-
-	var row1_spacer := Control.new()
-	row1_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row1.add_child(row1_spacer)
-
-	var date_lbl := Label.new()
-	date_lbl.text = record.get("date", "")
-	date_lbl.add_theme_font_size_override("font_size", 22)
-	row1.add_child(date_lbl)
-
-	# 第二块：数值统计
-	var sep2 := HSeparator.new()
-	vbox.add_child(sep2)
-	vbox.move_child(sep2, 3)
-
-	var level_val: int = record.get("level", 1)
-	var kills_val: int = record.get("kills", 0)
 	var time_val: float = record.get("time", 0)
 	var minutes := int(time_val) / 60
 	var seconds := int(time_val) % 60
-	var damage_val: int = record.get("damage_dealt", 0)
-	var score_val: int = record.get("score", 0)
-
-	_detail_stats_grid = GridContainer.new()
-	_detail_stats_grid.columns = 6
-	_detail_stats_grid.add_theme_constant_override("h_separation", 12)
-	_detail_stats_grid.add_theme_constant_override("v_separation", 4)
-	vbox.add_child(_detail_stats_grid)
-	vbox.move_child(_detail_stats_grid, 4)
-	_add_grid_pair(_detail_stats_grid, "等级：", "Lv.%d" % level_val, 33, 44)
-	_add_grid_pair(_detail_stats_grid, "击杀：", "%d" % kills_val, 33, 44)
-	_add_grid_pair(_detail_stats_grid, "时间：", "%d:%02d" % [minutes, seconds], 33, 44)
-
-	_detail_stats_grid2 = GridContainer.new()
-	_detail_stats_grid2.columns = 4
-	_detail_stats_grid2.add_theme_constant_override("h_separation", 12)
-	_detail_stats_grid2.add_theme_constant_override("v_separation", 4)
-	vbox.add_child(_detail_stats_grid2)
-	vbox.move_child(_detail_stats_grid2, 5)
-	_add_grid_pair(_detail_stats_grid2, "输出：", "%d" % damage_val, 33, 44)
-	_add_grid_pair(_detail_stats_grid2, "总分：", "%d" % score_val, 33, 44)
-
-	var sep3 := HSeparator.new()
-	vbox.add_child(sep3)
-	vbox.move_child(sep3, 6)
-
-	var sep4 := HSeparator.new()
-	vbox.add_child(sep4)
-	vbox.move_child(sep4, vbox.get_child_count() - 2)
+	$DetailPanel/DetailBox/VBox/TitleRow/TitleLabel.text = "#%d %s %s" % [record.get("id", 0), "胜利" if is_victory else "失败", "%d:%02d" % [minutes, seconds]]
+	$DetailPanel/DetailBox/VBox/TitleRow/TitleLabel.add_theme_font_size_override("font_size", 44)
+	$DetailPanel/DetailBox/VBox/TitleRow/TitleLabel.add_theme_color_override("font_color", Color(0, 0, 0))
+	$DetailPanel/DetailBox/VBox/LevelRow/LevelValue.text = "Lv.%d" % record.get("level", 1)
+	$DetailPanel/DetailBox/VBox/LevelRow/LevelValue.add_theme_font_size_override("font_size", 55)
+	$DetailPanel/DetailBox/VBox/LevelRow/LevelValue.add_theme_color_override("font_color", Color(0, 0, 0))
+	$DetailPanel/DetailBox/VBox/KillsRow/KillsValue.text = "%d" % record.get("kills", 0)
+	$DetailPanel/DetailBox/VBox/KillsRow/KillsValue.add_theme_font_size_override("font_size", 55)
+	$DetailPanel/DetailBox/VBox/KillsRow/KillsValue.add_theme_color_override("font_color", Color(0, 0, 0))
+	$DetailPanel/DetailBox/VBox/TimeRow/TimeValue.text = "%d:%02d" % [minutes, seconds]
+	$DetailPanel/DetailBox/VBox/TimeRow/TimeValue.add_theme_font_size_override("font_size", 55)
+	$DetailPanel/DetailBox/VBox/TimeRow/TimeValue.add_theme_color_override("font_color", Color(0, 0, 0))
+	$DetailPanel/DetailBox/VBox/DealtRow/DealtValue.text = "%d" % record.get("damage_dealt", 0)
+	$DetailPanel/DetailBox/VBox/DealtRow/DealtValue.add_theme_font_size_override("font_size", 55)
+	$DetailPanel/DetailBox/VBox/DealtRow/DealtValue.add_theme_color_override("font_color", Color(0, 0, 0))
+	$DetailPanel/DetailBox/VBox/ScoreRow/ScoreValue.text = "%d" % record.get("score", 0)
+	$DetailPanel/DetailBox/VBox/ScoreRow/ScoreValue.add_theme_font_size_override("font_size", 55)
+	$DetailPanel/DetailBox/VBox/ScoreRow/ScoreValue.add_theme_color_override("font_color", Color(0, 0, 0))
 	var rewards: Array = record.get("rewards", [])
 	if rewards.size() > 0:
-		rewards_label.text = "获得奖励："
-		rewards_label.add_theme_font_size_override("font_size", 33)
-		rewards_label.visible = true
+		$DetailPanel/DetailBox/VBox/RewardsLabel.visible = true
 		var rewards_grid: GridContainer = $DetailPanel/DetailBox/VBox/RewardsGrid
-		if rewards_grid != null:
-			for child in rewards_grid.get_children():
-				child.queue_free()
-			rewards_grid.columns = 2 if rewards.size() > 1 else 1
-			for reward in rewards:
-				var lbl := Label.new()
-				var reward_str := str(reward)
-				if "×" in reward_str and not " ×" in reward_str:
-					reward_str = reward_str.replace("×", " ×")
-				lbl.text = reward_str
-				lbl.add_theme_font_size_override("font_size", 22)
-				rewards_grid.add_child(lbl)
-			rewards_grid.visible = true
+		for child in rewards_grid.get_children():
+			child.queue_free()
+		rewards_grid.columns = 2 if rewards.size() > 1 else 1
+		for reward in rewards:
+			var lbl := Label.new()
+			lbl.text = str(reward)
+			lbl.add_theme_font_size_override("font_size", 22)
+			lbl.add_theme_color_override("font_color", Color(0, 0, 0))
+			rewards_grid.add_child(lbl)
+		rewards_grid.visible = true
 	else:
-		rewards_label.visible = false
-		var rewards_grid: GridContainer = $DetailPanel/DetailBox/VBox/RewardsGrid
-		if rewards_grid != null:
-			rewards_grid.visible = false
-	close_button.add_theme_font_size_override("font_size", 33)
+		$DetailPanel/DetailBox/VBox/RewardsGrid.visible = false
+	_style_summary_button($DetailPanel/DetailBox/VBox/CloseButton, "关闭")
 	detail_panel.visible = true
 
 func _close_detail() -> void:
@@ -289,23 +230,32 @@ func _close_detail() -> void:
 	_clear_detail_dynamic()
 
 func _clear_detail_dynamic() -> void:
-	if _detail_stats_grid != null and is_instance_valid(_detail_stats_grid):
-		_detail_stats_grid.queue_free()
-		_detail_stats_grid = null
-	if _detail_stats_grid2 != null and is_instance_valid(_detail_stats_grid2):
-		_detail_stats_grid2.queue_free()
-		_detail_stats_grid2 = null
-	var vbox: VBoxContainer = $DetailPanel/DetailBox/VBox
-	var to_remove: Array = []
-	for child in vbox.get_children():
-		if child is HSeparator:
-			to_remove.append(child)
-		elif child is HBoxContainer:
-			to_remove.append(child)
-		elif child is GridContainer and child != $DetailPanel/DetailBox/VBox/RewardsGrid:
-			to_remove.append(child)
-	for node in to_remove:
-		node.queue_free()
+	pass
+
+func _style_summary_button(btn: Button, label_text: String) -> void:
+	if btn == null:
+		return
+	btn.process_mode = Node.PROCESS_MODE_ALWAYS
+	btn.text = ""
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0, 0, 0, 0)
+	style.set_content_margin_all(0)
+	btn.add_theme_stylebox_override("normal", style)
+	btn.add_theme_stylebox_override("hover", style)
+	var pressed_style := StyleBoxFlat.new()
+	pressed_style.bg_color = Color(0, 0, 0, 0.15)
+	pressed_style.set_content_margin_all(0)
+	btn.add_theme_stylebox_override("pressed", pressed_style)
+	for child in btn.get_children():
+		if child is Label:
+			child.queue_free()
+	var lbl := Label.new()
+	lbl.text = label_text
+	lbl.add_theme_font_size_override("font_size", 33)
+	lbl.add_theme_color_override("font_color", Color(0, 0, 0))
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl.set_anchors_preset(Control.PRESET_FULL_RECT)
+	btn.add_child(lbl)
 
 func _on_dim_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed:
