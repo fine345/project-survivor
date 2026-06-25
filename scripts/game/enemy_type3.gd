@@ -86,6 +86,14 @@ func _start_attack() -> void:
 		_animated_sprite.play("attack")
 		_face_target()
 
+func take_damage(amount: int, color: Color = Color.WHITE, source_pos: Vector2 = Vector2.INF) -> void:
+	var was_attacking: bool = _pending_shot
+	super.take_damage(amount, color, source_pos)
+	if is_dead and was_attacking:
+		var rm = get_node_or_null("/root/RecordManager")
+		if rm != null:
+			rm.increment_achievement_stat("ranged_interrupts")
+
 func _fire_bullet() -> void:
 	if target == null or not is_instance_valid(target):
 		return

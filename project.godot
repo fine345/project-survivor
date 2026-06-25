@@ -10,10 +10,10 @@ config_version=5
 
 [application]
 
-config/name="project-survivor"
+config/name="dead-week"
 run/main_scene="res://scenes/ui/main_menu.tscn"
 config/features=PackedStringArray("4.6", "Mobile")
-config/icon="res://icon.svg"
+config/icon="res://icon.jpg"
 
 [autoload]
 
@@ -21,6 +21,8 @@ MCPRuntime="*uid://c8dfcidpqvwq8"
 RecordManager="*res://scripts/game/record_manager.gd"
 SettingsManager="*res://scripts/ui/settings_manager.gd"
 DifficultyManager="*res://scripts/ui/difficulty_manager.gd"
+BGM="*res://scripts/ui/bgm.gd"
+SFX="*res://scripts/ui/sfx.gd"
 
 [boot]
 
@@ -28,6 +30,7 @@ boot/splash/image="res://assets/sprites/splash_backgroung.png"
 boot/splash/show_image=true
 boot/splash/fullsize=true
 boot/splash/minimum_display_time=1.5
+boot/splash/show_godot_splash=false
 
 [display]
 

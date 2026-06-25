@@ -51,6 +51,7 @@ func _physics_process(delta: float) -> void:
 		_hit_enemies_during_tick()
 
 func _hit_enemies_during_tick() -> void:
+	var killed_this_tick: int = 0
 	for body in get_overlapping_bodies():
 		if body == null or not is_instance_valid(body):
 			continue
@@ -62,7 +63,17 @@ func _hit_enemies_during_tick() -> void:
 		if hit_enemies.has(body_id):
 			continue
 		hit_enemies.append(body_id)
+		var was_dead: bool = body.get("is_dead") == true
+		var hp_before_raw = body.get("health")
+		var hp_before: int = hp_before_raw if hp_before_raw != null else 999
 		body.take_damage(damage, Color(0.373, 0.804, 0.894, 1.0))
+		if not was_dead and not body.is_in_group("boss"):
+			if hp_before <= damage:
+				killed_this_tick += 1
+	if killed_this_tick >= 2:
+		var rm = get_node_or_null("/root/RecordManager")
+		if rm != null:
+			rm.increment_achievement_stat("laser_double_kills")
 
 func _on_body_entered(body: Node) -> void:
 	if body == null or not body.has_method("take_damage"):

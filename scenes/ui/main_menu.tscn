@@ -29,11 +29,12 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -200.0
-offset_top = 200.0
+offset_top = 300.0
 offset_right = 200.0
-offset_bottom = 280.0
+offset_bottom = 380.0
 grow_horizontal = 2
-text = "生存射击"
+text = "期末周
+Dead Week"
 horizontal_alignment = 1
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 
@@ -45,12 +46,12 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -120.0
-offset_top = -120.0
+offset_top = -50.0
 offset_right = 120.0
-offset_bottom = 180.0
+offset_bottom = 250.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 32
 
 [node name="StartButton" type="Button" parent="VBox" unique_id=190217647]
 custom_minimum_size = Vector2(240, 50)
@@ -109,13 +110,16 @@ offset_right = 120.0
 offset_bottom = 120.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 32
 
 [node name="Label" type="Label" parent="DifficultyPanel"]
 layout_mode = 2
 text = "选择难度"
 horizontal_alignment = 1
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+
+[node name="Spacer" type="Control" parent="DifficultyPanel"]
+custom_minimum_size = Vector2(0, 100)
 
 [node name="NormalBtn" type="Button" parent="DifficultyPanel"]
 custom_minimum_size = Vector2(240, 50)
@@ -131,3 +135,8 @@ text = "困难模式"
 custom_minimum_size = Vector2(240, 50)
 layout_mode = 2
 text = "挑战模式"
+
+[node name="BackBtn" type="Button" parent="DifficultyPanel"]
+custom_minimum_size = Vector2(240, 50)
+layout_mode = 2
+text = "返回"

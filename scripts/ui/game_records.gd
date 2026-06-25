@@ -71,7 +71,7 @@ func _create_record_card(record: Dictionary) -> void:
 	card.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	card.size_flags_stretch_ratio = 1.0
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.45, 0.45, 0.5, 1)
+	style.bg_color = Color(0.851, 0.627, 0.4, 1)
 	style.set_corner_radius_all(8)
 	style.set_content_margin_all(10)
 	card.add_theme_stylebox_override("panel", style)

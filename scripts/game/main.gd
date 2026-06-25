@@ -130,6 +130,7 @@ func _ready() -> void:
 	boss_health_bar = boss_health_bar_node
 	if boss_health_bar != null:
 		boss_health_bar.visible = false
+	_create_boss_warning_label()
 	_update_hud()
 	_update_game_state_ui()
 
@@ -138,6 +139,41 @@ func _set_font_size(node: Node, size: int) -> void:
 		(node as Control).add_theme_font_size_override("font_size", size)
 	for child in node.get_children():
 		_set_font_size(child, size)
+
+var _boss_warning_label: Label = null
+
+func _create_boss_warning_label() -> void:
+	var panel := Panel.new()
+	panel.name = "BossWarning"
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(1, 0.2, 0.2, 0.75)
+	style.set_corner_radius_all(8)
+	panel.add_theme_stylebox_override("panel", style)
+	panel.custom_minimum_size = Vector2(750, 120)
+	panel.offset_left = -15.0
+	panel.offset_top = 150.0
+	panel.offset_right = 735.0
+	panel.offset_bottom = 270.0
+	panel.visible = false
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	$HUD.add_child(panel)
+	_boss_warning_label = Label.new()
+	_boss_warning_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_boss_warning_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_boss_warning_label.add_theme_font_size_override("font_size", 44)
+	_boss_warning_label.add_theme_color_override("font_color", Color(1, 1, 1))
+	_boss_warning_label.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_boss_warning_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_child(_boss_warning_label)
+
+func _show_boss_warning(text: String) -> void:
+	if _boss_warning_label != null:
+		_boss_warning_label.text = text
+		_boss_warning_label.get_parent().visible = true
+
+func _hide_boss_warning() -> void:
+	if _boss_warning_label != null:
+		_boss_warning_label.get_parent().visible = false
 
 func _style_pause_button(btn: Button, label_text: String, font_size: int = 33) -> void:
 	if btn == null:
@@ -288,6 +324,7 @@ func _spawn_boss1() -> void:
 	_enable_boss_boundary()
 	if boss_health_bar != null:
 		boss_health_bar.show_boss(boss)
+	_hide_boss_warning()
 
 func _clear_enemies_in_range(center: Vector2, radius: float) -> void:
 	var to_remove: Array[Node] = []
@@ -333,9 +370,23 @@ func _on_boss1_tree_exited(enemy: Node) -> void:
 	var boss2_timer := Timer.new()
 	boss2_timer.one_shot = true
 	boss2_timer.wait_time = 180.0
-	boss2_timer.timeout.connect(func(): _spawn_boss2())
+	boss2_timer.timeout.connect(func(): _hide_boss_warning(); _spawn_boss2())
 	add_child(boss2_timer)
 	boss2_timer.start()
+	var boss2_warn_timer := Timer.new()
+	boss2_warn_timer.one_shot = true
+	boss2_warn_timer.wait_time = 150.0
+	boss2_warn_timer.timeout.connect(func():
+		_show_boss_warning("WARNING - BOSS 闹钟 30s后出现")
+		var hide_timer := Timer.new()
+		hide_timer.one_shot = true
+		hide_timer.wait_time = 5.0
+		hide_timer.timeout.connect(_hide_boss_warning)
+		add_child(hide_timer)
+		hide_timer.start()
+	)
+	add_child(boss2_warn_timer)
+	boss2_warn_timer.start()
 	_update_hud()
 	_update_game_state_ui()
 	_update_spawn_timers()
@@ -379,9 +430,23 @@ func _on_boss2_tree_exited(enemy: Node) -> void:
 	var boss3_timer := Timer.new()
 	boss3_timer.one_shot = true
 	boss3_timer.wait_time = 180.0
-	boss3_timer.timeout.connect(func(): _spawn_boss3())
+	boss3_timer.timeout.connect(func(): _hide_boss_warning(); _spawn_boss3())
 	add_child(boss3_timer)
 	boss3_timer.start()
+	var boss3_warn_timer := Timer.new()
+	boss3_warn_timer.one_shot = true
+	boss3_warn_timer.wait_time = 150.0
+	boss3_warn_timer.timeout.connect(func():
+		_show_boss_warning("WARNING - BOSS 学士帽 30s后出现")
+		var hide_timer := Timer.new()
+		hide_timer.one_shot = true
+		hide_timer.wait_time = 5.0
+		hide_timer.timeout.connect(_hide_boss_warning)
+		add_child(hide_timer)
+		hide_timer.start()
+	)
+	add_child(boss3_warn_timer)
+	boss3_warn_timer.start()
 	_update_hud()
 	_update_game_state_ui()
 	_update_spawn_timers()
@@ -478,6 +543,17 @@ func on_enemy_died(enemy: Node) -> void:
 	total_kills += 1
 	if enemy != null:
 		if enemy.is_in_group("boss"):
+			var rm = get_node_or_null("/root/RecordManager")
+			if rm != null:
+				if enemy.is_in_group("boss1"):
+					rm.increment_achievement_stat("boss1_kills")
+				elif enemy.is_in_group("boss2"):
+					rm.increment_achievement_stat("boss2_kills")
+				elif enemy.is_in_group("boss3"):
+					rm.increment_achievement_stat("boss3_kills")
+				if rm != null and player != null:
+					if player.health <= 1 and player.shield_count <= 0:
+						rm.increment_achievement_stat("low_hp_boss_kills")
 			if enemy.is_in_group("boss3"):
 				_show_summary(true)
 			else:
@@ -526,6 +602,10 @@ func _process(delta: float) -> void:
 		_heart_hit_timer = maxf(_heart_hit_timer - delta, 0.0)
 	enemy_two_unlocked = elapsed_time >= enemy_time_relief_start
 	_update_spawn_timers()
+	if not boss1_spawned and elapsed_time >= 150.0 and elapsed_time < 155.0:
+		_show_boss_warning("WARNING - BOSS 订书机 30s后出现")
+	elif elapsed_time >= 155.0:
+		_hide_boss_warning()
 	if not boss1_spawned and elapsed_time >= 180.0:
 		_spawn_boss1()
 	if boss_boundary_active and player != null and not player.is_dead:
@@ -837,6 +917,23 @@ func _show_summary(is_victory: bool) -> void:
 		"score": score
 	})
 	_save_record(is_victory, damage_taken, score, rewards_display)
+	if is_victory:
+		var rm = get_node_or_null("/root/RecordManager")
+		if rm != null:
+			var diff: int = _get_current_difficulty()
+			if diff == 0:
+				rm.set_achievement_flag("difficulty_normal_victory")
+			elif diff == 1:
+				rm.set_achievement_flag("difficulty_hard_victory")
+			elif diff == 2:
+				rm.set_achievement_flag("difficulty_challenge_victory")
+			if damage_taken == 0:
+				if diff == 0:
+					rm.set_achievement_flag("no_damage_normal")
+				elif diff == 1:
+					rm.set_achievement_flag("no_damage_hard")
+				elif diff == 2:
+					rm.set_achievement_flag("no_damage_challenge")
 
 func _save_record(is_victory: bool, damage_taken: int, score: int, rewards_display: Dictionary) -> void:
 	var record_manager = get_node_or_null("/root/RecordManager")

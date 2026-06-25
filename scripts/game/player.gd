@@ -434,6 +434,10 @@ func _spawn_bullet_now(bullet_index: int) -> void:
 	else:
 		add_child(bullet)
 	bullet.set_target(candidate)
+	if bullet_index == 0:
+		var sfx = get_node_or_null("/root/SFX")
+		if sfx != null:
+			sfx.play_bullet()
 
 func _process(delta: float) -> void:
 	if is_dead:

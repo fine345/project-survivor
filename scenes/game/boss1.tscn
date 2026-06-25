@@ -8,10 +8,10 @@ radius = 32.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_boss1_outer"]
 radius = 36.0
 
-[node name="Boss1" type="CharacterBody2D" unique_id=1850569289 groups=["boss", "enemy"]]
+[node name="Boss1" type="CharacterBody2D" unique_id=1850569289 groups=["boss", "boss1", "enemy"]]
+texture_filter = 1
 collision_layer = 4
 collision_mask = 6
-texture_filter = 1
 script = ExtResource("1_nr2pe")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=931369769]

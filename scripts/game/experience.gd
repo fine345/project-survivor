@@ -30,4 +30,7 @@ func _on_body_entered(body: Node) -> void:
 	if body == null or not body.has_method("collect_experience"):
 		return
 	body.collect_experience(pickup_value)
+	var sfx = get_node_or_null("/root/SFX")
+	if sfx != null:
+		sfx.play_pickup()
 	queue_free()

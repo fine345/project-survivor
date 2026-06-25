@@ -27,6 +27,7 @@ func _ready() -> void:
 	_style_menu_button($DifficultyPanel/ChallengeBtn, "挑战模式")
 	$DifficultyPanel/NormalBtn.pressed.connect(func(): _on_difficulty_selected(0))
 	$DifficultyPanel/HardBtn.pressed.connect(func(): _on_difficulty_selected(1))
+	$DifficultyPanel/BackBtn.pressed.connect(func(): $VBox.visible = true; $Title.visible = true; difficulty_panel.visible = false)
 	$DifficultyPanel/ChallengeBtn.pressed.connect(func(): _on_difficulty_selected(2))
 
 func _set_font_size(node: Node, size: int) -> void:
@@ -57,7 +58,31 @@ func _style_menu_button(btn: Button, label_text: String) -> void:
 
 func _on_start() -> void:
 	$VBox.visible = false
+	$Title.visible = false
 	difficulty_panel.visible = true
+	_update_difficulty_locks()
+
+func _update_difficulty_locks() -> void:
+	var rm = get_node_or_null("/root/RecordManager")
+	var normal_unlocked: bool = rm != null and rm.get_achievement_stat("difficulty_normal_victory") == true
+	var hard_unlocked: bool = rm != null and rm.get_achievement_stat("difficulty_hard_victory") == true
+	_set_difficulty_button($DifficultyPanel/HardBtn, "困难模式", normal_unlocked)
+	_set_difficulty_button($DifficultyPanel/ChallengeBtn, "挑战模式", hard_unlocked)
+
+func _set_difficulty_button(btn: Button, label_text: String, unlocked: bool) -> void:
+	btn.disabled = not unlocked
+	var lbl: Label = btn.get_child(0) if btn.get_child_count() > 0 and btn.get_child(0) is Label else null
+	if lbl != null:
+		if unlocked:
+			lbl.text = label_text
+			lbl.modulate = Color(1, 1, 1, 1)
+		else:
+			lbl.text = label_text + " 🔒"
+			lbl.modulate = Color(0.5, 0.5, 0.5, 0.7)
+	var disabled_style := StyleBoxFlat.new()
+	disabled_style.bg_color = Color(0, 0, 0, 0)
+	disabled_style.set_content_margin_all(0)
+	btn.add_theme_stylebox_override("disabled", disabled_style)
 
 func _on_difficulty_selected(diff: int) -> void:
 	var dm = get_node_or_null("/root/DifficultyManager")

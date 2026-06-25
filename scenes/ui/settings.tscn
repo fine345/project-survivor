@@ -73,6 +73,44 @@ text = "固定位置"
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 44
 
+[node name="MusicRow" type="HBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+
+[node name="MusicLabel" type="Label" parent="Panel/VBox/MusicRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "音乐音量"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 44
+
+[node name="MusicSlider" type="HSlider" parent="Panel/VBox/MusicRow"]
+layout_mode = 2
+size_flags_horizontal = 10
+custom_minimum_size = Vector2(200, 40)
+min_value = 0.0
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="SFXRow" type="HBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+
+[node name="SFXLabel" type="Label" parent="Panel/VBox/SFXRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "音效音量"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 44
+
+[node name="SFXSlider" type="HSlider" parent="Panel/VBox/SFXRow"]
+layout_mode = 2
+size_flags_horizontal = 10
+custom_minimum_size = Vector2(200, 40)
+min_value = 0.0
+max_value = 1.0
+step = 0.01
+value = 1.0
+
 [node name="Spacer" type="Control" parent="Panel/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
