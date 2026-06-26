@@ -11,7 +11,8 @@ config_version=5
 [application]
 
 config/name="dead-week"
-run/main_scene="res://scenes/ui/main_menu.tscn"
+config/version="0.4.7"
+run/main_scene="res://scenes/ui/login_screen.tscn"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://icon.jpg"
 
@@ -23,6 +24,7 @@ SettingsManager="*res://scripts/ui/settings_manager.gd"
 DifficultyManager="*res://scripts/ui/difficulty_manager.gd"
 BGM="*res://scripts/ui/bgm.gd"
 SFX="*res://scripts/ui/sfx.gd"
+Tap="*uid://bo576yb8eyur6"
 
 [boot]
 
@@ -41,7 +43,7 @@ window/handheld/orientation=1.0
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godot_mcp/plugin.cfg")
+enabled=PackedStringArray("res://addons/FlowerTapTapSDK/plugin.cfg", "res://addons/godot_mcp/plugin.cfg")
 
 [gui]
 

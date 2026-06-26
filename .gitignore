@@ -23,3 +23,5 @@ doc/
 .mimocode/
 AGENTS.md
 sheets/
+android/
+.idea/

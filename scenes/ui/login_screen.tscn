@@ -1,0 +1,95 @@
+[gd_scene format=3 uid="uid://c35clxmwl0y7p"]
+
+[ext_resource type="Script" uid="uid://yge8ljia810w" path="res://scripts/ui/login_screen.gd" id="1_login"]
+[ext_resource type="Texture2D" uid="uid://c3ng5frpbns0s" path="res://assets/sprites/splash_backgroung.png" id="2_vtwjt"]
+[ext_resource type="Texture2D" uid="uid://cr1xfpe0vig6k" path="res://sheets/login_button.png" id="3_login_btn"]
+
+[node name="LoginScreen" type="Control" unique_id=552232235]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_login")
+
+[node name="MenuBG" type="TextureRect" parent="." unique_id=1197614297]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_vtwjt")
+stretch_mode = 6
+
+[node name="Title" type="Label" parent="." unique_id=1881139856]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -200.0
+offset_top = 450.0
+offset_right = 200.0
+offset_bottom = 550.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "期末周
+Dead Week"
+horizontal_alignment = 1
+
+[node name="StatusLabel" type="Label" parent="." unique_id=373349662]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -200.0
+offset_top = 950.0
+offset_right = 200.0
+offset_bottom = 1000.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+horizontal_alignment = 1
+
+[node name="LoadingLabel" type="Label" parent="." unique_id=1921923993]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -200.0
+offset_top = 1000.0
+offset_right = 200.0
+offset_bottom = 1050.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+horizontal_alignment = 1
+
+[node name="LoginButton" type="TextureButton" parent="." unique_id=1544147128]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -270.0
+offset_top = 1050.0
+offset_right = 270.0
+offset_bottom = 1150.0
+grow_horizontal = 2
+texture_normal = ExtResource("3_login_btn")
+stretch_mode = 6
+
+[node name="LogoutButton" type="Button" parent="." unique_id=1888517110]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -120.0
+offset_top = 1160.0
+offset_right = 120.0
+offset_bottom = 1210.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 36
+text = "退出登录"
+
+[connection signal="pressed" from="LoginButton" to="." method="_on_login_pressed"]

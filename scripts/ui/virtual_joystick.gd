@@ -20,6 +20,8 @@ var base_center := Vector2.ZERO
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	base_center = Vector2(radius, radius)
+	knob.position = base_center - Vector2(48, 48)
 	_apply_input(Vector2.ZERO)
 	var sm = get_node_or_null("/root/SettingsManager")
 	if sm != null:
@@ -28,8 +30,10 @@ func _ready() -> void:
 			_show_fixed()
 		else:
 			base.visible = false
+		knob.visible = false
 	else:
 		base.visible = false
+		knob.visible = false
 
 func _on_joystick_mode_changed(mode: String) -> void:
 	if mode == "fixed":
@@ -37,9 +41,11 @@ func _on_joystick_mode_changed(mode: String) -> void:
 	else:
 		_reset_joystick(false)
 		base.visible = false
+		knob.visible = false
 
 func _show_fixed() -> void:
 	base.visible = true
+	knob.visible = true
 	var vp_size := get_viewport_rect().size
 	position = Vector2((vp_size.x - radius * 2.0) / 2.0, vp_size.y - 300.0 - radius * 2.0)
 	base.position = Vector2.ZERO
@@ -55,6 +61,7 @@ func set_enabled(value: bool) -> void:
 		var is_fixed: bool = sm.is_fixed_joystick() if sm != null else false
 		if not is_fixed:
 			base.visible = false
+			knob.visible = false
 
 func _input(event: InputEvent) -> void:
 	if not enabled:
@@ -140,6 +147,7 @@ func _is_over_ui(screen_position: Vector2) -> bool:
 
 func _show_joystick_at(screen_position: Vector2) -> void:
 	base.visible = true
+	knob.visible = true
 	position = screen_position - base_center
 	base.position = Vector2.ZERO
 	knob.position = base_center - Vector2(48, 48)
@@ -165,6 +173,7 @@ func _reset_joystick(emit_release := true) -> void:
 		knob.position = base_center - Vector2(48, 48)
 	else:
 		base.visible = false
+		knob.visible = false
 		knob.position = base_center - Vector2(48, 48)
 	_apply_input(Vector2.ZERO)
 

@@ -1,7 +1,7 @@
 extends Node
 
 const SETTINGS_PATH := "user://settings.json"
-var joystick_mode := "anywhere"
+var joystick_mode := "fixed"
 var previous_scene := "res://scenes/ui/main_menu.tscn"
 var music_volume := 1.0
 var sfx_volume := 1.0

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://drj3bmhqckm6"]
 
 [ext_resource type="Script" uid="uid://di2maqvcp1h60" path="res://scripts/ui/main_menu.gd" id="1_mm"]
-[ext_resource type="Texture2D" path="res://assets/sprites/ui/menu-Sheet.png" id="2_menu_bg"]
+[ext_resource type="Texture2D" uid="uid://cwwb6jc4b46gc" path="res://assets/sprites/ui/menu-Sheet.png" id="2_menu_bg"]
 
 [node name="MainMenu" type="Control" unique_id=1755850702]
 texture_filter = 1
@@ -13,7 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_mm")
 
-[node name="MenuBG" type="TextureRect" parent="."]
+[node name="MenuBG" type="TextureRect" parent="." unique_id=1831220117]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -33,10 +33,10 @@ offset_top = 300.0
 offset_right = 200.0
 offset_bottom = 380.0
 grow_horizontal = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "期末周
 Dead Week"
 horizontal_alignment = 1
-theme_override_colors/font_color = Color(0, 0, 0, 1)
 
 [node name="VBox" type="VBoxContainer" parent="." unique_id=1177407621]
 layout_mode = 1
@@ -78,6 +78,11 @@ custom_minimum_size = Vector2(240, 50)
 layout_mode = 2
 text = "关于"
 
+[node name="LogoutButton" type="Button" parent="VBox" unique_id=555700521]
+custom_minimum_size = Vector2(240, 50)
+layout_mode = 2
+text = "退出登录"
+
 [node name="PlaceholderLabel" type="Label" parent="." unique_id=974314011]
 visible = false
 layout_mode = 1
@@ -92,11 +97,11 @@ offset_right = 150.0
 offset_bottom = -40.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "敬请期待"
 horizontal_alignment = 1
-theme_override_colors/font_color = Color(0, 0, 0, 1)
 
-[node name="DifficultyPanel" type="VBoxContainer" parent="."]
+[node name="DifficultyPanel" type="VBoxContainer" parent="." unique_id=630283109]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -112,31 +117,32 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 32
 
-[node name="Label" type="Label" parent="DifficultyPanel"]
+[node name="Label" type="Label" parent="DifficultyPanel" unique_id=1629007413]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "选择难度"
 horizontal_alignment = 1
-theme_override_colors/font_color = Color(0, 0, 0, 1)
 
-[node name="Spacer" type="Control" parent="DifficultyPanel"]
+[node name="Spacer" type="Control" parent="DifficultyPanel" unique_id=1122501762]
 custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
 
-[node name="NormalBtn" type="Button" parent="DifficultyPanel"]
+[node name="NormalBtn" type="Button" parent="DifficultyPanel" unique_id=1558923494]
 custom_minimum_size = Vector2(240, 50)
 layout_mode = 2
 text = "正常模式"
 
-[node name="HardBtn" type="Button" parent="DifficultyPanel"]
+[node name="HardBtn" type="Button" parent="DifficultyPanel" unique_id=91460462]
 custom_minimum_size = Vector2(240, 50)
 layout_mode = 2
 text = "困难模式"
 
-[node name="ChallengeBtn" type="Button" parent="DifficultyPanel"]
+[node name="ChallengeBtn" type="Button" parent="DifficultyPanel" unique_id=1095476897]
 custom_minimum_size = Vector2(240, 50)
 layout_mode = 2
 text = "挑战模式"
 
-[node name="BackBtn" type="Button" parent="DifficultyPanel"]
+[node name="BackBtn" type="Button" parent="DifficultyPanel" unique_id=1623174009]
 custom_minimum_size = Vector2(240, 50)
 layout_mode = 2
 text = "返回"

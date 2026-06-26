@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dtl8wwdkyob30"]
 
 [ext_resource type="Script" uid="uid://6smlkhunhko6" path="res://scripts/ui/summary_panel.gd" id="1_sp"]
-[ext_resource type="StyleBox" path="res://review_panel_style.tres" id="2_review_style"]
+[ext_resource type="StyleBox" uid="uid://btv05rpcidk7w" path="res://review_panel_style.tres" id="2_review_style"]
 
 [node name="SummaryPanel" type="Control" unique_id=932125590]
 layout_mode = 3
@@ -33,15 +33,15 @@ offset_left = -268.0
 offset_top = -407.0
 offset_right = 268.0
 offset_bottom = 407.0
-theme_override_styles/panel = ExtResource("2_review_style")
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = ExtResource("2_review_style")
 
 [node name="VBox" type="VBoxContainer" parent="Panel" unique_id=96983657]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="TitleRow" type="HBoxContainer" parent="Panel/VBox"]
+[node name="TitleRow" type="HBoxContainer" parent="Panel/VBox" unique_id=1319399749]
 layout_mode = 2
 alignment = 1
 
@@ -49,12 +49,12 @@ alignment = 1
 layout_mode = 2
 text = "本局复盘"
 
-[node name="DifficultyLabel" type="Label" parent="Panel/VBox/TitleRow"]
+[node name="DifficultyLabel" type="Label" parent="Panel/VBox/TitleRow" unique_id=612620049]
 layout_mode = 2
-text = ""
 
-[node name="Spacer1" type="Control" parent="Panel/VBox"]
+[node name="Spacer1" type="Control" parent="Panel/VBox" unique_id=2106293547]
 custom_minimum_size = Vector2(0, 9)
+layout_mode = 2
 
 [node name="TimeRow" type="HBoxContainer" parent="Panel/VBox" unique_id=673387115]
 layout_mode = 2
@@ -108,28 +108,31 @@ layout_mode = 2
 size_flags_horizontal = 10
 text = "0"
 
-[node name="Spacer2" type="Control" parent="Panel/VBox"]
+[node name="Spacer2" type="Control" parent="Panel/VBox" unique_id=93778906]
 custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
 
 [node name="RewardsLabel" type="Label" parent="Panel/VBox" unique_id=535284526]
 layout_mode = 2
 text = "获得奖励"
 autowrap_mode = 2
 
-[node name="Spacer5" type="Control" parent="Panel/VBox"]
+[node name="Spacer5" type="Control" parent="Panel/VBox" unique_id=39271374]
 custom_minimum_size = Vector2(0, 3)
-
-[node name="RewardsGrid" type="GridContainer" parent="Panel/VBox"]
 layout_mode = 2
-columns = 2
+
+[node name="RewardsGrid" type="GridContainer" parent="Panel/VBox" unique_id=2020320423]
+layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 4
+columns = 2
 
-[node name="Spacer4" type="Control" parent="Panel/VBox"]
+[node name="Spacer4" type="Control" parent="Panel/VBox" unique_id=1010873780]
 custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
 
-[node name="ScoreRow" type="HBoxContainer" parent="Panel/VBox"]
+[node name="ScoreRow" type="HBoxContainer" parent="Panel/VBox" unique_id=907660940]
 layout_mode = 2
 alignment = 1
 
@@ -137,12 +140,13 @@ alignment = 1
 layout_mode = 2
 text = "总分："
 
-[node name="ScoreValue" type="Label" parent="Panel/VBox/ScoreRow"]
+[node name="ScoreValue" type="Label" parent="Panel/VBox/ScoreRow" unique_id=1185849497]
 layout_mode = 2
 text = "0"
 
-[node name="Spacer3" type="Control" parent="Panel/VBox"]
+[node name="Spacer3" type="Control" parent="Panel/VBox" unique_id=1638005716]
 custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
 
 [node name="RetryButton" type="Button" parent="Panel/VBox" unique_id=1694624484]
 custom_minimum_size = Vector2(200, 50)

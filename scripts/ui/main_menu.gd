@@ -22,6 +22,8 @@ func _ready() -> void:
 	_style_menu_button(settings_button, "设置")
 	_style_menu_button(achievements_button, "成就")
 	_style_menu_button(about_button, "关于")
+	_style_menu_button($VBox/LogoutButton, "退出登录")
+	$VBox/LogoutButton.pressed.connect(_on_logout)
 	_style_menu_button($DifficultyPanel/NormalBtn, "正常模式")
 	_style_menu_button($DifficultyPanel/HardBtn, "困难模式")
 	_style_menu_button($DifficultyPanel/ChallengeBtn, "挑战模式")
@@ -77,7 +79,7 @@ func _set_difficulty_button(btn: Button, label_text: String, unlocked: bool) -> 
 			lbl.text = label_text
 			lbl.modulate = Color(1, 1, 1, 1)
 		else:
-			lbl.text = label_text + " 🔒"
+			lbl.text = label_text
 			lbl.modulate = Color(0.5, 0.5, 0.5, 0.7)
 	var disabled_style := StyleBoxFlat.new()
 	disabled_style.bg_color = Color(0, 0, 0, 0)
@@ -104,3 +106,8 @@ func _on_achievements() -> void:
 
 func _on_about() -> void:
 	get_tree().change_scene_to_file("res://scenes/ui/about.tscn")
+
+func _on_logout() -> void:
+	if Engine.has_singleton("FlowerTapSDK"):
+		Tap.login_out()
+	get_tree().change_scene_to_file("res://scenes/ui/login_screen.tscn")

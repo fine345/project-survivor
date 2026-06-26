@@ -2,6 +2,7 @@ extends Control
 
 func _ready() -> void:
 	$Panel/VBox/BackButton.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn"))
+	$Panel/VBox/VersionLabel.text = "当前版本：v" + ProjectSettings.get_setting("application/config/version", "unknown")
 	_set_font_size(self, 33)
 
 func _set_font_size(node: Node, size: int) -> void:
