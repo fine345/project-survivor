@@ -5,6 +5,7 @@ var joystick_mode := "fixed"
 var previous_scene := "res://scenes/ui/main_menu.tscn"
 var music_volume := 1.0
 var sfx_volume := 1.0
+var privacy_agreed := false
 
 signal joystick_mode_changed(mode: String)
 
@@ -30,6 +31,8 @@ func _load() -> void:
 		music_volume = float(data["music_volume"])
 	if data.has("sfx_volume"):
 		sfx_volume = float(data["sfx_volume"])
+	if data.has("privacy_agreed"):
+		privacy_agreed = data["privacy_agreed"]
 
 func _save() -> void:
 	var file := FileAccess.open(SETTINGS_PATH, FileAccess.WRITE)
@@ -39,6 +42,7 @@ func _save() -> void:
 		"joystick_mode": joystick_mode,
 		"music_volume": music_volume,
 		"sfx_volume": sfx_volume,
+		"privacy_agreed": privacy_agreed,
 	}, "\t"))
 	file.close()
 
@@ -75,3 +79,10 @@ func _apply_volumes() -> void:
 
 func is_fixed_joystick() -> bool:
 	return joystick_mode == "fixed"
+
+func is_privacy_agreed() -> bool:
+	return privacy_agreed
+
+func set_privacy_agreed(agreed: bool) -> void:
+	privacy_agreed = agreed
+	_save()

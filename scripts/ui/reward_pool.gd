@@ -207,7 +207,7 @@ const WEAPON_CALCULATOR := [
 		"type": "weapon_upgrade",
 		"weapon": "calculator",
 		"requires": "calculator",
-		"max_count": 2,
+		"max_count": 1,
 		"weight": 1.2
 	},
 ]

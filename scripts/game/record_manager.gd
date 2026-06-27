@@ -16,6 +16,8 @@ var achievement_stats: Dictionary = {
 	"ranged_interrupts": 0,
 	"laser_double_kills": 0,
 	"low_hp_boss_kills": 0,
+	"difficulty_clear": 0,
+	"no_damage_clear": 0,
 }
 
 func _ready() -> void:
@@ -104,24 +106,6 @@ func get_achievements() -> Dictionary:
 		"ranged_interrupts": int(achievement_stats.get("ranged_interrupts", 0)),
 		"laser_double_kills": int(achievement_stats.get("laser_double_kills", 0)),
 		"low_hp_boss_kills": int(achievement_stats.get("low_hp_boss_kills", 0)),
-		"difficulty_clear": _get_max_difficulty_cleared(),
-		"no_damage_clear": _get_max_no_damage_cleared(),
+		"difficulty_clear": int(achievement_stats.get("difficulty_clear", 0)),
+		"no_damage_clear": int(achievement_stats.get("no_damage_clear", 0)),
 	}
-
-func _get_max_difficulty_cleared() -> int:
-	if achievement_stats.get("difficulty_challenge_victory", false):
-		return 3
-	if achievement_stats.get("difficulty_hard_victory", false):
-		return 2
-	if achievement_stats.get("difficulty_normal_victory", false):
-		return 1
-	return 0
-
-func _get_max_no_damage_cleared() -> int:
-	if achievement_stats.get("no_damage_challenge", false):
-		return 3
-	if achievement_stats.get("no_damage_hard", false):
-		return 2
-	if achievement_stats.get("no_damage_normal", false):
-		return 1
-	return 0

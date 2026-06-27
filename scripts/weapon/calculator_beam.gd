@@ -8,6 +8,9 @@ var hit_enemies: Array = []
 var owner_player: Node2D = null
 var _tick_timer := 0.0
 var _tick_interval := 0.75
+var _kill_buffer: int = 0
+var _kill_buffer_timer := 0.0
+const KILL_WINDOW := 0.2
 
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
@@ -49,6 +52,9 @@ func _physics_process(delta: float) -> void:
 	if _tick_timer >= _tick_interval:
 		_tick_timer -= _tick_interval
 		_hit_enemies_during_tick()
+	_kill_buffer_timer -= delta
+	if _kill_buffer_timer <= 0.0:
+		_kill_buffer = 0
 
 func _hit_enemies_during_tick() -> void:
 	var killed_this_tick: int = 0
@@ -70,10 +76,7 @@ func _hit_enemies_during_tick() -> void:
 		if not was_dead and not body.is_in_group("boss"):
 			if hp_before <= damage:
 				killed_this_tick += 1
-	if killed_this_tick >= 2:
-		var rm = get_node_or_null("/root/RecordManager")
-		if rm != null:
-			rm.increment_achievement_stat("laser_double_kills")
+	_add_kills(killed_this_tick)
 
 func _on_body_entered(body: Node) -> void:
 	if body == null or not body.has_method("take_damage"):
@@ -84,7 +87,13 @@ func _on_body_entered(body: Node) -> void:
 	if hit_enemies.has(body_id):
 		return
 	hit_enemies.append(body_id)
+	var was_dead: bool = body.get("is_dead") == true
+	var hp_before_raw = body.get("health")
+	var hp_before: int = hp_before_raw if hp_before_raw != null else 999
 	body.take_damage(damage, Color(0.373, 0.804, 0.894, 1.0))
+	if not was_dead and not body.is_in_group("boss"):
+		if hp_before <= damage:
+			_add_kills(1)
 
 func _update_collision_width() -> void:
 	var collision: CollisionShape2D = $CollisionShape2D
@@ -93,3 +102,14 @@ func _update_collision_width() -> void:
 		var shape: RectangleShape2D = collision.shape as RectangleShape2D
 		if shape != null:
 			shape.size = Vector2(1440, beam_width)
+
+func _add_kills(count: int) -> void:
+	if count <= 0:
+		return
+	_kill_buffer += count
+	_kill_buffer_timer = KILL_WINDOW
+	if _kill_buffer >= 2:
+		var rm = get_node_or_null("/root/RecordManager")
+		if rm != null:
+			rm.increment_achievement_stat("laser_double_kills")
+		_kill_buffer = 0

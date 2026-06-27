@@ -1,7 +1,7 @@
 extends Area2D
 
 var owner_player: Node2D = null
-var damage := 8
+var damage := 16
 var orbit_radius := 125.0
 var collision_radius := 13.0
 var rotation_speed := PI

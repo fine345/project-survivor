@@ -2,20 +2,18 @@
 
 [ext_resource type="Script" uid="uid://cgag7c0dle264" path="res://scripts/game/main.gd" id="1_llaio"]
 [ext_resource type="PackedScene" uid="uid://ctcvd8wy0rnhn" path="res://scenes/ui/level_up_panel.tscn" id="2_oekm8"]
-[ext_resource type="Script" uid="uid://c85wuuqkide8j" path="res://scripts/ui/level_up_panel.gd" id="3_yd8kv"]
 [ext_resource type="PackedScene" uid="uid://bn8jggr1tiupa" path="res://scenes/ui/virtual_joystick.tscn" id="4_iba00"]
 [ext_resource type="Script" uid="uid://dubx6ob6i50j0" path="res://scripts/game/grid_background.gd" id="4_uaf1y"]
 [ext_resource type="PackedScene" uid="uid://dtl8wwdkyob30" path="res://scenes/ui/summary_panel.tscn" id="6_j7lav"]
 [ext_resource type="PackedScene" path="res://scenes/ui/settings.tscn" id="7_settings"]
 [ext_resource type="PackedScene" uid="uid://dukqqin6bftnl" path="res://scenes/ui/boss_health_bar.tscn" id="8_5v64u"]
-[ext_resource type="Theme" path="res://dialog_theme.tres" id="9_dlgtheme"]
 [ext_resource type="Texture2D" uid="uid://jbaoynyxprt8" path="res://assets/sprites/ui/pause_btn_normal-Sheet.png" id="10_pause"]
 [ext_resource type="Texture2D" uid="uid://cifpkk67agf4q" path="res://assets/sprites/ui/pause_btn_normal_press-Sheet.png" id="11_pause_press"]
 [ext_resource type="Texture2D" uid="uid://c330v8wkfpqtb" path="res://assets/sprites/ui/heart_full-Sheet.png" id="14_heart_full"]
 [ext_resource type="Texture2D" uid="uid://c2j04oiwrnh57" path="res://assets/sprites/ui/exp_bar_frame-Sheet.png" id="17_exp_frame"]
 [ext_resource type="Texture2D" uid="uid://d4auxr7i78v8v" path="res://assets/sprites/ui/exp_bar_full-Sheet.png" id="18_exp_fill"]
-[ext_resource type="Texture2D" path="res://assets/sprites/ui/pause_panel-Sheet.png" id="19_pause_panel"]
-[ext_resource type="Texture2D" path="res://assets/sprites/ui/exit_comfirm_panel-Sheet.png" id="20_exit_panel"]
+[ext_resource type="Texture2D" uid="uid://cyerm8yh1wybj" path="res://assets/sprites/ui/pause_panel-Sheet.png" id="19_pause_panel"]
+[ext_resource type="Texture2D" uid="uid://bb5ouvxoj103y" path="res://assets/sprites/ui/exit_comfirm_panel-Sheet.png" id="20_exit_panel"]
 
 [node name="Main" type="Node2D" unique_id=1706105945]
 script = ExtResource("1_llaio")
@@ -38,10 +36,10 @@ offset_left = 438.0
 offset_top = 54.0
 offset_right = 588.0
 offset_bottom = 109.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 44
 text = "00:00"
 horizontal_alignment = 2
-theme_override_font_sizes/font_size = 44
-theme_override_colors/font_color = Color(0, 0, 0, 1)
 
 [node name="Hearts" type="HBoxContainer" parent="HUD" unique_id=1709245356]
 texture_filter = 1
@@ -97,17 +95,17 @@ texture = ExtResource("18_exp_fill")
 centered = false
 
 [node name="EXPLabel" type="Label" parent="HUD/EXPBar" unique_id=1586937023]
+layout_mode = 0
 offset_left = 20.0
 offset_top = 3.0
 offset_right = 250.0
 offset_bottom = 29.0
-theme_override_font_sizes/font_size = 22
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 22
 text = "Lv.1  0/25"
 
 [node name="VirtualJoystick" parent="HUD" unique_id=280974345 instance=ExtResource("4_iba00")]
 visible = false
-anchors_preset = 0
 offset_top = 820.0
 offset_bottom = 980.0
 
@@ -128,6 +126,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="GameOver" type="Label" parent="Layer/Panel" unique_id=1217924387]
 visible = false
@@ -162,7 +161,6 @@ visible = false
 top_level = true
 z_index = 200
 layout_mode = 1
-script = ExtResource("3_yd8kv")
 
 [node name="PauseButton" type="TextureButton" parent="Layer/Panel" unique_id=786493594 groups=["ui_capture"]]
 process_mode = 3
@@ -181,10 +179,10 @@ visible = false
 z_index = 220
 position = Vector2(360, 720)
 
-[node name="BG" type="Sprite2D" parent="Layer/Panel/PauseMenu"]
+[node name="BG" type="Sprite2D" parent="Layer/Panel/PauseMenu" unique_id=257370939]
 process_mode = 3
-texture = ExtResource("19_pause_panel")
 scale = Vector2(2, 2)
+texture = ExtResource("19_pause_panel")
 
 [node name="ResumeButton" type="Button" parent="Layer/Panel/PauseMenu" unique_id=1420310396]
 process_mode = 3
@@ -208,6 +206,7 @@ offset_right = 100.0
 offset_bottom = 140.0
 
 [node name="SummaryPanel" parent="Layer/Panel" unique_id=1553527617 instance=ExtResource("6_j7lav")]
+process_mode = 3
 z_index = 250
 layout_mode = 1
 
@@ -215,36 +214,36 @@ layout_mode = 1
 process_mode = 3
 visible = false
 z_index = 230
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
+anchors_preset = 0
 offset_right = 720.0
 offset_bottom = 1440.0
-mouse_filter = 0
 
-[node name="BG" type="Sprite2D" parent="Layer/Panel/ExitConfirmDialog"]
+[node name="BG" type="Sprite2D" parent="Layer/Panel/ExitConfirmDialog" unique_id=1471177857]
 process_mode = 3
 position = Vector2(360, 720)
-texture = ExtResource("20_exit_panel")
 scale = Vector2(2, 2)
+texture = ExtResource("20_exit_panel")
 
-[node name="TextLabel" type="Label" parent="Layer/Panel/ExitConfirmDialog"]
+[node name="TextLabel" type="Label" parent="Layer/Panel/ExitConfirmDialog" unique_id=6183214]
 process_mode = 3
+layout_mode = 0
 offset_left = 211.0
 offset_top = 664.0
 offset_right = 569.0
 offset_bottom = 698.0
 text = "退出游戏将立即结算"
 
-[node name="CancelBtn" type="Button" parent="Layer/Panel/ExitConfirmDialog"]
+[node name="CancelBtn" type="Button" parent="Layer/Panel/ExitConfirmDialog" unique_id=441136335]
 process_mode = 3
+layout_mode = 0
 offset_left = 196.0
 offset_top = 781.0
 offset_right = 354.0
 offset_bottom = 815.0
 
-[node name="ConfirmBtn" type="Button" parent="Layer/Panel/ExitConfirmDialog"]
+[node name="ConfirmBtn" type="Button" parent="Layer/Panel/ExitConfirmDialog" unique_id=241206374]
 process_mode = 3
+layout_mode = 0
 offset_left = 366.0
 offset_top = 781.0
 offset_right = 524.0
@@ -257,6 +256,8 @@ layout_mode = 1
 
 [node name="BossHealthBar" parent="Layer/Panel" unique_id=1313253364 instance=ExtResource("8_5v64u")]
 layout_mode = 1
+grow_vertical = 2
+mouse_filter = 2
 
 [connection signal="pressed" from="Layer/Panel/RetryButton" to="." method="restart_game"]
 [connection signal="pressed" from="Layer/Panel/PauseButton" to="." method="_on_pause_button_pressed"]

@@ -23,6 +23,7 @@ mouse_filter = 2
 color = Color(0, 0, 0, 0.65)
 
 [node name="Panel" type="PanelContainer" parent="." unique_id=201380505]
+process_mode = 3
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -38,6 +39,7 @@ grow_vertical = 2
 theme_override_styles/panel = ExtResource("2_review_style")
 
 [node name="VBox" type="VBoxContainer" parent="Panel" unique_id=96983657]
+process_mode = 3
 layout_mode = 2
 theme_override_constants/separation = 12
 

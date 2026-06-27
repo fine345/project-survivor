@@ -604,7 +604,7 @@ func _process(delta: float) -> void:
 	_update_spawn_timers()
 	if not boss1_spawned and elapsed_time >= 150.0 and elapsed_time < 155.0:
 		_show_boss_warning("WARNING - BOSS 订书机 30s后出现")
-	elif elapsed_time >= 155.0:
+	elif not boss1_spawned and elapsed_time >= 155.0:
 		_hide_boss_warning()
 	if not boss1_spawned and elapsed_time >= 180.0:
 		_spawn_boss1()
@@ -899,6 +899,8 @@ func _show_summary(is_victory: bool) -> void:
 		enemy_two_timer.paused = true
 	if enemy_three_timer != null:
 		enemy_three_timer.paused = true
+	boss_boundary_active = false
+	queue_redraw()
 	var score: int = _calculate_score()
 	var damage_taken: int = 0
 	if player != null and player.has_method("get"):
@@ -920,6 +922,7 @@ func _show_summary(is_victory: bool) -> void:
 	if is_victory:
 		var rm = get_node_or_null("/root/RecordManager")
 		if rm != null:
+			rm.increment_achievement_stat("difficulty_clear")
 			var diff: int = _get_current_difficulty()
 			if diff == 0:
 				rm.set_achievement_flag("difficulty_normal_victory")
@@ -928,6 +931,7 @@ func _show_summary(is_victory: bool) -> void:
 			elif diff == 2:
 				rm.set_achievement_flag("difficulty_challenge_victory")
 			if damage_taken == 0:
+				rm.increment_achievement_stat("no_damage_clear")
 				if diff == 0:
 					rm.set_achievement_flag("no_damage_normal")
 				elif diff == 1:

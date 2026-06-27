@@ -25,6 +25,10 @@ var _current_difficulty: int = 0
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	visible = false
+	retry_button.process_mode = Node.PROCESS_MODE_ALWAYS
+	exit_button.process_mode = Node.PROCESS_MODE_ALWAYS
+	retry_button.mouse_filter = Control.MOUSE_FILTER_STOP
+	exit_button.mouse_filter = Control.MOUSE_FILTER_STOP
 	retry_button.pressed.connect(func(): restart_requested.emit())
 	exit_button.pressed.connect(func(): exit_to_menu_requested.emit())
 	title_label.add_theme_font_size_override("font_size", 44)
@@ -82,6 +86,7 @@ func _style_summary_button(btn: Button, label_text: String) -> void:
 	lbl.add_theme_color_override("font_color", Color(0, 0, 0))
 	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	lbl.set_anchors_preset(Control.PRESET_FULL_RECT)
+	lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	btn.add_child(lbl)
 
 func show_summary(stats: Dictionary) -> void:

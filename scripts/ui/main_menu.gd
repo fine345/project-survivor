@@ -80,7 +80,7 @@ func _set_difficulty_button(btn: Button, label_text: String, unlocked: bool) -> 
 			lbl.modulate = Color(1, 1, 1, 1)
 		else:
 			lbl.text = label_text
-			lbl.modulate = Color(0.5, 0.5, 0.5, 0.7)
+			lbl.modulate = Color(0.5, 0.5, 0.5, 0.4)
 	var disabled_style := StyleBoxFlat.new()
 	disabled_style.bg_color = Color(0, 0, 0, 0)
 	disabled_style.set_content_margin_all(0)
