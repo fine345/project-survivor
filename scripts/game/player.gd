@@ -514,7 +514,7 @@ func _rebuild_rulers() -> void:
 	for i in range(orbit_ruler_count):
 		var ruler: Area2D = RULER_SCENE.instantiate() as Area2D
 		ruler.setup(self, i, orbit_ruler_count)
-		ruler.set_params(8 * ruler_damage_multiplier, ruler_orbit_radius, ruler_collision_radius, PI * ruler_speed_multiplier)
+		ruler.set_params(16 * ruler_damage_multiplier, ruler_orbit_radius, ruler_collision_radius, PI * ruler_speed_multiplier)
 		if game != null:
 			game.add_child(ruler)
 		else:
@@ -525,7 +525,7 @@ func _update_ruler_params() -> void:
 	for i in range(_ruler_instances.size()):
 		var ruler: Area2D = _ruler_instances[i]
 		if is_instance_valid(ruler):
-			ruler.set_params(8 * ruler_damage_multiplier, ruler_orbit_radius, ruler_collision_radius, PI * ruler_speed_multiplier)
+			ruler.set_params(16 * ruler_damage_multiplier, ruler_orbit_radius, ruler_collision_radius, PI * ruler_speed_multiplier)
 			ruler.angle_offset = (TAU / max(orbit_ruler_count, 1)) * i
 
 func cleanup_rulers() -> void:

@@ -1,10 +1,10 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://d3d8s7bpt8o2d"]
 
-[ext_resource type="Script" path="res://scripts/ui/settings.gd" id="1_set"]
-[ext_resource type="Texture2D" path="res://assets/sprites/ui/menu-Sheet.png" id="2_menu_bg"]
+[ext_resource type="Script" uid="uid://m8ger5oxc1hc" path="res://scripts/ui/settings.gd" id="1_set"]
+[ext_resource type="Texture2D" uid="uid://cwwb6jc4b46gc" path="res://assets/sprites/ui/menu-Sheet.png" id="2_menu_bg"]
 [ext_resource type="StyleBox" path="res://transparent_style.tres" id="3_transparent"]
 
-[node name="Settings" type="Control"]
+[node name="Settings" type="Control" unique_id=1929080194]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,7 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_set")
 
-[node name="MenuBG" type="TextureRect" parent="."]
+[node name="MenuBG" type="TextureRect" parent="." unique_id=395639784]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,7 +23,7 @@ grow_vertical = 2
 texture = ExtResource("2_menu_bg")
 stretch_mode = 6
 
-[node name="Panel" type="PanelContainer" parent="."]
+[node name="Panel" type="PanelContainer" parent="." unique_id=340698741]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -34,91 +34,108 @@ offset_left = -300.0
 offset_top = -400.0
 offset_right = 300.0
 offset_bottom = 400.0
-theme_override_styles/panel = ExtResource("3_transparent")
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = ExtResource("3_transparent")
 
-[node name="VBox" type="VBoxContainer" parent="Panel"]
+[node name="VBox" type="VBoxContainer" parent="Panel" unique_id=871021666]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="TitleLabel" type="Label" parent="Panel/VBox"]
+[node name="TitleLabel" type="Label" parent="Panel/VBox" unique_id=93328690]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 44
 text = "设置"
 horizontal_alignment = 1
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 44
 
-[node name="JoystickRow" type="HBoxContainer" parent="Panel/VBox"]
+[node name="MusicRow" type="HBoxContainer" parent="Panel/VBox" unique_id=717092227]
 layout_mode = 2
 
-[node name="NameLabel" type="Label" parent="Panel/VBox/JoystickRow"]
+[node name="MusicLabel" type="Label" parent="Panel/VBox/MusicRow" unique_id=142048879]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "摇杆模式"
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 44
-
-[node name="AnywhereButton" type="Button" parent="Panel/VBox/JoystickRow"]
-layout_mode = 2
-custom_minimum_size = Vector2(120, 40)
-text = "任意位置"
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 44
-
-[node name="FixedButton" type="Button" parent="Panel/VBox/JoystickRow"]
-layout_mode = 2
-custom_minimum_size = Vector2(120, 40)
-text = "固定位置"
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 44
-
-[node name="MusicRow" type="HBoxContainer" parent="Panel/VBox"]
-layout_mode = 2
-
-[node name="MusicLabel" type="Label" parent="Panel/VBox/MusicRow"]
-layout_mode = 2
-size_flags_horizontal = 3
 text = "音乐音量"
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 44
 
-[node name="MusicSlider" type="HSlider" parent="Panel/VBox/MusicRow"]
+[node name="MusicSlider" type="HSlider" parent="Panel/VBox/MusicRow" unique_id=2027756593]
+custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
 size_flags_horizontal = 10
-custom_minimum_size = Vector2(200, 40)
-min_value = 0.0
 max_value = 1.0
 step = 0.01
 value = 1.0
 
-[node name="SFXRow" type="HBoxContainer" parent="Panel/VBox"]
+[node name="SFXRow" type="HBoxContainer" parent="Panel/VBox" unique_id=1331135924]
 layout_mode = 2
 
-[node name="SFXLabel" type="Label" parent="Panel/VBox/SFXRow"]
+[node name="SFXLabel" type="Label" parent="Panel/VBox/SFXRow" unique_id=248566367]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "音效音量"
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 44
+text = "音效音量"
 
-[node name="SFXSlider" type="HSlider" parent="Panel/VBox/SFXRow"]
+[node name="SFXSlider" type="HSlider" parent="Panel/VBox/SFXRow" unique_id=111343299]
+custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
 size_flags_horizontal = 10
-custom_minimum_size = Vector2(200, 40)
-min_value = 0.0
 max_value = 1.0
 step = 0.01
 value = 1.0
 
-[node name="Spacer" type="Control" parent="Panel/VBox"]
+[node name="JoystickRow" type="HBoxContainer" parent="Panel/VBox" unique_id=455225866]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="Panel/VBox/JoystickRow" unique_id=577726628]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 44
+text = "摇杆模式"
+
+[node name="AnywhereButton" type="Button" parent="Panel/VBox/JoystickRow" unique_id=318711154]
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 44
+text = "任意位置"
+
+[node name="FixedButton" type="Button" parent="Panel/VBox/JoystickRow" unique_id=1226350814]
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 44
+text = "固定位置"
+
+[node name="HeightRow" type="HBoxContainer" parent="Panel/VBox" unique_id=742650312]
+layout_mode = 2
+
+[node name="HeightLabel" type="Label" parent="Panel/VBox/HeightRow" unique_id=483106476]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 44
+text = "摇杆高度"
+
+[node name="HeightSlider" type="HSlider" parent="Panel/VBox/HeightRow" unique_id=1221075539]
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+size_flags_horizontal = 10
+min_value = 100.0
+max_value = 400.0
+step = 10.0
+value = 300.0
+
+[node name="Spacer" type="Control" parent="Panel/VBox" unique_id=1462554745]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="BackButton" type="Button" parent="Panel/VBox"]
-layout_mode = 2
+[node name="BackButton" type="Button" parent="Panel/VBox" unique_id=915002650]
 custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
 size_flags_horizontal = 4
-text = "返回"
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 44
+text = "返回"

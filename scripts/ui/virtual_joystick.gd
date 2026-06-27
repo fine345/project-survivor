@@ -26,6 +26,7 @@ func _ready() -> void:
 	var sm = get_node_or_null("/root/SettingsManager")
 	if sm != null:
 		sm.joystick_mode_changed.connect(_on_joystick_mode_changed)
+		sm.joystick_height_changed.connect(_on_joystick_height_changed)
 		if sm.is_fixed_joystick():
 			_show_fixed()
 		else:
@@ -47,10 +48,17 @@ func _show_fixed() -> void:
 	base.visible = true
 	knob.visible = true
 	var vp_size := get_viewport_rect().size
-	position = Vector2((vp_size.x - radius * 2.0) / 2.0, vp_size.y - 300.0 - radius * 2.0)
+	var sm = get_node_or_null("/root/SettingsManager")
+	var height: float = sm.joystick_height if sm != null else 300.0
+	position = Vector2((vp_size.x - radius * 2.0) / 2.0, vp_size.y - height - radius * 2.0)
 	base.position = Vector2.ZERO
 	base_center = Vector2(radius, radius)
 	knob.position = base_center - Vector2(48, 48)
+
+func _on_joystick_height_changed(height: float) -> void:
+	var sm = get_node_or_null("/root/SettingsManager")
+	if sm != null and sm.is_fixed_joystick():
+		_show_fixed()
 
 func set_enabled(value: bool) -> void:
 	enabled = value

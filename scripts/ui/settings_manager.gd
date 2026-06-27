@@ -2,12 +2,14 @@ extends Node
 
 const SETTINGS_PATH := "user://settings.json"
 var joystick_mode := "fixed"
+var joystick_height := 300.0
 var previous_scene := "res://scenes/ui/main_menu.tscn"
-var music_volume := 1.0
-var sfx_volume := 1.0
+var music_volume := 0.75
+var sfx_volume := 0.75
 var privacy_agreed := false
 
 signal joystick_mode_changed(mode: String)
+signal joystick_height_changed(height: float)
 
 func _ready() -> void:
 	_load()
@@ -27,6 +29,8 @@ func _load() -> void:
 	var data: Dictionary = json.data
 	if data.has("joystick_mode"):
 		joystick_mode = data["joystick_mode"]
+	if data.has("joystick_height"):
+		joystick_height = float(data["joystick_height"])
 	if data.has("music_volume"):
 		music_volume = float(data["music_volume"])
 	if data.has("sfx_volume"):
@@ -40,6 +44,7 @@ func _save() -> void:
 		return
 	file.store_string(JSON.stringify({
 		"joystick_mode": joystick_mode,
+		"joystick_height": joystick_height,
 		"music_volume": music_volume,
 		"sfx_volume": sfx_volume,
 		"privacy_agreed": privacy_agreed,
@@ -50,6 +55,11 @@ func set_joystick_mode(mode: String) -> void:
 	joystick_mode = mode
 	_save()
 	joystick_mode_changed.emit(mode)
+
+func set_joystick_height(val: float) -> void:
+	joystick_height = val
+	_save()
+	joystick_height_changed.emit(val)
 
 func set_music_volume(vol: float) -> void:
 	music_volume = clampf(vol, 0.0, 1.0)

@@ -5,6 +5,8 @@ extends Control
 @onready var fixed_button: Button = $Panel/VBox/JoystickRow/FixedButton
 @onready var music_slider: HSlider = $Panel/VBox/MusicRow/MusicSlider
 @onready var sfx_slider: HSlider = $Panel/VBox/SFXRow/SFXSlider
+@onready var height_slider: HSlider = $Panel/VBox/HeightRow/HeightSlider
+@onready var height_row: HBoxContainer = $Panel/VBox/HeightRow
 
 var is_overlay := false
 
@@ -14,6 +16,7 @@ func _ready() -> void:
 	fixed_button.pressed.connect(func(): _set_mode("fixed"))
 	music_slider.value_changed.connect(_on_music_volume)
 	sfx_slider.value_changed.connect(_on_sfx_volume)
+	height_slider.value_changed.connect(_on_height_change)
 	_update_display()
 	_set_font_size(self, 44)
 
@@ -50,11 +53,18 @@ func _on_sfx_volume(value: float) -> void:
 	if sm != null:
 		sm.set_sfx_volume(value)
 
+func _on_height_change(value: float) -> void:
+	var sm = get_node_or_null("/root/SettingsManager")
+	if sm != null:
+		sm.set_joystick_height(value)
+
 func _update_display() -> void:
 	var sm = get_node_or_null("/root/SettingsManager")
 	var is_fixed: bool = sm.is_fixed_joystick() if sm != null else false
 	anywhere_button.text = "任意位置 ✓" if not is_fixed else "任意位置"
 	fixed_button.text = "固定位置 ✓" if is_fixed else "固定位置"
+	height_row.visible = is_fixed
 	if sm != null:
 		music_slider.value = sm.music_volume
 		sfx_slider.value = sm.sfx_volume
+		height_slider.value = sm.joystick_height
